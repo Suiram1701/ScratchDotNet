@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchDotNet.Core", "ScratchDotNet.Core\ScratchDotNet.Core.csproj", "{A05AEFEB-353B-4408-AD08-A8703F2D5D94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScratchDotNet.Test", "ScratchDotNet.Test\ScratchDotNet.Test.csproj", "{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A05AEFEB-353B-4408-AD08-A8703F2D5D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A05AEFEB-353B-4408-AD08-A8703F2D5D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A05AEFEB-353B-4408-AD08-A8703F2D5D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A05AEFEB-353B-4408-AD08-A8703F2D5D94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A669545D-AB6A-417B-A1F7-EDB373165B98}
+	EndGlobalSection
+EndGlobal
