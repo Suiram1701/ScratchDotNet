@@ -10,6 +10,21 @@ namespace Scratch.Core.Figure;
 public interface IFigure
 {
     /// <summary>
+    /// Called when the x position of the figure could have changed
+    /// </summary>
+    public event Action<double> OnXPositionChanged;
+
+    /// <summary>
+    /// Called when the y position of the figure could have changed
+    /// </summary>
+    public event Action<double> OnYPositionChanged;
+
+    /// <summary>
+    /// Called when the direction could have changed
+    /// </summary>
+    public event Action<double> OnDirectionChanged;
+
+    /// <summary>
     /// The Id of the figure
     /// </summary>
     [JsonProperty("name")]
@@ -53,7 +68,7 @@ public interface IFigure
 
     /// <summary>
     /// The Y coordinate of the figure
-    /// </summary>
+    /// </summary>m
     /// <remarks>
     /// The position point is at the center of the figure. 
     /// The Scratch stage has a width from -250 to 250
