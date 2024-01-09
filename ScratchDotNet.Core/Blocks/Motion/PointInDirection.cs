@@ -15,6 +15,9 @@ namespace Scratch.Core.Blocks.Motion;
 /// <summary>
 /// Set the figures rotation to a specified count of degrees
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [ExecutionBlockCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class PointInDirection : ExecutionBlockBase

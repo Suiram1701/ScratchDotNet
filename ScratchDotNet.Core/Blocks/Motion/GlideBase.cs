@@ -13,6 +13,9 @@ namespace Scratch.Core.Blocks.Motion;
 /// <summary>
 /// A base implementation of read the seconds from the JToken
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public abstract class GlideBase : ExecutionBlockBase
 {

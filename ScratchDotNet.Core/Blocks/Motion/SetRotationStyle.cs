@@ -10,6 +10,9 @@ namespace Scratch.Core.Blocks.Motion;
 /// <summary>
 /// Changes the rotation style of the figure
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [ExecutionBlockCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class SetRotationStyle : ExecutionBlockBase

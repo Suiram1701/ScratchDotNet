@@ -14,6 +14,9 @@ namespace Scratch.Core.Blocks.Motion;
 /// <summary>
 /// Glides a figur to specified coordinates
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [ExecutionBlockCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class GlideToXY : GlideBase

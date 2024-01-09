@@ -17,6 +17,9 @@ namespace ScratchDotNet.Core.Blocks.Motion.Variables;
 /// <summary>
 /// Provides the direction of the figure
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [OperatorCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class Direction : ValueOperatorBase
@@ -49,6 +52,8 @@ public class Direction : ValueOperatorBase
         if (!_delegateInitialized)     // Intialize the delegate
         {
             context.Figure.OnDirectionChanged += ValueChanged;
+
+            logger.LogInformation("Delegate of block {block} was successfully initialized", BlockId);
             _delegateInitialized = true;
         }
 

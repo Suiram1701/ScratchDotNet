@@ -15,6 +15,9 @@ namespace Scratch.Core.Blocks.Motion;
 /// <summary>
 /// Changes the position of the figure by a specified kind and value
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [ExecutionBlockCode(_constAxOpCode)]
 [ExecutionBlockCode(_constRxOpCode)]
 [ExecutionBlockCode(_constAyOpCode)]

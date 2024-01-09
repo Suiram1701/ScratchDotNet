@@ -12,6 +12,9 @@ namespace Scratch.Core.Blocks.Motion;
 /// <summary>
 /// Slides a figure to a specified targetString
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [ExecutionBlockCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class GlideTo : GlideBase

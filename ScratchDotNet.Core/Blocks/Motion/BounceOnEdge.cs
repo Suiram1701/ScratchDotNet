@@ -11,6 +11,9 @@ namespace Scratch.Core.Blocks.Motion;
 /// <summary>
 /// If the figure is at the border it get a bounce
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [ExecutionBlockCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class BounceOnEdge : ExecutionBlockBase

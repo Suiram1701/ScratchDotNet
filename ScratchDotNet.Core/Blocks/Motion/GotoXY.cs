@@ -15,6 +15,9 @@ namespace Scratch.Core.Blocks.Motion;
 /// <summary>
 /// Moves the figure instandly to a a specified point
 /// </summary>
+/// <remarks>
+/// This block have to got executed by a figure
+/// </remarks>
 [ExecutionBlockCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class GotoXY : ExecutionBlockBase
