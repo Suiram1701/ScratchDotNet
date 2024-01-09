@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
-namespace Scratch.Core.Blocks.Bases;
+namespace ScratchDotNet.Core.Blocks.Bases;
 
 /// <summary>
 /// The base for every executable block

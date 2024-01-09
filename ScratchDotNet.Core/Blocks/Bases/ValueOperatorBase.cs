@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Types.Bases;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Types.Bases;
 
-namespace Scratch.Core.Blocks.Bases;
+namespace ScratchDotNet.Core.Blocks.Bases;
 
 /// <summary>
 /// The base for all value operators that own a block

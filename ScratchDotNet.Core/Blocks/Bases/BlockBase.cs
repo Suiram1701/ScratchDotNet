@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Text;
 
-namespace Scratch.Core.Blocks.Bases;
+namespace ScratchDotNet.Core.Blocks.Bases;
 
 /// <summary>
 /// The base for every block

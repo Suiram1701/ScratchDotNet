@@ -1,11 +1,6 @@
-﻿using Scratch.Core.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ScratchDotNet.Core.Enums;
 
-namespace Scratch.Core.Blocks.Interfaces;
+namespace ScratchDotNet.Core.Blocks.Interfaces;
 
 /// <summary>
 /// Provides an value provider with an const value

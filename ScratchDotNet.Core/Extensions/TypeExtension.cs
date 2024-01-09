@@ -1,4 +1,4 @@
-﻿namespace Scratch.Core.Extensions;
+﻿namespace ScratchDotNet.Core.Extensions;
 
 internal static class TypeExtension
 {

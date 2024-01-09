@@ -1,4 +1,4 @@
-﻿using Scratch.Core.Attributes;
+﻿using ScratchDotNet.Core.Attributes;
 using System.Reflection;
 
 internal static class EnumNameAttributeHelpers

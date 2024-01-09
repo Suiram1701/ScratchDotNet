@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Scratch.Core.Types.Bases;
+namespace ScratchDotNet.Core.Types.Bases;
 
 /// <summary>
 /// The base for a with scratch compatible type (used for dynamic conversion between the types)

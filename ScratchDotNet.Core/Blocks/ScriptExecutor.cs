@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
 using System.Collections.ObjectModel;
 
-namespace Scratch.Core.Blocks;
+namespace ScratchDotNet.Core.Blocks;
 
 /// <summary>
 /// The executor for multiple block run as script

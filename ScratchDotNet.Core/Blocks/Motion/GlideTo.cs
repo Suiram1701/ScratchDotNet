@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Enums;
-using Scratch.Core.Extensions;
-using Scratch.Core.Figure;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Figure;
 using System.Diagnostics;
 
-namespace Scratch.Core.Blocks.Motion;
+namespace ScratchDotNet.Core.Blocks.Motion;
 
 /// <summary>
 /// Slides a figure to a specified targetString

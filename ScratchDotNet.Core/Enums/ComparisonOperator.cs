@@ -1,4 +1,4 @@
-﻿namespace Scratch.Core.Enums;
+﻿namespace ScratchDotNet.Core.Enums;
 
 /// <summary>
 /// The default comparisons operators

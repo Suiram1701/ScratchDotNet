@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Enums;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Enums;
 using System.Diagnostics;
 
-namespace Scratch.Core.Blocks.Motion;
+namespace ScratchDotNet.Core.Blocks.Motion;
 
 /// <summary>
 /// Changes the rotation style of the figure

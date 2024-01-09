@@ -1,4 +1,4 @@
-﻿namespace Scratch.Core.Blocks.Attributes;
+﻿namespace ScratchDotNet.Core.Blocks.Attributes;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
 internal class OperatorCodeAttribute : Attribute

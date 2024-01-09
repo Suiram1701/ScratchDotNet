@@ -1,4 +1,4 @@
-﻿namespace Scratch.Core.Attributes;
+﻿namespace ScratchDotNet.Core.Attributes;
 
 /// <summary>
 /// A attribute used to mark an enum value with a name

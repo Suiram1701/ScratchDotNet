@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Blocks.Operator.ConstProviders;
-using Scratch.Core.Extensions;
-using Scratch.Core.Types;
-using Scratch.Core.Types.Bases;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Types;
+using ScratchDotNet.Core.Types.Bases;
 using System.Diagnostics;
 
-namespace Scratch.Core.Blocks.Operator;
+namespace ScratchDotNet.Core.Blocks.Operator;
 
 /// <summary>
 /// Invert a logical value
@@ -20,8 +20,8 @@ public class Not : ValueOperatorBase, IBoolValueProvider
 {
     public override event Action OnValueChanged
     {
-        add => OnValueChanged += value;
-        remove => OnValueChanged -= value;
+        add => ValueProvider.OnValueChanged += value;
+        remove => ValueProvider.OnValueChanged -= value;
     }
 
     /// <summary>

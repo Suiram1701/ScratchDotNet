@@ -1,4 +1,4 @@
-﻿namespace Scratch.Core;
+﻿namespace ScratchDotNet.Core;
 
 /// <summary>
 /// The executor of the project

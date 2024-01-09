@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging.Abstractions;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Types.Bases;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Types.Bases;
 
-namespace Scratch.Core.Extensions;
+namespace ScratchDotNet.Core.Extensions;
 
 internal static class IValueProviderExtensions
 {

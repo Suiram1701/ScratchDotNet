@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Scratch.Core.Extensions;
+﻿namespace ScratchDotNet.Core.Extensions;
 
 internal static class EnumExtensions
 {
@@ -18,6 +12,6 @@ internal static class EnumExtensions
         ArgumentNullException.ThrowIfNull(@enum, nameof(@enum));
 
         Array values = Enum.GetValues(@enum.GetType());
-        return values.Cast<Enum>().Where(@enum.HasFlag).Count() > 1; 
+        return values.Cast<Enum>().Where(@enum.HasFlag).Count() > 1;
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Enums;
-using Scratch.Core.Figure;
-using Scratch.Core.Types;
-using Scratch.Core.Types.Bases;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Figure;
+using ScratchDotNet.Core.Types;
+using ScratchDotNet.Core.Types.Bases;
 
-namespace Scratch.Core.Blocks.Motion;
+namespace ScratchDotNet.Core.Blocks.Motion;
 
 /// <summary>
 /// Provides selectable values

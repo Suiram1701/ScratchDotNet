@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Enums;
-using Scratch.Core.Extensions;
-using Scratch.Core.Figure;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Figure;
 using System.Diagnostics;
-using Scratch.Core.Blocks.Operator.ConstProviders;
 
-namespace Scratch.Core.Blocks.Motion;
+namespace ScratchDotNet.Core.Blocks.Motion;
 
 /// <summary>
 /// Moves a figure to a specified position

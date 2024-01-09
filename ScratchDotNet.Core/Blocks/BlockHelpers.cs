@@ -1,19 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Blocks.Operator.ConstProviders;
-using Scratch.Core.Enums;
-using Scratch.Core.Types;
-using Scratch.Core.Types.Bases;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Types;
+using ScratchDotNet.Core.Types.Bases;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
-using System.Text;
-using Random = System.Random;
 
-namespace Scratch.Core.Blocks;
+namespace ScratchDotNet.Core.Blocks;
 
 internal static class BlockHelpers
 {
@@ -53,7 +51,11 @@ internal static class BlockHelpers
         if (valueProvider is null)
             return new EmptyBool();
         if (valueProvider is not IBoolValueProvider provider)
-            throw new ArgumentException("A boolean return type was a expected at 'inputs.Operand'.", nameof(blockToken));
+        {
+            string message = string.Format("A boolean return type was a expected at '{0}'.", dataPath);
+            throw new ArgumentException(message, nameof(blockToken));
+        }
+
         return provider;
     }
 

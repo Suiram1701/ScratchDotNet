@@ -1,6 +1,6 @@
-﻿using Scratch.Core.Attributes;
+﻿using ScratchDotNet.Core.Attributes;
 
-namespace Scratch.Core.Enums;
+namespace ScratchDotNet.Core.Enums;
 
 /// <summary>
 /// The different options of a figures rotation behavior

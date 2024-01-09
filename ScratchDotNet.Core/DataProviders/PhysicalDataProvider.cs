@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Scratch.Core.DataProviders;
+namespace ScratchDotNet.Core.DataProviders;
 
 /// <summary>
 /// A data provider for the actions

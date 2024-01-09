@@ -1,11 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Scratch.Test.Logger;
+namespace ScratchDotNet.Test.Logger;
 
 /// <summary>
 /// A logger provider for <see cref="NUnitLogger"/>

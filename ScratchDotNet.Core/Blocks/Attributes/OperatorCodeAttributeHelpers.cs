@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Extensions;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Extensions;
 using System.Reflection;
 
-namespace Scratch.Core.Blocks.Attributes;
+namespace ScratchDotNet.Core.Blocks.Attributes;
 
 internal static class OperatorCodeAttributeHelpers
 {

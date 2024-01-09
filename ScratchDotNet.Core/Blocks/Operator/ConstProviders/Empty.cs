@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Enums;
-using Scratch.Core.Types;
-using Scratch.Core.Types.Bases;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Types;
+using ScratchDotNet.Core.Types.Bases;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Scratch.Core.Blocks.Operator.ConstProviders;
+namespace ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 
 /// <summary>
 /// Provides an empty value

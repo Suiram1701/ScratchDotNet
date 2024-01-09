@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO.Compression;
 
-namespace Scratch.Core;
+namespace ScratchDotNet.Core;
 
 public class Project : IDisposable
 {
@@ -60,15 +60,15 @@ public class Project : IDisposable
     }
 
     /// <summary>
-    /// Get the metadata of the scratch file asynchronously
+    /// Get the metadata of the scratch file
     /// </summary>
-    /// <param name="ct">The cacellation token</param>
-    /// <returns>The metadata task</returns>
+    /// <returns>The metadata</returns>
     public async Task<Metadata> GetMetadataAsync(CancellationToken ct = default)
     {
         ThrowIfDisposed();
 
         ILogger logger = _loggerFactory.CreateLogger("Scratch.Core.Project.ReadMetadata");
+        logger.LogInformation("Start reading project metadata");
 
         string projFilePath = Path.Combine(_tmpDirectoryPath, "project.json");
         if (!File.Exists(projFilePath))
@@ -83,7 +83,7 @@ public class Project : IDisposable
 
         Metadata metadata = obj["meta"]!.ToObject<Metadata>()!;
 
-        logger.LogInformation("Metadata read");
+        logger.LogInformation("Project metadata successfully read");
         return metadata;
     }
 

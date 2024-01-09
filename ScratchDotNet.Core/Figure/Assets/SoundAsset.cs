@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Scratch.Core.Figure.Assets;
+namespace ScratchDotNet.Core.Figure.Assets;
 
 /// <summary>
 /// A sound

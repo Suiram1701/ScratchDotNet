@@ -1,17 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Blocks.Operator;
-using Scratch.Core.Blocks.Operator.ConstProviders;
-using Scratch.Core.Enums;
-using Scratch.Core.Extensions;
-using Scratch.Core.Types;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Extensions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-namespace Scratch.Core.Blocks.Control;
+namespace ScratchDotNet.Core.Blocks.Control;
 
 /// <summary>
 /// Repeats a chain of blocks a specific count

@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace Scratch.Core;
+namespace ScratchDotNet.Core;
 
 /// <summary>
 /// Meta information about the project
 /// </summary>
-public class Metadata
+public partial class Metadata
 {
     /// <summary>
     /// The scratch version (always 3.0.0)
@@ -20,17 +20,19 @@ public class Metadata
     public string Vm { get; set; }
 
     /// <summary>
-    /// The user agent of the last editor
+    /// The user agent of the last editor user
     /// </summary>
     [JsonProperty("agent")]
     public string UserAgent { get; set; }
+
+    private const string _constSemver = "3.0.0";
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
     public Metadata()
     {
-        Semver = string.Empty;
+        Semver = _constSemver;
         Vm = string.Empty;
         UserAgent = string.Empty;
     }
@@ -39,10 +41,10 @@ public class Metadata
     /// Creates a new instance
     /// </summary>
     /// <param name="vm">The version of the virtual maschine that created that file</param>
-    /// <param name="userAgent">The user agent of the creator</param>
+    /// <param name="userAgent">The user agent of the last editor user</param>
     public Metadata(string vm, string userAgent)
     {
-        Semver = "3.0.0";
+        Semver = _constSemver;
         Vm = vm;
         UserAgent = userAgent;
     }

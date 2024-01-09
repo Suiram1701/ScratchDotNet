@@ -1,14 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Scratch.Test.Logger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ScratchDotNet.Core;
+using ScratchDotNet.Test.Logger;
 
-namespace Scratch.Test;
+namespace ScratchDotNet.Test;
 
 [SetUpFixture]
 internal class Setup

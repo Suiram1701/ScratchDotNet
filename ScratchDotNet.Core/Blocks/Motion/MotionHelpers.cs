@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
-using Scratch.Core.Enums;
-using Scratch.Core.Figure;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Figure;
 using System.Drawing;
 
-namespace Scratch.Core.Blocks.Motion;
+namespace ScratchDotNet.Core.Blocks.Motion;
 
 internal static class MotionHelpers
 {

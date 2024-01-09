@@ -1,16 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Types;
-using Scratch.Core.Types.Bases;
-using System;
-using System.Collections.Generic;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Types;
+using ScratchDotNet.Core.Types.Bases;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Blocks.Motion.Variables;
 

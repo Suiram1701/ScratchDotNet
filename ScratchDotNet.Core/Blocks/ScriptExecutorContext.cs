@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Scratch.Core.DataProviders;
-using Scratch.Core.Figure;
+using ScratchDotNet.Core.DataProviders;
+using ScratchDotNet.Core.Figure;
 
-namespace Scratch.Core.Blocks;
+namespace ScratchDotNet.Core.Blocks;
 
 /// <summary>
 /// The context of a script execution

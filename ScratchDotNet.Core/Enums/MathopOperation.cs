@@ -1,7 +1,7 @@
-﻿using Scratch.Core.Attributes;
-using Scratch.Core.Blocks.Operator;
+﻿using ScratchDotNet.Core.Attributes;
+using ScratchDotNet.Core.Blocks.Operator;
 
-namespace Scratch.Core.Enums;
+namespace ScratchDotNet.Core.Enums;
 
 /// <summary>
 /// All operation of the <see cref="Mathop"/> block

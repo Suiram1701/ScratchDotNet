@@ -1,14 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Types;
-using Scratch.Core.Types.Bases;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Types;
+using ScratchDotNet.Core.Types.Bases;
 
-namespace Scratch.Core.Blocks.Operator.ConstProviders;
+namespace ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 
 /// <summary>
 /// A default implementation of <see cref="IBoolValueProvider"/> that always returns false

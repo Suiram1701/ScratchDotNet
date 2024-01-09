@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using Scratch.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Bases;
 
-namespace Scratch.Core.Blocks.Interfaces;
+namespace ScratchDotNet.Core.Blocks.Interfaces;
 
 /// <summary>
 /// An interface that provides evaluation of a value operator

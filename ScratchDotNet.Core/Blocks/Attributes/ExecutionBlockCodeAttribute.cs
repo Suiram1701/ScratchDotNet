@@ -1,4 +1,4 @@
-﻿namespace Scratch.Core.Blocks.Attributes;
+﻿namespace ScratchDotNet.Core.Blocks.Attributes;
 
 /// <summary>
 /// Set the op code of a block

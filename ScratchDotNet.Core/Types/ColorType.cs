@@ -1,7 +1,7 @@
-﻿using Scratch.Core.Types.Bases;
+﻿using ScratchDotNet.Core.Types.Bases;
 using System.Drawing;
 
-namespace Scratch.Core.Types;
+namespace ScratchDotNet.Core.Types;
 
 /// <summary>
 /// A color

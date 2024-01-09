@@ -1,13 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using Scratch.Core.Blocks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ScratchDotNet.Core.Blocks;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Scratch.Test;
+namespace ScratchDotNet.Test;
 
 internal static class TestHelpers
 {

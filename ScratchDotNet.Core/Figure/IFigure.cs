@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Scratch.Core.Enums;
-using Scratch.Core.Figure.Assets;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Figure.Assets;
 
-namespace Scratch.Core.Figure;
+namespace ScratchDotNet.Core.Figure;
 
 /// <summary>
 /// All properties of a figure

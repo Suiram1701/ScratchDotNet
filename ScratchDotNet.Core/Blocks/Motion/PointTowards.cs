@@ -1,18 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Scratch.Core.Blocks.Attributes;
-using Scratch.Core.Blocks.Bases;
-using Scratch.Core.Blocks.Interfaces;
-using Scratch.Core.Blocks.Operator;
-using Scratch.Core.Blocks.Operator.ConstProviders;
-using Scratch.Core.Enums;
-using Scratch.Core.Extensions;
-using Scratch.Core.Figure;
+using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Figure;
 using System.Diagnostics;
 using System.Drawing;
 using Random = System.Random;
 
-namespace Scratch.Core.Blocks.Motion;
+namespace ScratchDotNet.Core.Blocks.Motion;
 
 /// <summary>
 /// Rotates the figure toward a target
@@ -74,7 +73,7 @@ public class PointTowards : ExecutionBlockBase
     /// <exception cref="ArgumentNullException"></exception>
     public PointTowards(IFigure target, string blockId) : base(_constOpCode, blockId)
     {
-        ArgumentNullException.ThrowIfNull(target, nameof(target));      
+        ArgumentNullException.ThrowIfNull(target, nameof(target));
         TargetProvider = new TargetReporter(target, TargetReporter.PointTowardsOpCode);
     }
 
