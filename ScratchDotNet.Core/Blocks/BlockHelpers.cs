@@ -24,8 +24,10 @@ internal static class BlockHelpers
     /// <returns>The result provider. When <see langword="null"/> the result of the data path was empty</returns>
     public static IValueProvider? GetDataProvider(JToken blockToken, string dataPath)
     {
-        JToken? dataToken = blockToken.SelectToken(dataPath + "[1]");
-        if (dataToken is null)     // Value of path was empty
+        int selectedDataValue = blockToken.SelectToken(dataPath + "[0]")!.Value<int>();
+        JToken? dataToken = blockToken.SelectToken(dataPath + $"[{selectedDataValue}]");
+
+        if (dataToken is null || dataToken.Type == JTokenType.Null)     // Value of path was empty
             return null;
         else if (dataToken.Type == JTokenType.Array)     // Const result
             return GetStaticValue(dataToken);

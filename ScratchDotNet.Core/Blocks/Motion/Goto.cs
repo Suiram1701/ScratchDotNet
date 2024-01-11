@@ -32,7 +32,6 @@ public class Goto : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <param name="target">The special target where the figure should go to</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public Goto(SpecialTarget target) : this(target, GenerateBlockId())
     {
@@ -48,8 +47,6 @@ public class Goto : ExecutionBlockBase
     public Goto(SpecialTarget target, string blockId) : this(MotionHelpers.GetTargetString(target), blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        if (target.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(target));
         TargetProvider = new TargetReporter(target, TargetReporter.GotoOpCode);
     }
 

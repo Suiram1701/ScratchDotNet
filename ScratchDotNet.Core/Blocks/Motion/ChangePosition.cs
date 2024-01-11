@@ -42,14 +42,11 @@ public class ChangePosition : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <param name="kind">The kind how the position of the figure should be changed</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public ChangePosition(PositionChangeKind kind) : base(GetOpCodeFromKind(kind))
     {
         ArgumentNullException.ThrowIfNull(kind, nameof(kind));
-        if (kind.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(kind));
-
+        
         ChangeKind = kind;
         ValueProvider = new Empty(DataType.Number);
     }
@@ -59,7 +56,6 @@ public class ChangePosition : ExecutionBlockBase
     /// </summary>
     /// <param name="kind">The kind how the position of the figure should be changed</param>
     /// <param name="value">The value to change by</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public ChangePosition(PositionChangeKind kind, double value) : this(kind, value, GenerateBlockId())
     {
@@ -76,8 +72,6 @@ public class ChangePosition : ExecutionBlockBase
     public ChangePosition(PositionChangeKind kind, double value, string blockId) : base(GetOpCodeFromKind(kind), blockId)
     {
         ArgumentNullException.ThrowIfNull(kind, nameof(kind));
-        if (kind.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(kind));
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         ChangeKind = kind;
@@ -89,7 +83,6 @@ public class ChangePosition : ExecutionBlockBase
     /// </summary>
     /// <param name="kind">The kind how the position of the figure should be changed</param>
     /// <param name="valueProvider">The provider of the value to change by</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public ChangePosition(PositionChangeKind kind, IValueProvider valueProvider) : this(kind, valueProvider, GenerateBlockId())
     {
@@ -106,8 +99,6 @@ public class ChangePosition : ExecutionBlockBase
     public ChangePosition(PositionChangeKind kind, IValueProvider valueProvider, string blockId) : base(GetOpCodeFromKind(kind), blockId)
     {
         ArgumentNullException.ThrowIfNull(kind, nameof(kind));
-        if (kind.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(kind));
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
 
         ChangeKind = kind;

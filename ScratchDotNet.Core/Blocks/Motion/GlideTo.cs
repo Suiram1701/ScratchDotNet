@@ -31,6 +31,7 @@ public class GlideTo : GlideBase
     /// </summary>
     /// <param name="time">The time the figure needs to move there</param>
     /// <param name="target">The special target to move</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public GlideTo(TimeSpan time, SpecialTarget target) : this(time, target, GenerateBlockId())
     {
     }
@@ -46,9 +47,6 @@ public class GlideTo : GlideBase
     public GlideTo(TimeSpan time, SpecialTarget target, string blockId) : base(time, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        if (target.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(target));
-
         TargetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
     }
 
@@ -81,7 +79,6 @@ public class GlideTo : GlideBase
     /// </summary>
     /// <param name="timeProvider">The provider of the time in seconds the figure needs to move there</param>
     /// <param name="targetProvider"></param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public GlideTo(IValueProvider timeProvider, IValueProvider targetProvider) : this(timeProvider, targetProvider, GenerateBlockId())
     {

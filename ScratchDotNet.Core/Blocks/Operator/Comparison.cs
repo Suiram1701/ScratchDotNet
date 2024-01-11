@@ -58,13 +58,10 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     /// Creates a new instance
     /// </summary>
     /// <param name="operator">The comparison operation to execute</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public Comparison(ComparisonOperator @operator) : base(GetOpCodeFromOperator(@operator))
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        if (@operator.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(@operator));
 
         Operand1Provider = new Empty(DataType.String);
         Operand2Provider = new Empty(DataType.String);
@@ -77,14 +74,11 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     /// <param name="operand1">The first operand</param>
     /// <param name="operand2">The second operand</param>
     /// <param name="blockId">The id of this block</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public Comparison(ComparisonOperator @operator, ScratchTypeBase operand1, ScratchTypeBase operand2, string blockId) : base(GetOpCodeFromOperator(@operator), blockId)
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        if (@operator.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(@operator));
-
+        
         Operator = @operator;
         Operand1Provider = new Result(operand1, DataType.String);
         Operand2Provider = new Result(operand2, DataType.String);
@@ -102,8 +96,6 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     public Comparison(ComparisonOperator @operator, IValueProvider operand1Provider, IValueProvider operand2Provider, string blockId) : base(GetOpCodeFromOperator(@operator), blockId)
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        if (@operator.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(@operator));
         ArgumentNullException.ThrowIfNull(operand1Provider, nameof(operand1Provider));
         ArgumentNullException.ThrowIfNull(operand2Provider, nameof(operand2Provider));
 

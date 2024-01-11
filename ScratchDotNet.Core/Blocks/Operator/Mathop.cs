@@ -41,13 +41,9 @@ public class Mathop : ValueOperatorBase
     /// Creates a new instance
     /// </summary>
     /// <param name="operation">The operation to execute</param>
-    /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="ArgumentNullException"></exception>
     public Mathop(MathopOperation operation) : base(_constOpCode)
     {
         ArgumentNullException.ThrowIfNull(operation, nameof(operation));
-        if (operation.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(operation));
 
         Operation = operation;
         ValueProvider = new Empty(DataType.Number);
@@ -58,7 +54,6 @@ public class Mathop : ValueOperatorBase
     /// </summary>
     /// <param name="operation">The operation to execute</param>
     /// <param name="value">The value to be calculated with</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public Mathop(MathopOperation operation, double value) : this(operation, value, GenerateBlockId())
     {
@@ -75,8 +70,6 @@ public class Mathop : ValueOperatorBase
     public Mathop(MathopOperation operation, double value, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(operation, nameof(operation));
-        if (operation.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(operation));
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         Operation = operation;
@@ -88,7 +81,6 @@ public class Mathop : ValueOperatorBase
     /// </summary>
     /// <param name="operation">The operation to execute</param>
     /// <param name="valueProvider">The provider of the value to be calculated with</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public Mathop(MathopOperation operation, IValueProvider valueProvider) : this(operation, valueProvider, GenerateBlockId())
     {
@@ -105,8 +97,6 @@ public class Mathop : ValueOperatorBase
     public Mathop(MathopOperation operation, IValueProvider valueProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(operation, nameof(operation));
-        if (operation.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(operation));
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
 
         Operation = operation;

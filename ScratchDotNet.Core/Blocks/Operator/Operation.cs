@@ -61,13 +61,10 @@ public class Operation : ValueOperatorBase
     /// </summary>
     /// <param name="operator">The operator to use</param>
     /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="ArgumentNullException"></exception>
     public Operation(ValueOperator @operator) : base(GetOpCodeFromOperation(@operator))
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        if (@operator.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(@operator));
-
+        
         Operator = @operator;
         Num1Provider = new Empty(DataType.Number);
         Num2Provider = new Empty(DataType.Number);
@@ -97,8 +94,6 @@ public class Operation : ValueOperatorBase
     public Operation(ValueOperator @operator, double num1, double num2, string blockId) : base(GetOpCodeFromOperation(@operator), blockId)
     {
         ArgumentException.ThrowIfNullOrEmpty(nameof(@operator));
-        if (@operator.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(@operator));
         ArgumentNullException.ThrowIfNull(num1, nameof(num1));
         ArgumentNullException.ThrowIfNull(num2, nameof(num2));
 
@@ -130,9 +125,7 @@ public class Operation : ValueOperatorBase
     /// <exception cref="ArgumentNullException"></exception>
     public Operation(ValueOperator @operator, IValueProvider num1Provider, IValueProvider num2Provider, string blockId) : base(blockId, GetOpCodeFromOperation(@operator))
     {
-        ArgumentException.ThrowIfNullOrEmpty(nameof(@operator));
-        if (@operator.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(@operator));
+        ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
         ArgumentNullException.ThrowIfNull(num1Provider, nameof(num1Provider));
         ArgumentNullException.ThrowIfNull(num2Provider, nameof(num2Provider));
 

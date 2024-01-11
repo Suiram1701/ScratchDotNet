@@ -56,14 +56,10 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
     /// Creates a new instance
     /// </summary>
     /// <param name="operator">The operator to use</param>
-    /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="ArgumentNullException"></exception>
     public Logical(LogicalOperation @operator) : base(GetOpCodeFromOperator(@operator))
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        if (@operator.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(@operator));
-
+        
         Operator = @operator;
         Operand1Provider = new EmptyBool();
         Operand2Provider = new EmptyBool();
@@ -75,7 +71,6 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
     /// <param name="operator">The operator to use</param>
     /// <param name="operand1Provider">The provider of the first operand</param>
     /// <param name="operand2Provider">The provider of the first operand</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public Logical(LogicalOperation @operator, IBoolValueProvider operand1Provider, IBoolValueProvider operand2Provider) : this(@operator, operand1Provider, operand2Provider, GenerateBlockId())
     {
@@ -93,8 +88,6 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
     public Logical(LogicalOperation @operator, IBoolValueProvider operand1Provider, IBoolValueProvider operand2Provider, string blockId) : base(GetOpCodeFromOperator(@operator), blockId)
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        if (@operator.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(@operator));
         ArgumentNullException.ThrowIfNull(operand1Provider, nameof(operand1Provider));
         ArgumentNullException.ThrowIfNull(operand2Provider, nameof(operand2Provider));
 

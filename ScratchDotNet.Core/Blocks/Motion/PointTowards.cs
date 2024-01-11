@@ -50,8 +50,6 @@ public class PointTowards : ExecutionBlockBase
     public PointTowards(SpecialTarget target, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        if (target.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(target));
         TargetProvider = new TargetReporter(target, TargetReporter.PointTowardsOpCode);
     }
 

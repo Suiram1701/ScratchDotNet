@@ -38,13 +38,10 @@ public class Turn : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <param name="direction">The direction to rotate to</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public Turn(Direction direction) : base(GetOpCodeFromDirection(direction))
     {
         ArgumentNullException.ThrowIfNull(direction, nameof(direction));
-        if (direction.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(direction));
 
         Direction = direction;
         ValueProvider = new Empty(DataType.Number);
@@ -72,8 +69,6 @@ public class Turn : ExecutionBlockBase
     public Turn(Direction direction, double value, string blockId) : base(GetOpCodeFromDirection(direction), blockId)
     {
         ArgumentNullException.ThrowIfNull(direction, nameof(direction));
-        if (direction.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(direction));
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         Direction = direction;
@@ -102,8 +97,6 @@ public class Turn : ExecutionBlockBase
     public Turn(Direction direction, IValueProvider valueProvider, string blockId) : base(GetOpCodeFromDirection(direction), blockId)
     {
         ArgumentNullException.ThrowIfNull(direction, nameof(direction));
-        if (direction.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(direction));
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
 
         Direction = direction;

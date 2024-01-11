@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Blocks;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace ScratchDotNet.Test;
@@ -8,12 +9,17 @@ internal static class TestHelpers
 {
     public static void DoParseTest(string startId, [CallerMemberName] string? loggerName = null)
     {
+        Stopwatch sw = new();
         ILogger logger = Setup.LoggerFactory.CreateLogger(loggerName ?? "unknown");
 
         try
         {
             logger.LogInformation("Start test: {test}", loggerName);
+
+            sw.Start();
             _ = ScriptExecutor.Create(Setup.BlocksToken, startId, logger);
+            sw.Stop();
+
             logger.LogInformation("Test successfully ended");
         }
         catch (Exception ex)
@@ -23,6 +29,6 @@ internal static class TestHelpers
             return;
         }
 
-        Assert.Pass();
+        Assert.Pass("Needed time: {0}ms", sw.ElapsedMilliseconds);
     }
 }

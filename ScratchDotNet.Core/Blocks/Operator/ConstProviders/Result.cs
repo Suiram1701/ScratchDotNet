@@ -39,9 +39,7 @@ public class Result : IValueProvider, IConstProvider
     {
         ArgumentNullException.ThrowIfNull(value, nameof(value));
         ArgumentNullException.ThrowIfNull(dataType, nameof(dataType));
-        if (dataType.HasAnyFlag())
-            throw new ArgumentException("A enum instance with more than one flag is not allowed.", nameof(dataType));
-
+        
         if (value is BooleanType)
         {
             string message = string.Format("Result of the type {0} are not supported.", nameof(BooleanType));
