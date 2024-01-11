@@ -132,7 +132,7 @@ internal static class BlockHelpers
     /// </summary>
     /// <typeparam name="TValue">The type of the data</typeparam>
     /// <param name="blockToken">The token of the main block</param>
-    /// <param name="blockId">The Id of the data block</param>
+    /// <param name="blockId">The id of the data block</param>
     /// <returns>The block</returns>
     private static ValueOperatorBase GetReferenceBlock(JToken blockToken, string blockId)
     {

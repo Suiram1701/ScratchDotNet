@@ -25,7 +25,7 @@ internal class ScriptExecutor
     /// Creates a new script executor from the specified blocks (it starts with the first real action and not with the trigger)
     /// </summary>
     /// <param name="blocks">The object that contains the blocks to read</param>
-    /// <param name="startId">The Id of the block to start with</param>
+    /// <param name="startId">The id of the block to start with</param>
     /// <returns>The created executor</returns>
     public static ScriptExecutor Create(JObject blocks, string startId, ILogger logger)
     {

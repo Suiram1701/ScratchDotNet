@@ -8,7 +8,7 @@ namespace ScratchDotNet.Core.Figure.Assets;
 public abstract class AssetBase
 {
     /// <summary>
-    /// The Id of the asset
+    /// The id of the asset
     /// </summary>
     public string Name { get; }
 
@@ -18,7 +18,7 @@ public abstract class AssetBase
     public string DataFormat { get; }
 
     /// <summary>
-    /// The Id of the asset
+    /// The id of the asset
     /// </summary>
     protected readonly string _assetId;
 
@@ -43,9 +43,9 @@ public abstract class AssetBase
     /// <summary>
     /// Set the values
     /// </summary>
-    /// <param name="name">The Id of the asset</param>
+    /// <param name="name">The id of the asset</param>
     /// <param name="dataFormat">The file extension of the data</param>
-    /// <param name="assetId">The asset Id</param>
+    /// <param name="assetId">The asset id</param>
     /// <param name="tmpPath">The directory where the asset is saved</param>
     protected AssetBase(string name, string dataFormat, string assetId, string tmpPath)
     {

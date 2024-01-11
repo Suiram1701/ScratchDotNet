@@ -9,7 +9,7 @@ namespace ScratchDotNet.Core.Blocks.Bases;
 public abstract class BlockBase
 {
     /// <summary>
-    /// The Id of this block
+    /// The id of this block
     /// </summary>
     public string BlockId { get; }
 
@@ -26,7 +26,7 @@ public abstract class BlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="blockId">The Id of this block</param>
+    /// <param name="blockId">The id of this block</param>
     /// <param name="opCode">The op code of this block</param>
     /// <exception cref="ArgumentException"></exception>
     protected BlockBase(string blockId, string opCode)
@@ -40,7 +40,7 @@ public abstract class BlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="blockId">The Id of this block</param>
+    /// <param name="blockId">The id of this block</param>
     /// <param name="blockToken">The JToken to read the block from</param>
     protected BlockBase(string blockId, JToken blockToken)
     {
@@ -49,9 +49,9 @@ public abstract class BlockBase
     }
 
     /// <summary>
-    /// Generates a random block Id
+    /// Generates a random block id
     /// </summary>
-    /// <returns>The generated Id</returns>
+    /// <returns>The generated id</returns>
     public static string GenerateBlockId()
     {
         const string characters = "#abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:'<>,.?/";

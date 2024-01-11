@@ -42,7 +42,7 @@ internal class OperatorTests
         TestHelpers.DoParseTest(OperatorCodes.MathopCode);
 
     /// <summary>
-    /// Tests for the operator blocks 'connect', 'char at', 'lengh of' and 'contains'
+    /// Tests for the operator blocks 'join string', 'char at', 'lengh of' and 'contains'
     /// </summary>
     [Test]
     public void String() =>

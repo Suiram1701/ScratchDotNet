@@ -31,7 +31,7 @@ internal static class OperatorCodeAttributeHelpers
             if (constructor is null)
                 continue;
 
-            foreach (string opCode in type.GetCustomAttributes<OperatorCodeAttribute>().Select(attr => attr.Id))
+            foreach (string opCode in type.GetCustomAttributes<OperatorCodeAttribute>().Select(attr => attr.Code))
             {
                 if (_mappedOpCodes.ContainsKey(opCode))
                 {
@@ -49,7 +49,7 @@ internal static class OperatorCodeAttributeHelpers
     /// </summary>
     /// <typeparam name="TValue">The type of the operator result</typeparam>
     /// <param name="opcode">The op code</param>
-    /// <param name="blockId">The Id of the block</param>
+    /// <param name="blockId">The id of the block</param>
     /// <param name="block">The json data to create the block from</param>
     /// <returns>The created instance. <see langword="null"/> when no type was found</returns>
     public static ValueOperatorBase? GetFromOpCode(string opcode, string blockId, JToken block)

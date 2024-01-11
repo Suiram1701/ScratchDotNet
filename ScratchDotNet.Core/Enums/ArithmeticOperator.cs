@@ -3,7 +3,7 @@
 /// <summary>
 /// Some default value operations
 /// </summary>
-public enum ValueOperator
+public enum ArithmeticOperator
 {
     /// <summary>
     /// Addition

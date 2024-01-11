@@ -25,7 +25,7 @@ public interface IFigure
     public event Action<double> OnDirectionChanged;
 
     /// <summary>
-    /// The Id of the figure
+    /// The id of the figure
     /// </summary>
     [JsonProperty("name")]
     public string Name { get; set; }

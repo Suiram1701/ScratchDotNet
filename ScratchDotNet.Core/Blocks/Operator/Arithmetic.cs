@@ -20,7 +20,7 @@ namespace ScratchDotNet.Core.Blocks.Operator;
 [OperatorCode(_constMultOpCode)]
 [OperatorCode(_constDivOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public class Operation : ValueOperatorBase
+public class Arithmetic : ValueOperatorBase
 {
     public override event Action OnValueChanged
     {
@@ -39,7 +39,7 @@ public class Operation : ValueOperatorBase
     /// <summary>
     /// The operator to use
     /// </summary>
-    public ValueOperator Operator { get; }
+    public ArithmeticOperator Operator { get; }
 
     /// <summary>
     /// The provider of the first number
@@ -60,8 +60,8 @@ public class Operation : ValueOperatorBase
     /// Creates a new instance
     /// </summary>
     /// <param name="operator">The operator to use</param>
-    /// <exception cref="ArgumentException"></exception>
-    public Operation(ValueOperator @operator) : base(GetOpCodeFromOperation(@operator))
+    /// <exception cref="ArgumentNullException"></exception>
+    public Arithmetic(ArithmeticOperator @operator) : base(GetOpCodeFromOperation(@operator))
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
         
@@ -76,9 +76,8 @@ public class Operation : ValueOperatorBase
     /// <param name="operator">The operator to use</param>
     /// <param name="num1">The first number</param>
     /// <param name="num2">The second number</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Operation(ValueOperator @operator, double num1, double num2) : this(@operator, num1, num2, GenerateBlockId())
+    public Arithmetic(ArithmeticOperator @operator, double num1, double num2) : this(@operator, num1, num2, GenerateBlockId())
     {
     }
 
@@ -91,7 +90,7 @@ public class Operation : ValueOperatorBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Operation(ValueOperator @operator, double num1, double num2, string blockId) : base(GetOpCodeFromOperation(@operator), blockId)
+    public Arithmetic(ArithmeticOperator @operator, double num1, double num2, string blockId) : base(GetOpCodeFromOperation(@operator), blockId)
     {
         ArgumentException.ThrowIfNullOrEmpty(nameof(@operator));
         ArgumentNullException.ThrowIfNull(num1, nameof(num1));
@@ -108,9 +107,8 @@ public class Operation : ValueOperatorBase
     /// <param name="operator">The operator to use</param>
     /// <param name="num1Provider">The provider of the first number</param>
     /// <param name="num2Provider">The provider of the second number</param>
-    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Operation(ValueOperator @operator, IValueProvider num1Provider, IValueProvider num2Provider) : this(@operator, num1Provider, num1Provider, GenerateBlockId())
+    public Arithmetic(ArithmeticOperator @operator, IValueProvider num1Provider, IValueProvider num2Provider) : this(@operator, num1Provider, num2Provider, GenerateBlockId())
     {
     }
 
@@ -123,7 +121,7 @@ public class Operation : ValueOperatorBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Operation(ValueOperator @operator, IValueProvider num1Provider, IValueProvider num2Provider, string blockId) : base(blockId, GetOpCodeFromOperation(@operator))
+    public Arithmetic(ArithmeticOperator @operator, IValueProvider num1Provider, IValueProvider num2Provider, string blockId) : base(blockId, GetOpCodeFromOperation(@operator))
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
         ArgumentNullException.ThrowIfNull(num1Provider, nameof(num1Provider));
@@ -139,14 +137,14 @@ public class Operation : ValueOperatorBase
             num2ConstProvider.DataType = DataType.Number;
     }
 
-    internal Operation(string blockId, JToken blockToken) : base(blockId, blockToken)
+    internal Arithmetic(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         Operator = _opCode switch
         {
-            _constAddOpCode => ValueOperator.Add,
-            _constSubOpCode => ValueOperator.Subtract,
-            _constMultOpCode => ValueOperator.Multiply,
-            _constDivOpCode => ValueOperator.Divide,
+            _constAddOpCode => ArithmeticOperator.Add,
+            _constSubOpCode => ArithmeticOperator.Subtract,
+            _constMultOpCode => ArithmeticOperator.Multiply,
+            _constDivOpCode => ArithmeticOperator.Divide,
             _ => throw new NotSupportedException("The specified operator isn't supported.")
         };
 
@@ -163,23 +161,23 @@ public class Operation : ValueOperatorBase
 
         double result = Operator switch
         {
-            ValueOperator.Add => num1 + num2,
-            ValueOperator.Subtract => num1 - num2,
-            ValueOperator.Multiply => num1 * num2,
-            ValueOperator.Divide => num1 / num2,
+            ArithmeticOperator.Add => num1 + num2,
+            ArithmeticOperator.Subtract => num1 - num2,
+            ArithmeticOperator.Multiply => num1 * num2,
+            ArithmeticOperator.Divide => num1 / num2,
             _ => throw new NotSupportedException("The specified operator isn't supported.")
         };
         return new NumberType(result);
     }
 
-    private static string GetOpCodeFromOperation(ValueOperator @operator)
+    private static string GetOpCodeFromOperation(ArithmeticOperator @operator)
     {
         return @operator switch
         {
-            ValueOperator.Add => _constAddOpCode,
-            ValueOperator.Subtract => _constSubOpCode,
-            ValueOperator.Multiply => _constMultOpCode,
-            ValueOperator.Divide => _constDivOpCode,
+            ArithmeticOperator.Add => _constAddOpCode,
+            ArithmeticOperator.Subtract => _constSubOpCode,
+            ArithmeticOperator.Multiply => _constMultOpCode,
+            ArithmeticOperator.Divide => _constDivOpCode,
             _ => throw new NotSupportedException("The specified operator isn't supported.")
         };
     }
@@ -190,10 +188,10 @@ public class Operation : ValueOperatorBase
         double num2 = Num2Provider.GetDefaultResult().GetNumberValue();
         string @operator = Operator switch
         {
-            ValueOperator.Add => "+",
-            ValueOperator.Subtract => "-",
-            ValueOperator.Multiply => "*",
-            ValueOperator.Divide => "/",
+            ArithmeticOperator.Add => "+",
+            ArithmeticOperator.Subtract => "-",
+            ArithmeticOperator.Multiply => "*",
+            ArithmeticOperator.Divide => "/",
             _ => "unknow"
         };
 

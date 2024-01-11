@@ -30,8 +30,8 @@ public class SoundAsset : AssetBase
     /// <summary>
     /// Creates a new instance from raw data
     /// </summary>
-    /// <param name="name">The Id of the asset</param>
-    /// <param name="assetId">The Id of the asset</param>
+    /// <param name="name">The id of the asset</param>
+    /// <param name="assetId">The id of the asset</param>
     /// <param name="dataFormat">The format of the asset</param>
     /// <param name="rate">The rate of the sound in Hz</param>
     /// <param name="sampleCount">The sample count of the sound</param>

@@ -117,7 +117,7 @@ public class Repeat : ExecutionBlockBase
         else if (times % 1 != 0)
         {
             double rounded = Math.Round(times, 0);
-            logger.LogWarning("The value that indicates how many times the substack should be executed can't be a fractional number. Value: {times}; Rounded: {rounded}", times, rounded);
+            logger.LogWarning("Unable to execute the substack by a count that is fractional. In cause of this a rounded count is used. Value: {times}; Rounded: {rounded}", times, rounded);
             times = rounded;
         }
 

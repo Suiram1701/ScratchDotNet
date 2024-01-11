@@ -1,19 +1,22 @@
 ﻿namespace ScratchDotNet.Core.Blocks.Attributes;
 
+/// <summary>
+/// Sets the op code of a operator block
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
 internal class OperatorCodeAttribute : Attribute
 {
     /// <summary>
-    /// The Id of this operator
+    /// The code of this operator
     /// </summary>
-    public string Id { get; }
+    public string Code { get; }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param id="id">The Id of the operator</param>
-    public OperatorCodeAttribute(string id)
+    /// <param name="code">The id of the operator</param>
+    public OperatorCodeAttribute(string code)
     {
-        Id = id;
+        Code = code;
     }
 }

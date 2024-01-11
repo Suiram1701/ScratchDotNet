@@ -7,16 +7,16 @@
 internal sealed class ExecutionBlockCodeAttribute : Attribute
 {
     /// <summary>
-    /// The Id
+    /// The op code
     /// </summary>
-    public string Id { get; }
+    public string Code { get; }
 
     /// <summary>
     /// Creates a new instance 
     /// </summary>
-    /// <param Id="Id">The op code of the block</param>
-    public ExecutionBlockCodeAttribute(string id)
+    /// <param name="code">The op code of the block</param>
+    public ExecutionBlockCodeAttribute(string code)
     {
-        Id = id;
+        Code = code;
     }
 }

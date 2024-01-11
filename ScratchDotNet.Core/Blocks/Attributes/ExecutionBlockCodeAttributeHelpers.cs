@@ -31,7 +31,7 @@ internal static class ExecutionBlockCodeAttributeHelpers
             if (constructor is null)
                 continue;
 
-            foreach (string opCode in type.GetCustomAttributes<ExecutionBlockCodeAttribute>().Select(attr => attr.Id))
+            foreach (string opCode in type.GetCustomAttributes<ExecutionBlockCodeAttribute>().Select(attr => attr.Code))
             {
                 if (_mappedOpCodes.ContainsKey(opCode))
                 {
@@ -47,7 +47,7 @@ internal static class ExecutionBlockCodeAttributeHelpers
     /// Creates a instance of the block with the specified op code
     /// </summary>
     /// <param name="opcode">The op code</param>
-    /// <param name="blockId">The Id of the block</param>
+    /// <param name="blockId">The id of the block</param>
     /// <param name="block">The json data to create the block from</param>
     /// <returns>The created instance. <see langword="null"/> when no type was found</returns>
     public static ExecutionBlockBase? GetFromOpCode(string opcode, string blockId, JToken block)
