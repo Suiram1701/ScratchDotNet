@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -65,7 +67,7 @@ public class CharAt : ValueOperatorBase
     /// <param name="source">The source string of the char to get</param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public CharAt(int index, string source) : this(index, source, GenerateBlockId())
+    public CharAt(int index, string source) : this(index, source, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -95,7 +97,7 @@ public class CharAt : ValueOperatorBase
     /// <param name="indexProvider">The provider of the index of the char to get</param>
     /// <param name="sourceProvider">The provider of the source string of the char to get</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public CharAt(IValueProvider indexProvider, IValueProvider sourceProvider) : this(indexProvider, sourceProvider, GenerateBlockId())
+    public CharAt(IValueProvider indexProvider, IValueProvider sourceProvider) : this(indexProvider, sourceProvider, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -119,6 +121,12 @@ public class CharAt : ValueOperatorBase
         StringProvider = sourceProvider;
         if (StringProvider is IConstProvider constSourceProvider)
             constSourceProvider.DataType = DataType.String;
+    }
+
+    internal CharAt(string blockId, JToken blockToken) : base(blockId, _constOpCode)
+    {
+        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.LETTER") ?? new Empty(DataType.PositiveInteger);
+        StringProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING") ?? new Empty(DataType.String);
     }
 
     public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

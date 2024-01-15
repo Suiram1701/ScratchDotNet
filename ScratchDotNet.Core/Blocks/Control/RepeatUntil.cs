@@ -4,6 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Execution;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -56,7 +57,7 @@ public class RepeatUntil : ExecutionBlockBase
     /// <param name="conditionProvider">The provider of the condition</param>
     /// <param name="substack">The substack to execute until the condition returns false</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public RepeatUntil(IBoolValueProvider conditionProvider, IList<ExecutionBlockBase> substack) : this(conditionProvider, substack, GenerateBlockId())
+    public RepeatUntil(IBoolValueProvider conditionProvider, IList<ExecutionBlockBase> substack) : this(conditionProvider, substack, BlockHelpers.GenerateBlockId())
     {
     }
 

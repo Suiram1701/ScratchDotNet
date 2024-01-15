@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -46,7 +47,7 @@ public class Repeat : ExecutionBlockBase
     /// <param name="substack">The substack to execute</param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public Repeat(int times, IList<ExecutionBlockBase> substack) : this(times, substack, GenerateBlockId())
+    public Repeat(int times, IList<ExecutionBlockBase> substack) : this(times, substack, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -76,7 +77,7 @@ public class Repeat : ExecutionBlockBase
     /// <param name="timesProvider">The provider of the value that indicates how many times to executed the substack</param>
     /// <param name="substack">The substack to execute</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Repeat(IValueProvider timesProvider, IList<ExecutionBlockBase> substack) : this(timesProvider, substack, GenerateBlockId())
+    public Repeat(IValueProvider timesProvider, IList<ExecutionBlockBase> substack) : this(timesProvider, substack, BlockHelpers.GenerateBlockId())
     {
     }
 

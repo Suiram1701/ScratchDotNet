@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using ScratchDotNet.Core.Blocks;
+using ScratchDotNet.Core.Execution;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -17,7 +17,7 @@ internal static class TestHelpers
             logger.LogInformation("Start test: {test}", loggerName);
 
             sw.Start();
-            _ = ScriptExecutor.Create(Setup.BlocksToken, startId, logger);
+            _ = ScriptExecutor.Create(Setup.BlockTokens, startId, logger);
             sw.Stop();
 
             logger.LogInformation("Test successfully ended");

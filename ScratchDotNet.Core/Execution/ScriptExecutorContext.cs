@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.DataProviders;
 using ScratchDotNet.Core.Figure;
 
-namespace ScratchDotNet.Core.Blocks;
+namespace ScratchDotNet.Core.Execution;
 
 /// <summary>
 /// The context of a script execution
@@ -21,6 +22,11 @@ public class ScriptExecutorContext
     public IEnumerable<IFigure> Figures { get; }
 
     /// <summary>
+    /// The variables of the current executor
+    /// </summary>
+    public IEnumerable<Variable> Variables { get; }
+
+    /// <summary>
     /// The logger factory
     /// </summary>
     public ILoggerFactory LoggerFactory { get; }
@@ -30,20 +36,19 @@ public class ScriptExecutorContext
     /// </summary>
     public PhysicalDataProvider PhysicalDataProvider { get; }
 
-    /// <summary>
-    /// An empty instance
-    /// </summary>
     internal ScriptExecutorContext()
     {
         Figures = Array.Empty<IFigure>();
+        Variables = Array.Empty<Variable>();
         LoggerFactory = NullLoggerFactory.Instance;
         PhysicalDataProvider = new(() => new(0, 0));
     }
 
-    internal ScriptExecutorContext(IFigure? figure, IEnumerable<IFigure> figures, ILoggerFactory loggerFactory, PhysicalDataProvider physicalDataProvider)
+    internal ScriptExecutorContext(IFigure? figure, IEnumerable<IFigure> figures, IEnumerable<Variable> variables, ILoggerFactory loggerFactory, PhysicalDataProvider physicalDataProvider)
     {
         Figure = figure;
         Figures = figures;
+        Variables = variables;
         LoggerFactory = loggerFactory;
         PhysicalDataProvider = physicalDataProvider;
     }

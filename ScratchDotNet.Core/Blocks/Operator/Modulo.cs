@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -60,7 +61,7 @@ public class Modulo : ValueOperatorBase
     /// <param name="num1">The dividend</param>
     /// <param name="num2">The divisor</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Modulo(double num1, double num2) : this(num1, num2, GenerateBlockId())
+    public Modulo(double num1, double num2) : this(num1, num2, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -87,7 +88,7 @@ public class Modulo : ValueOperatorBase
     /// <param name="num1Provider">The provider of the dividend</param>
     /// <param name="num2Provider">The provider of the divisor</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Modulo(IValueProvider num1Provider, IValueProvider num2Provider) : this(num1Provider, num2Provider, GenerateBlockId())
+    public Modulo(IValueProvider num1Provider, IValueProvider num2Provider) : this(num1Provider, num2Provider, BlockHelpers.GenerateBlockId())
     {
     }
 

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -49,7 +51,7 @@ public class LengthOf : ValueOperatorBase
     /// </summary>
     /// <param name="string">The string to get the length from</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public LengthOf(string @string) : this(@string, GenerateBlockId())
+    public LengthOf(string @string) : this(@string, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -71,7 +73,7 @@ public class LengthOf : ValueOperatorBase
     /// </summary>
     /// <param name="stringProvider">The provider of the string to get the length from</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public LengthOf(IValueProvider stringProvider) : this(stringProvider, GenerateBlockId())
+    public LengthOf(IValueProvider stringProvider) : this(stringProvider, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -89,6 +91,11 @@ public class LengthOf : ValueOperatorBase
         StringProvider = stringProvider;
         if (StringProvider is IConstProvider constProvider)
             constProvider.DataType = DataType.String;
+    }
+
+    internal LengthOf(string blockId, JToken blockToken) : base(blockId, _constOpCode)
+    {
+        StringProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING") ?? new Empty(DataType.String);
     }
 
     public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

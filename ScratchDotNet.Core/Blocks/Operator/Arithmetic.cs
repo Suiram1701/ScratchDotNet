@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -77,7 +78,7 @@ public class Arithmetic : ValueOperatorBase
     /// <param name="num1">The first number</param>
     /// <param name="num2">The second number</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Arithmetic(ArithmeticOperator @operator, double num1, double num2) : this(@operator, num1, num2, GenerateBlockId())
+    public Arithmetic(ArithmeticOperator @operator, double num1, double num2) : this(@operator, num1, num2, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -108,7 +109,7 @@ public class Arithmetic : ValueOperatorBase
     /// <param name="num1Provider">The provider of the first number</param>
     /// <param name="num2Provider">The provider of the second number</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Arithmetic(ArithmeticOperator @operator, IValueProvider num1Provider, IValueProvider num2Provider) : this(@operator, num1Provider, num2Provider, GenerateBlockId())
+    public Arithmetic(ArithmeticOperator @operator, IValueProvider num1Provider, IValueProvider num2Provider) : this(@operator, num1Provider, num2Provider, BlockHelpers.GenerateBlockId())
     {
     }
 

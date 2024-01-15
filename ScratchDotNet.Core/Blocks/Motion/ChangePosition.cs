@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
@@ -57,7 +58,7 @@ public class ChangePosition : ExecutionBlockBase
     /// <param name="kind">The kind how the position of the figure should be changed</param>
     /// <param name="value">The value to change by</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ChangePosition(PositionChangeKind kind, double value) : this(kind, value, GenerateBlockId())
+    public ChangePosition(PositionChangeKind kind, double value) : this(kind, value, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -84,7 +85,7 @@ public class ChangePosition : ExecutionBlockBase
     /// <param name="kind">The kind how the position of the figure should be changed</param>
     /// <param name="valueProvider">The provider of the value to change by</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ChangePosition(PositionChangeKind kind, IValueProvider valueProvider) : this(kind, valueProvider, GenerateBlockId())
+    public ChangePosition(PositionChangeKind kind, IValueProvider valueProvider) : this(kind, valueProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

@@ -4,6 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
@@ -47,7 +48,7 @@ public class GlideToXY : GlideBase
     /// <param name="targetX">The target x position</param>
     /// <param name="targetY">The target y position</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideToXY(TimeSpan time, double targetX, double targetY) : this(time, targetX, targetY, GenerateBlockId())
+    public GlideToXY(TimeSpan time, double targetX, double targetY) : this(time, targetX, targetY, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -76,7 +77,7 @@ public class GlideToXY : GlideBase
     /// <param name="targetXProvider">The provider of the target x position</param>
     /// <param name="targetYProvider">The provider of the target y position</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideToXY(IValueProvider timeSecondsProvider, IValueProvider targetXProvider, IValueProvider targetYProvider) : this(timeSecondsProvider, targetXProvider, targetYProvider, GenerateBlockId())
+    public GlideToXY(IValueProvider timeSecondsProvider, IValueProvider targetXProvider, IValueProvider targetYProvider) : this(timeSecondsProvider, targetXProvider, targetYProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

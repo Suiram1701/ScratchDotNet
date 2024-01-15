@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Figure;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -49,7 +50,7 @@ public class TargetReporter : ValueOperatorBase
     /// <param name="target">The target of this reporter</param>
     /// <param name="opcode">The op code of this reporter (depending on the block that owns this block)</param>
     /// <exception cref="ArgumentException"></exception>
-    public TargetReporter(SpecialTarget target, string opcode) : this(target, opcode, GenerateBlockId())
+    public TargetReporter(SpecialTarget target, string opcode) : this(target, opcode, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -70,7 +71,7 @@ public class TargetReporter : ValueOperatorBase
     /// <param name="target">The target of this reporter</param>
     /// <param name="opCode">The op code of this reporter (depending on the block that owns this block)</param>
     /// <exception cref="ArgumentException"></exception>
-    public TargetReporter(IFigure target, string opCode) : this(target, opCode, GenerateBlockId())
+    public TargetReporter(IFigure target, string opCode) : this(target, opCode, BlockHelpers.GenerateBlockId())
     {
     }
 

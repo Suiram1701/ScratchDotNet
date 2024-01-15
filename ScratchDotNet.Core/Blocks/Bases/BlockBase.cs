@@ -19,7 +19,7 @@ public abstract class BlockBase
     /// Creates a new instance with an automatic generated block id
     /// </summary>
     /// <param name="opCode">The op code of this block</param>
-    protected BlockBase(string opCode) : this(GenerateBlockId(), opCode)
+    protected BlockBase(string opCode) : this(BlockHelpers.GenerateBlockId(), opCode)
     {
     }
 
@@ -46,23 +46,5 @@ public abstract class BlockBase
     {
         BlockId = blockId;
         _opCode = blockToken["opcode"]!.Value<string>()!;
-    }
-
-    /// <summary>
-    /// Generates a random block id
-    /// </summary>
-    /// <returns>The generated id</returns>
-    public static string GenerateBlockId()
-    {
-        const string characters = "#abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:'<>,.?/";
-
-        StringBuilder randomString = new(20);
-        for (int i = 0; i < 20; i++)
-        {
-            int randomIndex = Random.Shared.Next(characters.Length);
-            randomString.Append(characters[randomIndex]);
-        }
-
-        return randomString.ToString();
     }
 }

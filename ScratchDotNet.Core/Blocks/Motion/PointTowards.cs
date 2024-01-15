@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Figure;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ public class PointTowards : ExecutionBlockBase
     /// <param name="target">The special target of the rotation</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public PointTowards(SpecialTarget target) : this(target, GenerateBlockId())
+    public PointTowards(SpecialTarget target) : this(target, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -58,7 +59,7 @@ public class PointTowards : ExecutionBlockBase
     /// </summary>
     /// <param name="target">The target figure where the figure have to rotate to</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public PointTowards(IFigure target) : this(target, GenerateBlockId())
+    public PointTowards(IFigure target) : this(target, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -84,7 +85,7 @@ public class PointTowards : ExecutionBlockBase
     /// <param name="targetProvider">The provider of the target figure name</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public PointTowards(IValueProvider targetProvider) : this(targetProvider, GenerateBlockId())
+    public PointTowards(IValueProvider targetProvider) : this(targetProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

@@ -4,7 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using System.Collections.ObjectModel;
 
-namespace ScratchDotNet.Core.Blocks;
+namespace ScratchDotNet.Core.Execution;
 
 /// <summary>
 /// The executor for multiple block run as script
@@ -69,7 +69,7 @@ internal class ScriptExecutor
                 logger.LogError("Unable to determine the op code of block {block}", nextName);
             }
 
-            next:
+        next:
             nextName = block["next"]?.Value<string>();
         }
         while (!string.IsNullOrEmpty(nextName));

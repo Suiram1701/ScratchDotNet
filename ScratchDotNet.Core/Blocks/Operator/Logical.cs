@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -72,7 +73,7 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
     /// <param name="operand1Provider">The provider of the first operand</param>
     /// <param name="operand2Provider">The provider of the first operand</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Logical(LogicalOperation @operator, IBoolValueProvider operand1Provider, IBoolValueProvider operand2Provider) : this(@operator, operand1Provider, operand2Provider, GenerateBlockId())
+    public Logical(LogicalOperation @operator, IBoolValueProvider operand1Provider, IBoolValueProvider operand2Provider) : this(@operator, operand1Provider, operand2Provider, BlockHelpers.GenerateBlockId())
     {
     }
 

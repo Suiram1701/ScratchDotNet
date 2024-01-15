@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -55,7 +56,7 @@ public class Mathop : ValueOperatorBase
     /// <param name="operation">The operation to execute</param>
     /// <param name="value">The value to be calculated with</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Mathop(MathopOperation operation, double value) : this(operation, value, GenerateBlockId())
+    public Mathop(MathopOperation operation, double value) : this(operation, value, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -82,7 +83,7 @@ public class Mathop : ValueOperatorBase
     /// <param name="operation">The operation to execute</param>
     /// <param name="valueProvider">The provider of the value to be calculated with</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Mathop(MathopOperation operation, IValueProvider valueProvider) : this(operation, valueProvider, GenerateBlockId())
+    public Mathop(MathopOperation operation, IValueProvider valueProvider) : this(operation, valueProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

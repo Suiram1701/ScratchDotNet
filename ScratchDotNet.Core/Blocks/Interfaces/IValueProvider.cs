@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types.Bases;
 
 namespace ScratchDotNet.Core.Blocks.Interfaces;

@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
@@ -54,7 +55,7 @@ public class Turn : ExecutionBlockBase
     /// <param name="value">The count of degrees to rotate</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Turn(Direction direction, double value) : this(direction, value, GenerateBlockId())
+    public Turn(Direction direction, double value) : this(direction, value, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -82,7 +83,7 @@ public class Turn : ExecutionBlockBase
     /// <param name="valueProvider">The provider of the count of degrees to rotate</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Turn(Direction direction, IValueProvider valueProvider) : this(direction, valueProvider, GenerateBlockId())
+    public Turn(Direction direction, IValueProvider valueProvider) : this(direction, valueProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

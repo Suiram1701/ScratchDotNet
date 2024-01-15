@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Execution;
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
@@ -26,7 +27,7 @@ public class BounceOnEdge : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public BounceOnEdge() : this(GenerateBlockId())
+    public BounceOnEdge() : this(BlockHelpers.GenerateBlockId())
     {
     }
 

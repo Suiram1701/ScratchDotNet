@@ -6126,12 +6126,12 @@
           },
           "shadow": false,
           "topLevel": true,
-          "x": 1644,
-          "y": 717
+          "x": 1760,
+          "y": 705
         },
         "8:NKv1Q/Y,~M[aYU`^`n": {
           "opcode": "data_changevariableby",
-          "next": "_YJvivR$:EZ/4,,D{$Fs",
+          "next": null,
           "parent": "*Y[o9N0s4@DZy$w)ue*;",
           "inputs": {
             "VALUE": [
@@ -6154,7 +6154,7 @@
         "_YJvivR$:EZ/4,,D{$Fs": {
           "opcode": "data_showvariable",
           "next": "*IGAr./s$qn!A;hg4CK%",
-          "parent": "8:NKv1Q/Y,~M[aYU`^`n",
+          "parent": null,
           "inputs": {
 
           },
@@ -6165,7 +6165,9 @@
             ]
           },
           "shadow": false,
-          "topLevel": false
+          "topLevel": true,
+          "x": 1641,
+          "y": 831
         },
         "*IGAr./s$qn!A;hg4CK%": {
           "opcode": "data_hidevariable",
@@ -6204,8 +6206,8 @@
           },
           "shadow": false,
           "topLevel": true,
-          "x": 1624,
-          "y": 1001
+          "x": 1633,
+          "y": 990
         },
         "`YG=!~j1$OzfPkf8]?bP": {
           "opcode": "data_deleteoflist",
@@ -6675,6 +6677,32 @@
             "argumentids": "[\"DZ6a9W1r7q.wj_:}V$2a\",\"WSz_ped#r@{bKw/*](3L\"]",
             "warp": "false"
           }
+        },
+        "1e%X|h44p0!8/8OCKq0*": {
+          "opcode": "motion_movesteps",
+          "next": null,
+          "parent": null,
+          "inputs": {
+            "STEPS": [
+              3,
+              [
+                12,
+                "GlobalVar",
+                ";ocxd/4/$h6}axtEA3+u"
+              ],
+              [
+                4,
+                "10"
+              ]
+            ]
+          },
+          "fields": {
+
+          },
+          "shadow": false,
+          "topLevel": true,
+          "x": 1695,
+          "y": 914
         }
       },
       "comments": {
@@ -6824,7 +6852,7 @@
   ],
   "monitors": [
     {
-      "id": "X~VZkIUQJn47q)C6yKB7_xposition",
+      "id": "undefined_xposition",
       "mode": "default",
       "opcode": "motion_xposition",
       "params": {
@@ -6842,7 +6870,7 @@
       "isDiscrete": true
     },
     {
-      "id": "X~VZkIUQJn47q)C6yKB7_size",
+      "id": "2FnM%G}`6Kl)EJ]ZT2Y!_size",
       "mode": "default",
       "opcode": "looks_size",
       "params": {

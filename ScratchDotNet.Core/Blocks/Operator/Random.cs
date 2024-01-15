@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -60,7 +61,7 @@ public class Random : ValueOperatorBase
     /// <param name="min">The minimum value</param>
     /// <param name="max">The maximum value</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Random(double min, double max) : this(min, max, GenerateBlockId())
+    public Random(double min, double max) : this(min, max, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -87,7 +88,7 @@ public class Random : ValueOperatorBase
     /// <param name="minProvider">The provider of the minimum value</param>
     /// <param name="maxProvider">The provider of the maximum value</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Random(IValueProvider minProvider, IValueProvider maxProvider) : this(minProvider, maxProvider, GenerateBlockId())
+    public Random(IValueProvider minProvider, IValueProvider maxProvider) : this(minProvider, maxProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

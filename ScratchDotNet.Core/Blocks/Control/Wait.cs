@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
@@ -30,7 +31,7 @@ public class Wait : ExecutionBlockBase
     /// <param name="duration">The time to wait</param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public Wait(TimeSpan duration) : this(duration, GenerateBlockId())
+    public Wait(TimeSpan duration) : this(duration, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -56,7 +57,7 @@ public class Wait : ExecutionBlockBase
     /// </summary>
     /// <param name="durationProvider">The provider of the time in seconds to wait</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Wait(IValueProvider durationProvider) : this(durationProvider, GenerateBlockId())
+    public Wait(IValueProvider durationProvider) : this(durationProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

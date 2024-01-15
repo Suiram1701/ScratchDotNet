@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -45,7 +46,7 @@ public class Round : ValueOperatorBase
     /// </summary>
     /// <param name="number">The number to round</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Round(double number) : this(number, GenerateBlockId())
+    public Round(double number) : this(number, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -67,7 +68,7 @@ public class Round : ValueOperatorBase
     /// </summary>
     /// <param name="numProvider">The provider of the number to round</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Round(IValueProvider numProvider) : this(numProvider, GenerateBlockId())
+    public Round(IValueProvider numProvider) : this(numProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

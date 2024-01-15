@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -65,7 +66,7 @@ public class Join : ValueOperatorBase
     /// <param name="string1">The first string to join</param>
     /// <param name="string2">The second string to join</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Join(string string1, string string2) : this(string1, string2, GenerateBlockId())
+    public Join(string string1, string string2) : this(string1, string2, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -93,7 +94,7 @@ public class Join : ValueOperatorBase
     /// <param name="string2Provider">The provider of the second string</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Join(IValueProvider string1Provider, IValueProvider string2Provider) : this(string1Provider, string2Provider, GenerateBlockId())
+    public Join(IValueProvider string1Provider, IValueProvider string2Provider) : this(string1Provider, string2Provider, BlockHelpers.GenerateBlockId())
     {
     }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
 using System.Diagnostics;

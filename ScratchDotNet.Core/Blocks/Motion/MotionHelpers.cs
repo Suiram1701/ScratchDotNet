@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Figure;
 using System.Drawing;
 

@@ -2,18 +2,21 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Blocks.Data;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
+using System.Text;
 
 namespace ScratchDotNet.Core.Blocks;
 
-internal static class BlockHelpers
+public static class BlockHelpers
 {
     /// <summary>
     /// Read a data provider from a block
@@ -22,10 +25,9 @@ internal static class BlockHelpers
     /// <param name="blockToken">The token of the block that request the provider</param>
     /// <param name="dataPath">The relative JSON path to the data</param>
     /// <returns>The result provider. When <see langword="null"/> the result of the data path was empty</returns>
-    public static IValueProvider? GetDataProvider(JToken blockToken, string dataPath)
+    internal static IValueProvider? GetDataProvider(JToken blockToken, string dataPath)
     {
-        int selectedDataValue = blockToken.SelectToken(dataPath + "[0]")!.Value<int>();
-        JToken? dataToken = blockToken.SelectToken(dataPath + $"[{selectedDataValue}]");
+        JToken? dataToken = blockToken.SelectToken(dataPath + $"[1]");
 
         if (dataToken is null || dataToken.Type == JTokenType.Null)     // Value of path was empty
             return null;
@@ -47,7 +49,7 @@ internal static class BlockHelpers
     /// <param name="blockToken">The token of the block that request the provider</param>
     /// <param name="dataPath">The relative JSON path to the data</param>
     /// <returns>The provider</returns>
-    public static IBoolValueProvider GetBoolDataProvider(JToken blockToken, string dataPath)
+    internal static IBoolValueProvider GetBoolDataProvider(JToken blockToken, string dataPath)
     {
         IValueProvider? valueProvider = GetDataProvider(blockToken, dataPath);
         if (valueProvider is null)
@@ -112,7 +114,10 @@ internal static class BlockHelpers
         }
         else if (dataType == DataType.Variable)
         {
-            throw new NotImplementedException();
+            string varName = dataValue!;
+            string varId = dataToken.SelectToken("[2]")!.Value<string>()!;
+
+            return new VariableResult(new(varName, varId));
         }
         else if (dataType == DataType.List)
         {
@@ -179,7 +184,7 @@ internal static class BlockHelpers
     /// <param name="blockToken">The root object of the blockToken</param>
     /// <param name="jsonPath">The path of the substack entry point id</param>
     /// <returns>The created substack</returns>
-    public static ReadOnlyCollection<ExecutionBlockBase> GetSubstack(JToken blockToken, string jsonPath)
+    internal static ReadOnlyCollection<ExecutionBlockBase> GetSubstack(JToken blockToken, string jsonPath)
     {
         string? startId = blockToken.SelectToken(jsonPath + "[1]")?.Value<string>();
         if (string.IsNullOrEmpty(startId))
@@ -228,7 +233,7 @@ internal static class BlockHelpers
     /// <param name="logger">The logger</param>
     /// <param name="ct">The cancellation token</param>
     /// <returns>The task</returns>
-    public static async Task InvokeSubstackAsync(IEnumerable<ExecutionBlockBase> substack, ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    internal static async Task InvokeSubstackAsync(IEnumerable<ExecutionBlockBase> substack, ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         IDisposable? loggerScope = logger.BeginScope("Start executing substack");
 
@@ -236,5 +241,23 @@ internal static class BlockHelpers
             await block.ExecuteAsync(context, logger, ct);
 
         loggerScope?.Dispose();
+    }
+
+    /// <summary>
+    /// Generates a random block id
+    /// </summary>
+    /// <returns>The generated id</returns>
+    public static string GenerateBlockId()
+    {
+        const string characters = "#abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:'<>,.?/";
+
+        StringBuilder randomString = new(20);
+        for (int i = 0; i < 20; i++)
+        {
+            int randomIndex = Random.Shared.Next(characters.Length);
+            randomString.Append(characters[randomIndex]);
+        }
+
+        return randomString.ToString();
     }
 }

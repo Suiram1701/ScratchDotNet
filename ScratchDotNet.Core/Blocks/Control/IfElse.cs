@@ -4,6 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Execution;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -51,7 +52,7 @@ public class IfElse : ExecutionBlockBase
     /// <param name="substack">The substack to execute at positive condition</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public IfElse(IBoolValueProvider conditionProvider, IList<ExecutionBlockBase> substack) : this(conditionProvider, substack, GenerateBlockId())
+    public IfElse(IBoolValueProvider conditionProvider, IList<ExecutionBlockBase> substack) : this(conditionProvider, substack, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -80,7 +81,7 @@ public class IfElse : ExecutionBlockBase
     /// <param name="elseSubstack">The substack to execute at negative case</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public IfElse(IBoolValueProvider conditionProvider, IList<ExecutionBlockBase> substack, IList<ExecutionBlockBase> elseSubstack) : this(conditionProvider, substack, elseSubstack, GenerateBlockId())
+    public IfElse(IBoolValueProvider conditionProvider, IList<ExecutionBlockBase> substack, IList<ExecutionBlockBase> elseSubstack) : this(conditionProvider, substack, elseSubstack, BlockHelpers.GenerateBlockId())
     {
     }
 

@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Figure;
 using System.Diagnostics;
@@ -33,7 +34,7 @@ public class Goto : ExecutionBlockBase
     /// </summary>
     /// <param name="target">The special target where the figure should go to</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Goto(SpecialTarget target) : this(target, GenerateBlockId())
+    public Goto(SpecialTarget target) : this(target, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -55,7 +56,7 @@ public class Goto : ExecutionBlockBase
     /// </summary>
     /// <param name="target">The target figure where the figure should go to</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Goto(IFigure target) : this(target, GenerateBlockId())
+    public Goto(IFigure target) : this(target, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -78,7 +79,7 @@ public class Goto : ExecutionBlockBase
     /// <param name="targetProvider">The provider of the target figure</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Goto(IValueProvider targetProvider) : this(targetProvider, GenerateBlockId())
+    public Goto(IValueProvider targetProvider) : this(targetProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

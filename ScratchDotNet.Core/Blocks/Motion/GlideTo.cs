@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Figure;
 using System.Diagnostics;
@@ -32,7 +33,7 @@ public class GlideTo : GlideBase
     /// <param name="time">The time the figure needs to move there</param>
     /// <param name="target">The special target to move</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(TimeSpan time, SpecialTarget target) : this(time, target, GenerateBlockId())
+    public GlideTo(TimeSpan time, SpecialTarget target) : this(time, target, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -56,7 +57,7 @@ public class GlideTo : GlideBase
     /// <param name="time">The time the figure needs to move there</param>
     /// <param name="target">The figure to move to</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(TimeSpan time, IFigure target) : this(time, target, GenerateBlockId())
+    public GlideTo(TimeSpan time, IFigure target) : this(time, target, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -80,7 +81,7 @@ public class GlideTo : GlideBase
     /// <param name="timeProvider">The provider of the time in seconds the figure needs to move there</param>
     /// <param name="targetProvider"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(IValueProvider timeProvider, IValueProvider targetProvider) : this(timeProvider, targetProvider, GenerateBlockId())
+    public GlideTo(IValueProvider timeProvider, IValueProvider targetProvider) : this(timeProvider, targetProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

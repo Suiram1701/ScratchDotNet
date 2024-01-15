@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
@@ -40,7 +41,7 @@ public class MoveSteps : ExecutionBlockBase
     /// </summary>
     /// <param name="steps">The count of steps to move</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public MoveSteps(double steps) : this(steps, GenerateBlockId())
+    public MoveSteps(double steps) : this(steps, BlockHelpers.GenerateBlockId())
     {
     }
 

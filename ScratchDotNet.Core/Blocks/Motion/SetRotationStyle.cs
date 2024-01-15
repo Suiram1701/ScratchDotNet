@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -28,7 +29,7 @@ public class SetRotationStyle : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <param name="rotationStyle">The rotation style to set</param>
-    public SetRotationStyle(RotationStyle rotationStyle) : this(rotationStyle, GenerateBlockId())
+    public SetRotationStyle(RotationStyle rotationStyle) : this(rotationStyle, BlockHelpers.GenerateBlockId())
     {
         RotationStyle = rotationStyle;
     }

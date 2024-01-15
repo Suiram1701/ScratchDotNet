@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
@@ -47,7 +48,7 @@ public class GotoXY : ExecutionBlockBase
     /// <param name="targetX">The target x position</param>
     /// <param name="targetY">The target y position</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GotoXY(double targetX, double targetY) : this(targetX, targetY, GenerateBlockId())
+    public GotoXY(double targetX, double targetY) : this(targetX, targetY, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -74,7 +75,7 @@ public class GotoXY : ExecutionBlockBase
     /// <param name="targetXProvider">The provider of the target x position</param>
     /// <param name="targetYProvider">The provider of the target y position</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GotoXY(IValueProvider targetXProvider, IValueProvider targetYProvider) : this(targetXProvider, targetYProvider, GenerateBlockId())
+    public GotoXY(IValueProvider targetXProvider, IValueProvider targetYProvider) : this(targetXProvider, targetYProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

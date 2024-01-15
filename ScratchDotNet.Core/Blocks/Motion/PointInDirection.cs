@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
@@ -41,7 +42,7 @@ public class PointInDirection : ExecutionBlockBase
     /// <param name="angle">The count of degrees to set</param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public PointInDirection(double angle) : this(angle, GenerateBlockId())
+    public PointInDirection(double angle) : this(angle, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -67,7 +68,7 @@ public class PointInDirection : ExecutionBlockBase
     /// </summary>
     /// <param name="angleProvider">The provider of the count of degree to rotate</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public PointInDirection(IValueProvider angleProvider) : this(angleProvider, GenerateBlockId())
+    public PointInDirection(IValueProvider angleProvider) : this(angleProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

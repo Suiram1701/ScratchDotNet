@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
 using System;
@@ -62,7 +63,7 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
     /// <param name="string1">The main string</param>
     /// <param name="string2">The string that could be conatined in the main string</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Contains(string string1, string string2) : this(string1, string2, GenerateBlockId())
+    public Contains(string string1, string string2) : this(string1, string2, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -89,7 +90,7 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
     /// <param name="string1Provider">The provider of the main string</param>
     /// <param name="string2Provider">The provider of the string that could be conatined in the main string</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Contains(IValueProvider string1Provider, IValueProvider string2Provider) : this(string1Provider, string2Provider, GenerateBlockId())
+    public Contains(IValueProvider string1Provider, IValueProvider string2Provider) : this(string1Provider, string2Provider, BlockHelpers.GenerateBlockId())
     {
     }
 

@@ -4,6 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -43,7 +44,7 @@ public class Not : ValueOperatorBase, IBoolValueProvider
     /// </summary>
     /// <param name="valueProvider">The provider of the value to invert</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Not(IBoolValueProvider valueProvider) : this(valueProvider, GenerateBlockId())
+    public Not(IBoolValueProvider valueProvider) : this(valueProvider, BlockHelpers.GenerateBlockId())
     {
     }
 

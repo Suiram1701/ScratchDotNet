@@ -11,7 +11,7 @@ internal class Setup
 {
     public static Project Project { get; private set; }
 
-    public static JObject BlocksToken { get; private set; }
+    public static JObject BlockTokens { get; private set; }
 
     public static ILoggerFactory LoggerFactory { get; private set; }
 
@@ -44,6 +44,13 @@ internal class Setup
         JObject rootObj = await JObject.LoadAsync(jsonReader);
         using JsonReader blocksReader = rootObj.SelectToken("targets[1].blocks")!.CreateReader();
 
-        BlocksToken = await JObject.LoadAsync(blocksReader);
+        BlockTokens = await JObject.LoadAsync(blocksReader);
+    }
+
+    [OneTimeTearDown]
+    public void Dispose()
+    {
+        Project?.Dispose();
+        LoggerFactory?.Dispose();
     }
 }
