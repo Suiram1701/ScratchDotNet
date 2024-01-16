@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Text;
 
 namespace ScratchDotNet.Core.Blocks.Bases;
 

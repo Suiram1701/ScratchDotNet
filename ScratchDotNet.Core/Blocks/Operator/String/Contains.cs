@@ -6,24 +6,16 @@ using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ScratchDotNet.Core.Blocks.Operator;
+namespace ScratchDotNet.Core.Blocks.Operator.String;
 
 /// <summary>
-/// Joins two strings together
+/// Indicates whether a string conatins another string
 /// </summary>
 [OperatorCode(_constOpCode)]
-[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public class Join : ValueOperatorBase
+public class Contains : ValueOperatorBase, IBoolValueProvider
 {
     public override event Action OnValueChanged
     {
@@ -40,21 +32,21 @@ public class Join : ValueOperatorBase
     }
 
     /// <summary>
-    /// The provider of the first string to join
+    /// The provider of the main string
     /// </summary>
     public IValueProvider String1Provider { get; }
 
     /// <summary>
-    /// The provider of the seconds string to join
+    /// The provider of the string that could be contained in the main string
     /// </summary>
     public IValueProvider String2Provider { get; }
 
-    private const string _constOpCode = "operator_join";
+    private const string _constOpCode = "operator_contains";
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public Join() : base(_constOpCode)
+    public Contains() : base(_constOpCode)
     {
         String1Provider = new Empty(DataType.String);
         String2Provider = new Empty(DataType.String);
@@ -63,25 +55,25 @@ public class Join : ValueOperatorBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="string1">The first string to join</param>
-    /// <param name="string2">The second string to join</param>
+    /// <param name="string1">The main string</param>
+    /// <param name="string2">The string that could be conatined in the main string</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Join(string string1, string string2) : this(string1, string2, BlockHelpers.GenerateBlockId())
+    public Contains(string string1, string string2) : this(string1, string2, BlockHelpers.GenerateBlockId())
     {
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="string1">The first string to join</param>
-    /// <param name="string2">The second string to join</param>
+    /// <param name="string1">The main string</param>
+    /// <param name="string2">The string that could be conatined in the main string</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="ArgumentNullException">
-    public Join(string string1, string string2, string blockId) : base(blockId, _constOpCode)
+    /// <exception cref="ArgumentNullException"></exception>
+    public Contains(string string1, string string2, string blockId) : base(blockId, _constOpCode)
     {
-        ArgumentNullException.ThrowIfNull(string1, string2);
-        ArgumentNullException.ThrowIfNull(string2, string2);
+        ArgumentNullException.ThrowIfNull(string1, nameof(string1));
+        ArgumentNullException.ThrowIfNull(string2, nameof(string2));
 
         String1Provider = new Result(string1);
         String2Provider = new Result(string2);
@@ -90,23 +82,22 @@ public class Join : ValueOperatorBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="string1Provider">The provider of the first string</param>
-    /// <param name="string2Provider">The provider of the second string</param>
-    /// <param name="blockId">The id of this block</param>
+    /// <param name="string1Provider">The provider of the main string</param>
+    /// <param name="string2Provider">The provider of the string that could be conatined in the main string</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Join(IValueProvider string1Provider, IValueProvider string2Provider) : this(string1Provider, string2Provider, BlockHelpers.GenerateBlockId())
+    public Contains(IValueProvider string1Provider, IValueProvider string2Provider) : this(string1Provider, string2Provider, BlockHelpers.GenerateBlockId())
     {
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="string1Provider">The provider of the first string</param>
-    /// <param name="string2Provider">The provider of the second string</param>
-    /// <param name="blockId">The id of this block</param>
+    /// <param name="string1Provider">The provider of the main string</param>
+    /// <param name="string2Provider">The provider of the string that could be conatined in the main string</param>
+    /// <param name="blockId">The id of the this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Join(IValueProvider string1Provider, IValueProvider string2Provider, string blockId) : base(blockId, _constOpCode)
+    public Contains(IValueProvider string1Provider, IValueProvider string2Provider, string blockId) : base(blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(string1Provider, nameof(string1Provider));
         ArgumentNullException.ThrowIfNull(string2Provider, nameof(string2Provider));
@@ -120,7 +111,7 @@ public class Join : ValueOperatorBase
             const2Provider.DataType = DataType.String;
     }
 
-    internal Join(string blockId, JToken blockToken) : base(blockId, blockToken)
+    internal Contains(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         String1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING1") ?? new Empty(DataType.String);
         String2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING2") ?? new Empty(DataType.String);
@@ -131,15 +122,7 @@ public class Join : ValueOperatorBase
         string string1 = (await String1Provider.GetResultAsync(context, logger, ct)).GetStringValue();
         string string2 = (await String2Provider.GetResultAsync(context, logger, ct)).GetStringValue();
 
-        string result = string1 + string2;
-        return new StringType(result);
-    }
-
-    private string GetDebuggerDisplay()
-    {
-        string string1 = String1Provider.GetDefaultResult().GetStringValue();
-        string string2 = String2Provider.GetDefaultResult().GetStringValue();
-
-        return string.Format("Join: {0} + {1}", string1, string2);
+        bool result = string1.Contains(string2, StringComparison.OrdinalIgnoreCase);
+        return new BooleanType(result);
     }
 }

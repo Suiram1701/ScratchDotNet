@@ -69,7 +69,7 @@ internal class ScriptExecutor
                 logger.LogError("Unable to determine the op code of block {block}", nextName);
             }
 
-        next:
+            next:
             nextName = block["next"]?.Value<string>();
         }
         while (!string.IsNullOrEmpty(nextName));

@@ -1,13 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Execution;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Blocks.Bases;
 

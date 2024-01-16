@@ -9,14 +9,9 @@ using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ScratchDotNet.Core.Blocks.Operator;
+namespace ScratchDotNet.Core.Blocks.Operator.String;
 
 /// <summary>
 /// Get the the char of a specified index

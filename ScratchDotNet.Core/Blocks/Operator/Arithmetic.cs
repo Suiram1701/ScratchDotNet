@@ -65,7 +65,7 @@ public class Arithmetic : ValueOperatorBase
     public Arithmetic(ArithmeticOperator @operator) : base(GetOpCodeFromOperation(@operator))
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        
+
         Operator = @operator;
         Num1Provider = new Empty(DataType.Number);
         Num2Provider = new Empty(DataType.Number);

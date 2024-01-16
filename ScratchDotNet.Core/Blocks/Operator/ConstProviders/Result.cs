@@ -2,7 +2,6 @@
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
 using System.Diagnostics;
@@ -40,7 +39,7 @@ public class Result : IValueProvider, IConstProvider
     {
         ArgumentNullException.ThrowIfNull(value, nameof(value));
         ArgumentNullException.ThrowIfNull(dataType, nameof(dataType));
-        
+
         if (value is BooleanType)
         {
             string message = string.Format("Result of the type {0} are not supported.", nameof(BooleanType));

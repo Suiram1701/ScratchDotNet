@@ -79,7 +79,7 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     public Comparison(ComparisonOperator @operator, ScratchTypeBase operand1, ScratchTypeBase operand2, string blockId) : base(GetOpCodeFromOperator(@operator), blockId)
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        
+
         Operator = @operator;
         Operand1Provider = new Result(operand1, DataType.String);
         Operand2Provider = new Result(operand2, DataType.String);

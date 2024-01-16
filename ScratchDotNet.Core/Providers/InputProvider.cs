@@ -3,9 +3,9 @@
 namespace ScratchDotNet.Core.DataProviders;
 
 /// <summary>
-/// A data provider for the actions
+/// A data provider mouse and keyboard
 /// </summary>
-public class PhysicalDataProvider
+public class InputProvider
 {
     /// <summary>
     /// A delegate to get the mouse position
@@ -13,13 +13,16 @@ public class PhysicalDataProvider
     /// <returns>The position relative inside the stage</returns>
     public delegate Point PositionDelegate();
 
+    /// <summary>
+    /// Get mouse position
+    /// </summary>
     public PositionDelegate MousePosition { get; }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
     /// <param name="getPosition">The method to get the mouse position</param>
-    public PhysicalDataProvider(PositionDelegate getPosition)
+    public InputProvider(PositionDelegate getPosition)
     {
         MousePosition = getPosition;
     }

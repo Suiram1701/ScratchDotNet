@@ -47,7 +47,7 @@ public class ChangePosition : ExecutionBlockBase
     public ChangePosition(PositionChangeKind kind) : base(GetOpCodeFromKind(kind))
     {
         ArgumentNullException.ThrowIfNull(kind, nameof(kind));
-        
+
         ChangeKind = kind;
         ValueProvider = new Empty(DataType.Number);
     }

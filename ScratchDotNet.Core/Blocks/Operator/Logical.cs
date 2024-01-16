@@ -60,7 +60,7 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
     public Logical(LogicalOperation @operator) : base(GetOpCodeFromOperator(@operator))
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-        
+
         Operator = @operator;
         Operand1Provider = new EmptyBool();
         Operand2Provider = new EmptyBool();

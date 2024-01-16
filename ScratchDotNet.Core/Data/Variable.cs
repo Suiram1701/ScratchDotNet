@@ -1,11 +1,6 @@
 ﻿using ScratchDotNet.Core.Blocks;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Data;
 

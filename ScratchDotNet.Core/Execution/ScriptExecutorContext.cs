@@ -34,7 +34,7 @@ public class ScriptExecutorContext
     /// <summary>
     /// A data provider for physical input data
     /// </summary>
-    public PhysicalDataProvider PhysicalDataProvider { get; }
+    public InputProvider PhysicalDataProvider { get; }
 
     internal ScriptExecutorContext()
     {
@@ -44,7 +44,7 @@ public class ScriptExecutorContext
         PhysicalDataProvider = new(() => new(0, 0));
     }
 
-    internal ScriptExecutorContext(IFigure? figure, IEnumerable<IFigure> figures, IEnumerable<Variable> variables, ILoggerFactory loggerFactory, PhysicalDataProvider physicalDataProvider)
+    internal ScriptExecutorContext(IFigure? figure, IEnumerable<IFigure> figures, IEnumerable<Variable> variables, ILoggerFactory loggerFactory, InputProvider physicalDataProvider)
     {
         Figure = figure;
         Figures = figures;
