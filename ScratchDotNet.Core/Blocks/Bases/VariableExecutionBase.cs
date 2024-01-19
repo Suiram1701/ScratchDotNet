@@ -48,7 +48,7 @@ public abstract class VariableExecutionBase : ExecutionBlockBase
 
     protected sealed override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        Variable? variable = context.Variables.FirstOrDefault(var => var.Id.Equals(VariableRef.VarId));
+        Variable? variable = context.Executor.Variables.FirstOrDefault(var => var.Id.Equals(VariableRef.VarId));
         if (variable is null)
         {
             logger.LogError("Could not find variable with id \"{id}\" and name \"{name}\"", VariableRef.VarId, VariableRef.VarName);

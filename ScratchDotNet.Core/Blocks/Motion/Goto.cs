@@ -3,11 +3,10 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
-using ScratchDotNet.Core.Figure;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -76,6 +75,9 @@ public class Goto : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
+    /// <remarks>
+    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
+    /// </remarks>
     /// <param name="targetProvider">The provider of the target figure</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
@@ -87,7 +89,7 @@ public class Goto : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// If you want to provide a constant target you have to use <see cref="TargetReporter"/> instead of <see cref="Result"/> at <paramref name="targetProvider"/> with <see cref="TargetReporter.GotoOpCode"/> as op code
+    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
     /// <param name="targetProvider">The provider of the target figure</param>
     /// <param name="blockId">The id of this block</param>
@@ -100,7 +102,11 @@ public class Goto : ExecutionBlockBase
         TargetProvider = targetProvider;
         if (targetProvider is IConstProvider)
         {
-            string message = string.Format("A target provider that implements {0} is not supported.", nameof(IConstProvider));
+            string message = string.Format(
+                "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
+                nameof(IConstProvider),
+                nameof(SpecialTarget),
+                nameof(IFigure));
             throw new ArgumentException(message, nameof(targetProvider));
         }
     }
@@ -113,16 +119,16 @@ public class Goto : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
         }
 
         string target = (await TargetProvider.GetResultAsync(context, logger, ct)).GetStringValue();
-        (double x, double y) = MotionHelpers.GetTargetPosition(target, context);
+        (double x, double y) = MotionHelpers.GetTargetPosition(target, context, logger);
 
-        context.Figure.MoveTo(x, y);
+        figure.MoveTo(x, y);
     }
 
     private string GetDebuggerDisplay()

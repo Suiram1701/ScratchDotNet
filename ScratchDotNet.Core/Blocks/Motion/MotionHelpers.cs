@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Figure;
+using ScratchDotNet.Core.Providers.Interfaces;
+using ScratchDotNet.Core.StageObjects;
 using System.Drawing;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -13,10 +14,8 @@ internal static class MotionHelpers
     /// </summary>
     /// <param name="target">The target string</param>
     /// <param name="context">The execution context</param>
-    public static (double x, double y) GetTargetPosition(string target, ScriptExecutorContext context)
+    public static (double x, double y) GetTargetPosition(string target, ScriptExecutorContext context, ILogger logger)
     {
-        ILogger logger = context.LoggerFactory.CreateLogger(typeof(MotionHelpers));
-
         switch (target)
         {
             case "_random_":
@@ -24,7 +23,15 @@ internal static class MotionHelpers
             case "_mouse_":
                 Point mousePosition;
                 try
-                { mousePosition = context.PhysicalDataProvider.MousePosition(); }
+                {
+                    if (context.Providers[typeof(IInputProvider)] is not IInputProvider provider)
+                    {
+                        string message = string.Format("Could not find any registered implementation of {0}", nameof(IInputProvider));
+                        throw new InvalidOperationException(message);
+                    }
+
+                    mousePosition = provider.GetMousePosition();
+                }
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "An error happened while determining mouse position");

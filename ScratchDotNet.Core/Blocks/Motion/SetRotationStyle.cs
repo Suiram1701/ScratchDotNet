@@ -4,6 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -52,13 +53,13 @@ public class SetRotationStyle : ExecutionBlockBase
 
     protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return Task.CompletedTask;
         }
 
-        context.Figure.SetRotationStyle(RotationStyle);
+        figure.SetRotationStyle(RotationStyle);
         return Task.CompletedTask;
     }
 

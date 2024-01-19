@@ -5,7 +5,7 @@ using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
-using ScratchDotNet.Core.Figure;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -78,6 +78,9 @@ public class GlideTo : GlideBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
+    /// <remarks>
+    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
+    /// </remarks>
     /// <param name="timeProvider">The provider of the time in seconds the figure needs to move there</param>
     /// <param name="targetProvider"></param>
     /// <exception cref="ArgumentNullException"></exception>
@@ -89,7 +92,7 @@ public class GlideTo : GlideBase
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// If you want to provide a const target you have to use <see cref="TargetReporter"/> instead of <see cref="ResultOperator{String}"/> as <paramref name="targetProvider"/>
+    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
     /// <param name="timeProvider">The provider of the time in seconds the figure needs to move there</param>
     /// <param name="targetProvider">The provider of the target to move to</param>
@@ -103,7 +106,11 @@ public class GlideTo : GlideBase
         TargetProvider = targetProvider;
         if (TargetProvider is IConstProvider)
         {
-            string message = string.Format("A target provider that implements {0} is not supported.", nameof(IConstProvider));
+            string message = string.Format(
+                "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
+                nameof(IConstProvider),
+                nameof(SpecialTarget),
+                nameof(IFigure));
             throw new ArgumentException(message, nameof(targetProvider));
         }
     }
@@ -116,7 +123,7 @@ public class GlideTo : GlideBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
@@ -125,8 +132,8 @@ public class GlideTo : GlideBase
         string target = (await TargetProvider.GetResultAsync(context, logger, ct)).GetStringValue();
         double timeSeconds = (await TimeProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
 
-        (double x, double y) = MotionHelpers.GetTargetPosition(target, context);
-        await context.Figure.GlideToAsync(x, y, TimeSpan.FromSeconds(timeSeconds), ct);
+        (double x, double y) = MotionHelpers.GetTargetPosition(target, context, logger);
+        await figure.GlideToAsync(x, y, TimeSpan.FromSeconds(timeSeconds), ct);
     }
 
     protected override string GetDebuggerDisplay()

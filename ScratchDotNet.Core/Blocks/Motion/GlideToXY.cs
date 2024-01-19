@@ -6,6 +6,7 @@ using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -112,7 +113,7 @@ public class GlideToXY : GlideBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
@@ -125,10 +126,10 @@ public class GlideToXY : GlideBase
         if (timeSeconds < 0)
         {
             logger.LogWarning("Could not glide the figure in a count of seconds that is less than 0 to the target position; Time: {time}s", timeSeconds);
-            context.Figure.MoveTo(targetX, targetY);
+            figure.MoveTo(targetX, targetY);
         }
         else
-            await context.Figure.GlideToAsync(targetX, targetY, TimeSpan.FromSeconds(timeSeconds), ct);
+            await figure.GlideToAsync(targetX, targetY, TimeSpan.FromSeconds(timeSeconds), ct);
     }
 
     protected override string GetDebuggerDisplay()

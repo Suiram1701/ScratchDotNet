@@ -7,6 +7,7 @@ using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -109,7 +110,7 @@ public class GotoXY : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
@@ -118,7 +119,7 @@ public class GotoXY : ExecutionBlockBase
         double targetX = (await TargetXProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
         double targetY = (await TargetYProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
 
-        context.Figure.MoveTo(targetX, targetY);
+        figure.MoveTo(targetX, targetY);
     }
 
     private string GetDebuggerDisplay()

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace ScratchDotNet.Core.Figure.Assets;
+namespace ScratchDotNet.Core.StageObjects.Assets;
 
 /// <summary>
 /// A sound
@@ -8,14 +8,14 @@ namespace ScratchDotNet.Core.Figure.Assets;
 public class SoundAsset : AssetBase
 {
     /// <summary>
-    /// The Hz of the audio
+    /// The frequency of the audio
     /// </summary>
-    public int Rate { get; set; }
+    public uint Rate { get; set; }
 
     /// <summary>
     /// The count of the audio samples
     /// </summary>
-    public int SampleCount { get; set; }
+    public uint SampleCount { get; set; }
 
     /// <summary>
     /// Parses a new instance from JSON
@@ -23,8 +23,8 @@ public class SoundAsset : AssetBase
     /// <param name="assetToken">The JSON token to parse</param>
     public SoundAsset(JToken assetToken, string tmpPath) : base(assetToken, tmpPath)
     {
-        Rate = assetToken["rate"]!.Value<int>();
-        SampleCount = assetToken["sampleCount"]!.Value<int>();
+        Rate = assetToken["rate"]!.Value<uint>();
+        SampleCount = assetToken["sampleCount"]!.Value<uint>();
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public class SoundAsset : AssetBase
     /// <param name="dataFormat">The format of the asset</param>
     /// <param name="rate">The rate of the sound in Hz</param>
     /// <param name="sampleCount">The sample count of the sound</param>
-    public SoundAsset(string name, string assetId, string dataFormat, int rate, int sampleCount, string tmpPath) : base(name, dataFormat, assetId, tmpPath)
+    public SoundAsset(string name, string assetId, string dataFormat, uint rate, uint sampleCount, string tmpPath) : base(name, dataFormat, assetId, tmpPath)
     {
         Rate = rate;
         SampleCount = sampleCount;

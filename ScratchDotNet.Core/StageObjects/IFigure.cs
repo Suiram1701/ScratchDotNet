@@ -1,13 +1,11 @@
-﻿using Newtonsoft.Json;
-using ScratchDotNet.Core.Enums;
-using ScratchDotNet.Core.Figure.Assets;
+﻿using ScratchDotNet.Core.Enums;
 
-namespace ScratchDotNet.Core.Figure;
+namespace ScratchDotNet.Core.StageObjects;
 
 /// <summary>
-/// All properties of a figure
+/// Provides all properties of a figure
 /// </summary>
-public interface IFigure
+public interface IFigure : IStageObject
 {
     /// <summary>
     /// Called when the x position of the figure could have changed
@@ -25,82 +23,34 @@ public interface IFigure
     public event Action<double> OnDirectionChanged;
 
     /// <summary>
-    /// The id of the figure
-    /// </summary>
-    [JsonProperty("name")]
-    public string Name { get; set; }
-
-    /// <summary>
-    /// The currently selected costume
-    /// </summary>
-    [JsonProperty("currentCostume")]
-    public int SelectedCostume { get; set; }
-
-    /// <summary>
-    /// All available costume assets
-    /// </summary>
-    [JsonProperty("costumes")]
-    public List<CostumeAsset> Costumes { get; set; }
-
-    /// <summary>
-    /// The currently set volume of the figure
-    /// </summary>
-    [JsonProperty("volume")]
-    public int Volume { get; set; }
-
-    /// <summary>
-    /// All saved sound assets for the figure
-    /// </summary>
-    [JsonProperty("sounds")]
-    public List<SoundAsset> Sounds { get; set; }
-
-    /// <summary>
-    /// The Z index of the figure
-    /// </summary>
-    [JsonProperty("layerOrder")]
-    public int LayerOrder { get; set; }
-
-    /// <summary>
     /// Is the figure visible
     /// </summary>
-    [JsonProperty("visible")]
-    public bool IsVisible { get; set; }
-
-    /// <summary>
-    /// The Y coordinate of the figure
-    /// </summary>m
-    /// <remarks>
-    /// The position point is at the center of the figure. 
-    /// The Scratch stage has a width from -250 to 250
-    /// </remarks>
-    [JsonProperty("x")]
-    public double X { get; set; }
+    public bool IsVisible { get; }
 
     /// <summary>
     /// The Y coordinate of the figure
     /// </summary>
-    /// <remarks>
-    /// The position point is at the center of the figure. 
-    /// The Scratch stage has a height from -190 to 190
-    /// </remarks>
-    [JsonProperty("y")]
-    public double Y { get; set; }
+    public double X { get; }
+
+    /// <summary>
+    /// The Y coordinate of the figure
+    /// </summary>
+    public double Y { get; }
 
     /// <summary>
     /// The size of the figure in percent
     /// </summary>
-    [JsonProperty("size")]
-    public double Size { get; set; }
+    public double Size { get; }
 
     /// <summary>
-    /// The height of the figure (relative to the scratch stage)
+    /// The height of the figure
     /// </summary>
-    public double Height { get; }
+    public int Height { get; }
 
     /// <summary>
-    /// The width of the figure (relative to the scratch stage)
+    /// The width of the figure
     /// </summary>
-    public double Width { get; }
+    public int Width { get; }
 
     /// <summary>
     /// The direction of the figure
@@ -108,20 +58,25 @@ public interface IFigure
     /// <remarks>
     /// The rotation works a bit different that normaly. 0° start on top and rotates to the bottom until 180°. From now until the top it goes from -179° until 0°
     /// </remarks>
-    [JsonProperty("direction")]
-    public double Direction { get; set; }
+    public double Direction { get; }
 
     /// <summary>
     /// Is the figure draggable with the mouse while runtime
     /// </summary>
-    [JsonProperty("draggable")]
-    public bool Draggable { get; set; }
+    public bool Draggable { get; }
 
     /// <summary>
     /// The setting of the rotation
     /// </summary>
-    [JsonProperty("rotationStyle")]
-    public RotationStyle RotationSetting { get; set; }
+    public RotationStyle RotationSetting { get; }
+
+    /// <summary>
+    /// A cancellation token source for sound playing
+    /// </summary>
+    /// <remarks>
+    /// <see langword="null"/> when currently no sound is playing
+    /// </remarks>
+    internal CancellationTokenSource? SoundCts { get; set; }
 
     /// <summary>
     /// Moves the figure instandly to a specified point

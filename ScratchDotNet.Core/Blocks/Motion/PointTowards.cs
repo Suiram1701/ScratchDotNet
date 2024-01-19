@@ -3,11 +3,11 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
-using ScratchDotNet.Core.Figure;
+using ScratchDotNet.Core.Providers.Interfaces;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 using System.Drawing;
 using Random = System.Random;
@@ -80,7 +80,7 @@ public class PointTowards : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// If you want to provide a constant target you have to use <see cref="TargetReporter"/> instead of <see cref="Result"/> at <paramref name="targetProvider"/> with <see cref="TargetReporter.PointTowardsOpCode"/> as op code
+    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
     /// <param name="targetProvider">The provider of the target figure name</param>
     /// <exception cref="ArgumentException"></exception>
@@ -93,7 +93,7 @@ public class PointTowards : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// If you want to provide a constant target you have to use <see cref="TargetReporter"/> instead of <see cref="Result"/> at <paramref name="targetProvider"/> with <see cref="TargetReporter.PointTowardsOpCode"/> as op code
+    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
     /// <param name="targetProvider">The provider of the target figure name</param>
     /// <param name="blockId">The id of this block</param>
@@ -106,7 +106,11 @@ public class PointTowards : ExecutionBlockBase
         TargetProvider = targetProvider;
         if (TargetProvider is IConstProvider)
         {
-            string message = string.Format("A target provider that implements {0} is not supported.", nameof(IConstProvider));
+            string message = string.Format(
+                "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
+                nameof(IConstProvider),
+                nameof(SpecialTarget),
+                nameof(IFigure));
             throw new ArgumentException(message, nameof(targetProvider));
         }
     }
@@ -119,7 +123,7 @@ public class PointTowards : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
@@ -131,17 +135,28 @@ public class PointTowards : ExecutionBlockBase
             "_random_" => () => Random.Shared.Next(1, 359),
             "_mouse_" => () =>
             {
-                Point mousePosition = context.PhysicalDataProvider.MousePosition();
-                return GetFigureAngle(context, mousePosition.X, mousePosition.Y);
+                if (context.Providers[typeof(IInputProvider)] is not IInputProvider provider)
+                {
+                    logger.LogCritical("Could not find any registered implementation of {interface}", nameof(IInputProvider));
+
+                    string message = string.Format("Could not find any registered implementation of {0}", nameof(IInputProvider));
+                    throw new InvalidOperationException(message);
+                }
+
+                Point mousePosition = provider.GetMousePosition();
+                return GetFigureAngle(figure, mousePosition.X, mousePosition.Y);
             }
             ,
             _ => () =>
             {
-                IFigure? figure = context.Figures.FirstOrDefault(f => f.Name == target);
-                if (figure is null)
-                    return double.NaN;
+                IFigure? targetFigure = context.Figures.FirstOrDefault(f => f.Name.Equals(target));
+                if (targetFigure is null)     // Do not change direction when not found
+                {
+                    logger.LogWarning("Could not find any figure with name \"{name}\" on stage", target);
+                    return figure.Direction;
+                }
 
-                return GetFigureAngle(context, figure.X, figure.Y);
+                return GetFigureAngle(figure, targetFigure.X, targetFigure.Y);
             }
         };
         double degree = degreeFunc();
@@ -152,13 +167,15 @@ public class PointTowards : ExecutionBlockBase
             return;
         }
 
-        context.Figure.RotateTo(degree);
+        figure.RotateTo(degree);
     }
 
-    private static double GetFigureAngle(ScriptExecutorContext context, double otherX, double otherY)
+    private static double GetFigureAngle(IFigure figure, double otherX, double otherY)
     {
-        double dx = otherX - context.Figure!.X;
-        double dy = otherY - context.Figure.Y;
+
+
+        double dx = otherX - figure.X;
+        double dy = otherY - figure.Y;
 
         double angleRadians = Math.Atan2(dy, dx);
         return angleRadians * (180 / Math.PI);

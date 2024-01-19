@@ -7,6 +7,7 @@ using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -95,7 +96,7 @@ public class PointInDirection : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
@@ -108,7 +109,7 @@ public class PointInDirection : ExecutionBlockBase
             return;
         }
 
-        context.Figure.RotateTo(value);
+        figure.RotateTo(value);
     }
 
     private string GetDebuggerDisplay()

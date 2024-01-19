@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
@@ -46,21 +47,21 @@ public class BounceOnEdge : ExecutionBlockBase
 
     protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return Task.CompletedTask;
         }
 
-        float figureX = Convert.ToSingle(context.Figure.X);
-        float figureY = Convert.ToSingle(context.Figure.Y);
+        float figureX = Convert.ToSingle(figure.X);
+        float figureY = Convert.ToSingle(figure.Y);
         Vector2 figureCenter = new(figureX, figureY);
 
-        float figureHeight = Convert.ToSingle(context.Figure.Height);
-        float figureWidth = Convert.ToSingle(context.Figure.Width);
+        float figureHeight = Convert.ToSingle(figure.Height);
+        float figureWidth = Convert.ToSingle(figure.Width);
         SizeF figureSize = new(figureWidth, figureHeight);
 
-        float radian = Convert.ToSingle(context.Figure.Direction) * (MathF.PI / 180);
+        float radian = Convert.ToSingle(figure.Direction) * (MathF.PI / 180);
         Matrix3x2 rotation = Matrix3x2.CreateRotation(radian, figureCenter);
 
         Vector2[] corners = new[]
@@ -71,8 +72,8 @@ public class BounceOnEdge : ExecutionBlockBase
             GetCornerVector(rotation.M22, figureSize),
         };
 
-        double targetX = context.Figure.X;
-        double targetY = context.Figure.Y;
+        double targetX = figure.X;
+        double targetY = figure.Y;
 
         if (corners.Min(v => v.X) < -(_stageWidth / 2))
             targetX = -(_stageWidth / 2);
@@ -84,7 +85,7 @@ public class BounceOnEdge : ExecutionBlockBase
         else if (corners.Max(v => v.Y) > _stageHeight / 2)
             targetY = _stageHeight / 2;
 
-        context.Figure.MoveTo(targetX, targetY);
+        figure.MoveTo(targetX, targetY);
         return Task.CompletedTask;
     }
 

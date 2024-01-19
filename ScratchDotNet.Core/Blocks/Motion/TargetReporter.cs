@@ -4,7 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Figure;
+using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
 
@@ -16,7 +16,7 @@ namespace ScratchDotNet.Core.Blocks.Motion;
 [OperatorCode(GotoOpCode)]
 [OperatorCode(GlideToOpCode)]
 [OperatorCode(PointTowardsOpCode)]
-public class TargetReporter : ValueOperatorBase
+internal class TargetReporter : ValueOperatorBase
 {
     /// <inheritdoc/>
     /// <remarks>

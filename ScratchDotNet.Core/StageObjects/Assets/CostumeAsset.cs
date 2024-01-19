@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace ScratchDotNet.Core.Figure.Assets;
+namespace ScratchDotNet.Core.StageObjects.Assets;
 
 public class CostumeAsset : AssetBase
 {

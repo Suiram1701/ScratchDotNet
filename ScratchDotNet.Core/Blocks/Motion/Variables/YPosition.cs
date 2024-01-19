@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
 using System.Diagnostics;
@@ -38,21 +39,21 @@ public class YPosition : ValueOperatorBase
 
     public override Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
-            return Task.FromResult((ScratchTypeBase)new NumberType(0d));
+            return Task.FromResult((ScratchTypeBase)new NumberType());
         }
 
-        if (!_delegateInitialized)     // Intialize the delegate
+        if (!_delegateInitialized)
         {
-            context.Figure.OnYPositionChanged += ValueChanged;
+            figure.OnYPositionChanged += ValueChanged;
 
             logger.LogInformation("Delegate of block {block} was successfully initialized", BlockId);
             _delegateInitialized = true;
         }
 
-        return Task.FromResult((ScratchTypeBase)new NumberType(context.Figure.Y));
+        return Task.FromResult((ScratchTypeBase)new NumberType(figure.Y));
     }
 
     private void ValueChanged(double value)

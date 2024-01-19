@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace ScratchDotNet.Core.Figure.Assets;
+namespace ScratchDotNet.Core.StageObjects.Assets;
 
 /// <summary>
 /// The base for every asset

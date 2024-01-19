@@ -7,6 +7,7 @@ using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -125,7 +126,7 @@ public class ChangePosition : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
@@ -133,21 +134,21 @@ public class ChangePosition : ExecutionBlockBase
 
         double value = (await ValueProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
 
-        double cx = context.Figure.X;
-        double cy = context.Figure.Y;
+        double cx = figure.X;
+        double cy = figure.Y;
         switch (ChangeKind)
         {
             case PositionChangeKind.X:
-                context.Figure.MoveTo(value, cy);
+                figure.MoveTo(value, cy);
                 break;
             case PositionChangeKind.DX:
-                context.Figure.MoveTo(cx + value, cy);
+                figure.MoveTo(cx + value, cy);
                 break;
             case PositionChangeKind.Y:
-                context.Figure.MoveTo(cx, value);
+                figure.MoveTo(cx, value);
                 break;
             case PositionChangeKind.DY:
-                context.Figure.MoveTo(cx, cy + value);
+                figure.MoveTo(cx, cy + value);
                 break;
         }
 

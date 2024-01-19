@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using ScratchDotNet.Core.Data;
-using ScratchDotNet.Core.DataProviders;
-using ScratchDotNet.Core.Figure;
+using ScratchDotNet.Core.StageObjects;
 
 namespace ScratchDotNet.Core.Execution;
 
@@ -12,9 +10,14 @@ namespace ScratchDotNet.Core.Execution;
 public class ScriptExecutorContext
 {
     /// <summary>
-    /// The figure that execute the script (<see langword="null"/> if no figure execute the script)
+    /// The executor of this context
     /// </summary>
-    public IFigure? Figure { get; }
+    public IStageObject Executor { get; }
+
+    /// <summary>
+    /// The stage
+    /// </summary>
+    public IStage Stage { get; }
 
     /// <summary>
     /// All figures on the stage
@@ -22,34 +25,21 @@ public class ScriptExecutorContext
     public IEnumerable<IFigure> Figures { get; }
 
     /// <summary>
-    /// The variables of the current executor
-    /// </summary>
-    public IEnumerable<Variable> Variables { get; }
-
-    /// <summary>
     /// The logger factory
     /// </summary>
     public ILoggerFactory LoggerFactory { get; }
 
     /// <summary>
-    /// A data provider for physical input data
+    /// A dictionary that contains the instance of a provider with the interface type as key
     /// </summary>
-    public InputProvider PhysicalDataProvider { get; }
+    public IReadOnlyDictionary<Type, object> Providers { get; }
 
+#pragma warning disable CS8618     // only temporary
     internal ScriptExecutorContext()
+#pragma warning restore CS8618
     {
         Figures = Array.Empty<IFigure>();
-        Variables = Array.Empty<Variable>();
         LoggerFactory = NullLoggerFactory.Instance;
-        PhysicalDataProvider = new(() => new(0, 0));
-    }
-
-    internal ScriptExecutorContext(IFigure? figure, IEnumerable<IFigure> figures, IEnumerable<Variable> variables, ILoggerFactory loggerFactory, InputProvider physicalDataProvider)
-    {
-        Figure = figure;
-        Figures = figures;
-        Variables = variables;
-        LoggerFactory = loggerFactory;
-        PhysicalDataProvider = physicalDataProvider;
+        Providers = new Dictionary<Type, object>();
     }
 }

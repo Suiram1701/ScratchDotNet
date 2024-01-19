@@ -2,17 +2,11 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
-using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Figure.Assets;
+using ScratchDotNet.Core.StageObjects.Assets;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Blocks.Sound;
 
@@ -27,7 +21,7 @@ internal class SoundNameReporter : ValueOperatorBase
     /// <remarks>
     /// This will be never get called
     /// </remarks>
-    public override event Action OnValueChanged {  add { } remove { } }
+    public override event Action OnValueChanged { add { } remove { } }
 
     /// <summary>
     /// The name of the sound

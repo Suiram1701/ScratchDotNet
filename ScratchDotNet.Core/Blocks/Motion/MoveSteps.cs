@@ -7,6 +7,7 @@ using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -84,21 +85,21 @@ public class MoveSteps : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
         }
 
-        double radians = context.Figure.Direction * (Math.PI / 180.0);
+        double radians = figure.Direction * (Math.PI / 180.0);
 
         double value = (await StepsProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
         double rx = value * Math.Sin(radians);
         double ry = value * Math.Cos(radians);
 
-        double x = context.Figure.X + rx;
-        double y = context.Figure.Y + ry;
-        context.Figure.MoveTo(x, y);
+        double x = figure.X + rx;
+        double y = figure.Y + ry;
+        figure.MoveTo(x, y);
     }
 
     private string GetDebuggerDisplay()

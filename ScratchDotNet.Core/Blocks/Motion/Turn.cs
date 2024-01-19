@@ -7,6 +7,7 @@ using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -113,19 +114,21 @@ public class Turn : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Figure is null)
+        if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;
         }
 
         double value = (await ValueProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        context.Figure.Direction += Direction switch
+        double direction = figure.Direction + Direction switch
         {
             Direction.Left => -value,
             Direction.Right => value,
             _ => throw new NotSupportedException("The specified direction isn't supported.")
         };
+
+        figure.RotateTo(direction);
     }
 
     private static string GetOpCodeFromDirection(Direction direction)
