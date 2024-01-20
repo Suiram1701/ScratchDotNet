@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Providers;
 
+/// <summary>
+/// A default implementation of <see cref="ISoundOutputService"/> that uses NAudio
+/// </summary>
 public class DefaultSoundOutputService : ISoundOutputService
 {
     /// <summary>
@@ -34,8 +37,21 @@ public class DefaultSoundOutputService : ISoundOutputService
         DeviceNumber = deviceNumber;
     }
 
+    /// <inheritdoc/>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public async Task PlaySoundAsync(SoundAsset soundAsset, float volume, float pitch, float panorama, ILogger logger, CancellationToken ct = default)
     {
+        ArgumentNullException.ThrowIfNull(soundAsset, nameof(soundAsset));
+        if (volume < 0.0f || volume > 1.0f)
+            throw new ArgumentOutOfRangeException(nameof(volume), volume, "The volume have to be between 0.0f and 1.0f");
+        if (panorama < -1.0f || panorama > 1.0f)
+            throw new ArgumentOutOfRangeException(nameof(volume), volume, "The panoryma have to be between -1.0f and 1.0f");
+        ArgumentNullException.ThrowIfNull(logger, nameof(logger));
+        if (ct.IsCancellationRequested)
+            throw new ArgumentException(string.Format("Could not start with a already cancelled {0}", nameof(CancellationToken)));
+
         using Stream audioStream = soundAsset.GetStream();
         using WaveStream waveStream = soundAsset.DataFormat switch
         {

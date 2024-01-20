@@ -14,4 +14,11 @@ internal class SoundTests
     [Test]
     public void Play() =>
         TestHelpers.DoParseTest(SoundCodes.PlayCode);
+
+    /// <summary>
+    /// Tests for the blocks 'change effect ... by', 'set effect ... to' and 'clear all effects'
+    /// </summary>
+    [Test]
+    public void Effect() =>
+        TestHelpers.DoParseTest(SoundCodes.EffectCode);
 }

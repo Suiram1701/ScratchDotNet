@@ -45,7 +45,7 @@ internal class SoundNameReporter : ValueOperatorBase
     /// <param name="name">The name of the sound to refer to</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
-    public SoundNameReporter(string name, string blockId) : base(blockId, _constOpCode)
+    public SoundNameReporter(string name, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 
@@ -68,7 +68,7 @@ internal class SoundNameReporter : ValueOperatorBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public SoundNameReporter(SoundAsset sound, string blockId) : base(blockId, _constOpCode)
+    public SoundNameReporter(SoundAsset sound, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(sound, nameof(sound));
         Name = sound.Name;

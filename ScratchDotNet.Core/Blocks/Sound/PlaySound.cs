@@ -51,7 +51,7 @@ public class PlaySound : ExecutionBlockBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public PlaySound(SoundAsset sound, bool awaitEnd, string blockId) : base(blockId, GetOpCodeFromAwaitEnd(awaitEnd))
+    public PlaySound(SoundAsset sound, bool awaitEnd, string blockId) : base(GetOpCodeFromAwaitEnd(awaitEnd), blockId)
     {
         ArgumentNullException.ThrowIfNull(sound, nameof(sound));
         SoundNameProvider = new SoundNameReporter(sound);
@@ -83,7 +83,7 @@ public class PlaySound : ExecutionBlockBase
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="NotSupportedException"></exception>
-    public PlaySound(IValueProvider soundNameProvider, bool awaitEnd, string blockId) : base(blockId, GetOpCodeFromAwaitEnd(awaitEnd))
+    public PlaySound(IValueProvider soundNameProvider, bool awaitEnd, string blockId) : base(GetOpCodeFromAwaitEnd(awaitEnd), blockId)
     {
         ArgumentNullException.ThrowIfNull(soundNameProvider, nameof(soundNameProvider));
 

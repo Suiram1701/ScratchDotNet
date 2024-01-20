@@ -45,12 +45,12 @@ public interface IStageObject
     /// <summary>
     /// A modifier for the sound frequency
     /// </summary>
-    internal double SoundPitch { get; }
+    internal double SoundPitch { get; set; }
 
     /// <summary>
     /// A modifier for the sound that specifies the positioning in a stereo-panarama
     /// </summary>
-    internal double SoundPanorama { get; }
+    internal double SoundPanorama { get; set; }
 
     /// <summary>
     /// A cancellation token source for sound playing
