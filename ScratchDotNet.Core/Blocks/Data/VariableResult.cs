@@ -45,7 +45,7 @@ public class VariableResult : IValueProvider
         {
             variable.OnValueChanged += ValueChanged;
 
-            logger.LogInformation("Delegate to variable {id} was successfully initialized", VariableRef.VarId);
+            logger.LogInformation("Value changed event to variable {id} was successfully initialized", VariableRef.VarId);
             _delegateInitialized = true;
         }
 

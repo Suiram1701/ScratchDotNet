@@ -8,6 +8,8 @@ namespace ScratchDotNet.Core.StageObjects;
 /// </summary>
 public interface IStageObject
 {
+    internal event Action<double> OnVolumeChanged;
+
     /// <summary>
     /// The name of the figure
     /// </summary>
@@ -40,7 +42,7 @@ public interface IStageObject
     /// <summary>
     /// The sound volume of this object in percent
     /// </summary>
-    public int SoundVolume { get; }
+    public double SoundVolume { get; set; }
 
     /// <summary>
     /// A modifier for the sound frequency

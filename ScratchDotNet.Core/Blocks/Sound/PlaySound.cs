@@ -127,7 +127,7 @@ public class PlaySound : ExecutionBlockBase
             return;
         }
 
-        float volume = Math.Min(Math.Max(executor.SoundVolume, 0), 100) / 100f;      // Validate that the volume is between 0 and 100 and convert it to a value between 0.0 - 1.0
+        float volume = (float)(Math.Min(Math.Max(executor.SoundVolume, 0), 100) / 100f);      // Validate that the volume is between 0 and 100 and convert it to a value between 0.0 - 1.0
         float pitch = (float)executor.SoundPitch;
         float pan = (float)Math.Min(Math.Max(executor.SoundPanorama, -100), 100) / 100;     // Validate that the pan is between 0 and 100 and convert it to a value between 0.0 - 1.0
 

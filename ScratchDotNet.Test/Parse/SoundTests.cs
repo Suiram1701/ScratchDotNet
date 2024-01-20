@@ -21,4 +21,11 @@ internal class SoundTests
     [Test]
     public void Effect() =>
         TestHelpers.DoParseTest(SoundCodes.EffectCode);
+
+    /// <summary>
+    /// Tests for the blocks 'change volume by', 'set volume to' and 'get volume'
+    /// </summary>
+    [Test]
+    public void Volume() =>
+        TestHelpers.DoParseTest(SoundCodes.VolumeCode);
 }

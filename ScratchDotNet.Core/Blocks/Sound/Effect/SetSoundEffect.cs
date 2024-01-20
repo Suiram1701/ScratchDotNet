@@ -56,7 +56,7 @@ public class SetSoundEffect : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(effect, nameof(effect));
         Effect = effect;
 
-        ValueProvider = new Empty(DataType.Number);
+        ValueProvider = new Result(0, false);
     }
 
     /// <summary>

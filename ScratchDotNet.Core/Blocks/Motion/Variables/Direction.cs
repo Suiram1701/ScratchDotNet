@@ -49,7 +49,7 @@ public class Direction : ValueOperatorBase
         {
             figure.OnDirectionChanged += ValueChanged;
 
-            logger.LogInformation("Delegate of block {block} was successfully initialized", BlockId);
+            logger.LogInformation("Value changed event of block {block} was successfully initialized", BlockId);
             _delegateInitialized = true;
         }
 
