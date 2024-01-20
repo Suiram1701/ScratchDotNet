@@ -135,11 +135,11 @@ public class PointTowards : ExecutionBlockBase
             "_random_" => () => Random.Shared.Next(1, 359),
             "_mouse_" => () =>
             {
-                if (context.Providers[typeof(IInputProvider)] is not IInputProvider provider)
+                if (context.Services[typeof(IInputProviderService)] is not IInputProviderService provider)
                 {
-                    logger.LogCritical("Could not find any registered implementation of {interface}", nameof(IInputProvider));
+                    logger.LogCritical("Could not find any registered service that implement {interface}", nameof(IInputProviderService));
 
-                    string message = string.Format("Could not find any registered implementation of {0}", nameof(IInputProvider));
+                    string message = string.Format("Could not find any registered implementation of {0}", nameof(IInputProviderService));
                     throw new InvalidOperationException(message);
                 }
 

@@ -60,13 +60,13 @@ public class WaitUntil : ExecutionBlockBase
         if (ConditionProvider is EmptyBool)     // No condition
             return;
 
-        TaskCompletionSource<bool> tcs = new(TaskCreationOptions.LongRunning);
+        TaskCompletionSource tcs = new(TaskCreationOptions.LongRunning);
         using CancellationTokenRegistration ctr = ct.Register(tcs.SetCanceled);
 
         async void ConditionChangedAsync()
         {
             if ((await ConditionProvider.GetResultAsync(context, logger, ct)).GetBoolValue())
-                tcs.SetResult(true);
+                tcs.SetResult();
         }
 
         try
@@ -76,6 +76,13 @@ public class WaitUntil : ExecutionBlockBase
             ConditionProvider.OnValueChanged += ConditionChangedAsync;
 
             await tcs.Task;
+        }
+        catch (TaskCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error happened while waiting for the {tcs}", nameof(TaskCompletionSource));
         }
         finally
         {

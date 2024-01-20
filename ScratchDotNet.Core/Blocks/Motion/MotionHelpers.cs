@@ -24,9 +24,9 @@ internal static class MotionHelpers
                 Point mousePosition;
                 try
                 {
-                    if (context.Providers[typeof(IInputProvider)] is not IInputProvider provider)
+                    if (context.Services[typeof(IInputProviderService)] is not IInputProviderService provider)
                     {
-                        string message = string.Format("Could not find any registered implementation of {0}", nameof(IInputProvider));
+                        string message = string.Format("Could not find any registered service that implement {0}", nameof(IInputProviderService));
                         throw new InvalidOperationException(message);
                     }
 

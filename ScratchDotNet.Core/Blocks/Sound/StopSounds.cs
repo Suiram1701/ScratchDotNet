@@ -37,7 +37,8 @@ public class StopSounds : ExecutionBlockBase
 
     protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        context.Executor.SoundCts?.Cancel();
+        return Task.CompletedTask;
     }
 
     private static string GetDebuggerDisplay() =>

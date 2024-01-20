@@ -71,14 +71,6 @@ public interface IFigure : IStageObject
     public RotationStyle RotationSetting { get; }
 
     /// <summary>
-    /// A cancellation token source for sound playing
-    /// </summary>
-    /// <remarks>
-    /// <see langword="null"/> when currently no sound is playing
-    /// </remarks>
-    internal CancellationTokenSource? SoundCts { get; set; }
-
-    /// <summary>
     /// Moves the figure instandly to a specified point
     /// </summary>
     /// <remarks>

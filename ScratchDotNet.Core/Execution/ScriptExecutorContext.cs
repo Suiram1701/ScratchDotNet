@@ -30,9 +30,9 @@ public class ScriptExecutorContext
     public ILoggerFactory LoggerFactory { get; }
 
     /// <summary>
-    /// A dictionary that contains the instance of a provider with the interface type as key
+    /// A dictionary that contains the instance of a service with the interface type as key
     /// </summary>
-    public IReadOnlyDictionary<Type, object> Providers { get; }
+    public IReadOnlyDictionary<Type, object> Services { get; }
 
 #pragma warning disable CS8618     // only temporary
     internal ScriptExecutorContext()
@@ -40,6 +40,6 @@ public class ScriptExecutorContext
     {
         Figures = Array.Empty<IFigure>();
         LoggerFactory = NullLoggerFactory.Instance;
-        Providers = new Dictionary<Type, object>();
+        Services = new Dictionary<Type, object>();
     }
 }

@@ -5,6 +5,8 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Providers.Interfaces;
+using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.StageObjects.Assets;
 using System.Diagnostics;
 
@@ -105,8 +107,36 @@ public class PlaySound : ExecutionBlockBase
         AwaitEnd = _opCode.Equals(_constPlayUntilDoneOpCode);
     }
 
-    protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
+        IStageObject executor = context.Executor;
+        if (!(executor.SoundCts?.IsCancellationRequested ?? true))
+            executor.SoundCts.Cancel();
+
+        if (context.Services[typeof(ISoundOutputService)] is not ISoundOutputService soundOutputProvider)
+        {
+            logger.LogCritical("Could not find any registered service that implements {provider}", nameof(ISoundOutputService));
+            return;
+        }
+
+        string soundName = (await SoundNameProvider.GetResultAsync(context, logger, ct)).GetStringValue();
+        SoundAsset? soundAsset = executor.Sounds.FirstOrDefault(sa => sa.Name.Equals(soundName));
+        if (soundAsset is null)
+        {
+            logger.LogWarning("Could not find a sound named \"{name}\"", soundName);
+            return;
+        }
+
+        float volume = Math.Min(Math.Max(executor.SoundVolume, 0), 100) / 100f;      // Validate that the volume is between 0 and 100 and convert it to a value between 0.0 - 1.0
+        float pitch = (float)executor.SoundPitch;
+        float pan = (float)Math.Min(Math.Max(executor.SoundPanorama, -100), 100) / 100;     // Validate that the pan is between 0 and 100 and convert it to a value between 0.0 - 1.0
+
+        executor.SoundCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        Task soundPlay = soundOutputProvider.PlaySoundAsync(soundAsset, volume, pitch, pan, logger, executor.SoundCts.Token);
+        if (AwaitEnd)
+            await soundPlay;
+        else
+            _ = Task.Run(async () => await soundPlay, executor.SoundCts.Token);
     }
 
     private static string GetOpCodeFromAwaitEnd(bool awaitEnd) =>
