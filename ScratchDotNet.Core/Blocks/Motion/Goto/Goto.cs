@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -8,71 +9,67 @@ using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
 
-namespace ScratchDotNet.Core.Blocks.Motion;
+namespace ScratchDotNet.Core.Blocks.Motion.Goto;
 
 /// <summary>
-/// Slides a figure to a specified targetString
+/// Moves a figure to a specified position
 /// </summary>
 /// <remarks>
-/// This block have to got executed by a figure
+/// This can only executed from a figure
 /// </remarks>
 [ExecutionBlockCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public class GlideTo : GlideBase
+public class Goto : ExecutionBlockBase
 {
     /// <summary>
-    /// The provider position to move to
+    /// The position to move to
     /// </summary>
     public IValueProvider TargetProvider { get; }
 
-    private const string _constOpCode = "motion_glideto";
+    private const string _constOpCode = "motion_goto";
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="time">The time the figure needs to move there</param>
-    /// <param name="target">The special target to move</param>
+    /// <param name="target">The special target where the figure should go to</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(TimeSpan time, SpecialTarget target) : this(time, target, BlockHelpers.GenerateBlockId())
+    public Goto(SpecialTarget target) : this(target, BlockHelpers.GenerateBlockId())
     {
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="time">The time the figure needs to glide to the targetString</param>
-    /// <param name="target">The special target to move</param>
+    /// <param name="target">The special target where the figure should go to</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(TimeSpan time, SpecialTarget target, string blockId) : base(time, _constOpCode, blockId)
+    public Goto(SpecialTarget target, string blockId) : this(MotionHelpers.GetTargetString(target), blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        TargetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
+        TargetProvider = new TargetReporter(target, TargetReporter.GotoOpCode);
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="time">The time the figure needs to move there</param>
-    /// <param name="target">The figure to move to</param>
+    /// <param name="target">The target figure where the figure should go to</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(TimeSpan time, IFigure target) : this(time, target, BlockHelpers.GenerateBlockId())
+    public Goto(IFigure target) : this(target, BlockHelpers.GenerateBlockId())
     {
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="time">The time the figure needs to glide to the targetString</param>
-    /// <param name="target">The figure to move to</param>
+    /// <param name="target">The target figure where the figure should go to</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(TimeSpan time, IFigure target, string blockId) : base(time, _constOpCode, blockId)
+    public Goto(IFigure target, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        TargetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
+        TargetProvider = new TargetReporter(target, TargetReporter.GotoOpCode);
     }
 
     /// <summary>
@@ -81,10 +78,10 @@ public class GlideTo : GlideBase
     /// <remarks>
     /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
-    /// <param name="timeProvider">The provider of the time in seconds the figure needs to move there</param>
-    /// <param name="targetProvider"></param>
+    /// <param name="targetProvider">The provider of the target figure</param>
+    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(IValueProvider timeProvider, IValueProvider targetProvider) : this(timeProvider, targetProvider, BlockHelpers.GenerateBlockId())
+    public Goto(IValueProvider targetProvider) : this(targetProvider, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -94,17 +91,16 @@ public class GlideTo : GlideBase
     /// <remarks>
     /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
-    /// <param name="timeProvider">The provider of the time in seconds the figure needs to move there</param>
-    /// <param name="targetProvider">The provider of the target to move to</param>
+    /// <param name="targetProvider">The provider of the target figure</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlideTo(IValueProvider timeProvider, IValueProvider targetProvider, string blockId) : base(timeProvider, _constOpCode, blockId)
+    public Goto(IValueProvider targetProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(targetProvider, nameof(targetProvider));
 
         TargetProvider = targetProvider;
-        if (TargetProvider is IConstProvider)
+        if (targetProvider is IConstProvider)
         {
             string message = string.Format(
                 "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
@@ -115,10 +111,10 @@ public class GlideTo : GlideBase
         }
     }
 
-    internal GlideTo(string blockId, JToken blockToken) : base(blockId, blockToken)
+    internal Goto(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         TargetProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TO")
-            ?? new TargetReporter(SpecialTarget.Random, TargetReporter.GlideToOpCode);     // random by default
+            ?? new TargetReporter(SpecialTarget.Random, TargetReporter.GotoOpCode);     // Random position by default
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
@@ -130,13 +126,12 @@ public class GlideTo : GlideBase
         }
 
         string target = (await TargetProvider.GetResultAsync(context, logger, ct)).GetStringValue();
-        double timeSeconds = (await TimeProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-
         (double x, double y) = MotionHelpers.GetTargetPosition(target, context, logger);
-        await figure.GlideToAsync(x, y, TimeSpan.FromSeconds(timeSeconds), ct);
+
+        figure.MoveTo(x, y);
     }
 
-    protected override string GetDebuggerDisplay()
+    private string GetDebuggerDisplay()
     {
         string target = TargetProvider.GetDefaultResult().GetStringValue();
         string targetString = target switch
@@ -146,7 +141,6 @@ public class GlideTo : GlideBase
             _ => string.Format("figure {0}", target)
         };
 
-        string baseMessage = base.GetDebuggerDisplay();
-        return baseMessage + targetString;
+        return string.Format("Goto: {0}", targetString);
     }
 }

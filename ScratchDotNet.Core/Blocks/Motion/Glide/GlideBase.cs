@@ -6,7 +6,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
-namespace ScratchDotNet.Core.Blocks.Motion;
+namespace ScratchDotNet.Core.Blocks.Motion.Glide;
 
 /// <summary>
 /// A base implementation of read the seconds from the JToken

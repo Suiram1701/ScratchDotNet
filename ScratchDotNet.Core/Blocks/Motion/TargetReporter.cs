@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Blocks.Motion.Glide;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.StageObjects;

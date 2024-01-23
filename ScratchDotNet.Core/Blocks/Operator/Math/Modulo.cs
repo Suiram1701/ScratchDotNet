@@ -11,7 +11,7 @@ using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
 using System.Diagnostics;
 
-namespace ScratchDotNet.Core.Blocks.Operator;
+namespace ScratchDotNet.Core.Blocks.Operator.Math;
 
 /// <summary>
 /// Provides the modulo operator

@@ -23,7 +23,7 @@ namespace ScratchDotNet.Core.Blocks.Motion;
 [ExecutionBlockCode(_constAyOpCode)]
 [ExecutionBlockCode(_constRyOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public class ChangePosition : ExecutionBlockBase
+public class ChangeXY : ExecutionBlockBase
 {
     /// <summary>
     /// The provider of the value to change by
@@ -45,7 +45,7 @@ public class ChangePosition : ExecutionBlockBase
     /// </summary>
     /// <param name="kind">The kind how the position of the figure should be changed</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ChangePosition(PositionChangeKind kind) : base(GetOpCodeFromKind(kind))
+    public ChangeXY(PositionChangeKind kind) : base(GetOpCodeFromKind(kind))
     {
         ArgumentNullException.ThrowIfNull(kind, nameof(kind));
 
@@ -59,7 +59,7 @@ public class ChangePosition : ExecutionBlockBase
     /// <param name="kind">The kind how the position of the figure should be changed</param>
     /// <param name="value">The value to change by</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ChangePosition(PositionChangeKind kind, double value) : this(kind, value, BlockHelpers.GenerateBlockId())
+    public ChangeXY(PositionChangeKind kind, double value) : this(kind, value, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -71,7 +71,7 @@ public class ChangePosition : ExecutionBlockBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public ChangePosition(PositionChangeKind kind, double value, string blockId) : base(GetOpCodeFromKind(kind), blockId)
+    public ChangeXY(PositionChangeKind kind, double value, string blockId) : base(GetOpCodeFromKind(kind), blockId)
     {
         ArgumentNullException.ThrowIfNull(kind, nameof(kind));
         ArgumentNullException.ThrowIfNull(value, nameof(value));
@@ -86,7 +86,7 @@ public class ChangePosition : ExecutionBlockBase
     /// <param name="kind">The kind how the position of the figure should be changed</param>
     /// <param name="valueProvider">The provider of the value to change by</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ChangePosition(PositionChangeKind kind, IValueProvider valueProvider) : this(kind, valueProvider, BlockHelpers.GenerateBlockId())
+    public ChangeXY(PositionChangeKind kind, IValueProvider valueProvider) : this(kind, valueProvider, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -98,7 +98,7 @@ public class ChangePosition : ExecutionBlockBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public ChangePosition(PositionChangeKind kind, IValueProvider valueProvider, string blockId) : base(GetOpCodeFromKind(kind), blockId)
+    public ChangeXY(PositionChangeKind kind, IValueProvider valueProvider, string blockId) : base(GetOpCodeFromKind(kind), blockId)
     {
         ArgumentNullException.ThrowIfNull(kind, nameof(kind));
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
@@ -109,7 +109,7 @@ public class ChangePosition : ExecutionBlockBase
             constProvider.DataType = DataType.Number;
     }
 
-    internal ChangePosition(string blockId, JToken blockToken) : base(blockId, blockToken)
+    internal ChangeXY(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         ChangeKind = _opCode switch
         {
