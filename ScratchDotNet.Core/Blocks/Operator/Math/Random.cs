@@ -129,8 +129,8 @@ public class Random : ValueOperatorBase
         ScratchTypeBase maxType = await MaxProvider.GetResultAsync(context, logger, ct);
         double orgMax = maxType.GetNumberValue();
 
-        double min = Math.Min(orgMin, orgMax);
-        double max = Math.Max(orgMin, orgMax);
+        double min = System.Math.Min(orgMin, orgMax);
+        double max = System.Math.Max(orgMin, orgMax);
 
         double result;
         if (HasDecimal(min) || HasDecimal(max))

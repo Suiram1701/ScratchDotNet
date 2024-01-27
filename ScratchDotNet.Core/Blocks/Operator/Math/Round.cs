@@ -96,7 +96,7 @@ public class Round : ValueOperatorBase
     public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         double number = (await NumProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        return new NumberType(Math.Round(number, 0));
+        return new NumberType(System.Math.Round(number, 0));
     }
 
     private string GetDebuggerDisplay()

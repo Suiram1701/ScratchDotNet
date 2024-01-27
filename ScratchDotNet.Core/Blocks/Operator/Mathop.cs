@@ -118,20 +118,20 @@ public class Mathop : ValueOperatorBase
     {
         Func<double, double> func = Operation switch
         {
-            MathopOperation.Abs => Math.Abs,
-            MathopOperation.Floor => Math.Floor,
-            MathopOperation.Ceiling => Math.Ceiling,
-            MathopOperation.Sqrt => Math.Sqrt,
-            MathopOperation.Sin => Math.Sin,
-            MathopOperation.Cos => Math.Cos,
-            MathopOperation.Tan => Math.Tan,
-            MathopOperation.Asin => Math.Asin,
-            MathopOperation.Acos => Math.Acos,
-            MathopOperation.Atan => Math.Atan,
-            MathopOperation.Ln => Math.Log,
-            MathopOperation.Log => Math.Log10,
-            MathopOperation.PowE => Math.Exp,
-            MathopOperation.Pow10 => x => Math.Pow(10, x),
+            MathopOperation.Abs => System.Math.Abs,
+            MathopOperation.Floor => System.Math.Floor,
+            MathopOperation.Ceiling => System.Math.Ceiling,
+            MathopOperation.Sqrt => System.Math.Sqrt,
+            MathopOperation.Sin => System.Math.Sin,
+            MathopOperation.Cos => System.Math.Cos,
+            MathopOperation.Tan => System.Math.Tan,
+            MathopOperation.Asin => System.Math.Asin,
+            MathopOperation.Acos => System.Math.Acos,
+            MathopOperation.Atan => System.Math.Atan,
+            MathopOperation.Ln => System.Math.Log,
+            MathopOperation.Log => System.Math.Log10,
+            MathopOperation.PowE => System.Math.Exp,
+            MathopOperation.Pow10 => x => System.Math.Pow(10, x),
             _ => throw new NotSupportedException("The specified mathop operation isn't supported.")
         };
 

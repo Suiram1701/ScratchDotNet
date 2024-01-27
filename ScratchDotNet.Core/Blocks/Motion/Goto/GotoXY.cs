@@ -9,6 +9,7 @@ using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ScratchDotNet.Core.Blocks.Motion.Goto;
 

@@ -131,7 +131,7 @@ public class CharAt : ValueOperatorBase
 
         if (index % 1 != 0)
         {
-            int rounded = (int)Math.Round(index);
+            int rounded = (int)System.Math.Round(index);
             logger.LogWarning("Unable to get a char by an index that is fractional. In cause of this a rounded index is used. Value: {index}; Rounded: {rounded}", index, rounded);
             index = rounded;
         }

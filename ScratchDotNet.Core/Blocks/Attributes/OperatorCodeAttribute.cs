@@ -4,7 +4,7 @@
 /// Sets the op code of a operator block
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-internal class OperatorCodeAttribute : Attribute
+internal sealed class OperatorCodeAttribute : Attribute
 {
     /// <summary>
     /// The code of this operator
