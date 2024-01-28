@@ -9,44 +9,58 @@ namespace ScratchDotNet.Test.Parse;
 internal class MotionTests
 {
     /// <summary>
-    /// Tests for "move steps" and "goto"
+    /// Test for the 'move steps' block
     /// </summary>
     [Test]
-    public void Movement() =>
-        TestHelpers.DoParseTest(MotionCodes.MovementCode);
+    public void MoveSteps() =>
+        TestHelpers.DoParseTest(MotionCodes.MoveStepsCode);
 
     /// <summary>
-    /// Tests for "glide to ..." and "glide to xy"
+    /// Test for the blocks 'goto' and 'goto xy'
     /// </summary>
     [Test]
-    public void Glidement() =>
-        TestHelpers.DoParseTest(MotionCodes.GlidementCode);
+    public void Goto() =>
+        TestHelpers.DoParseTest(MotionCodes.GotoCode);
 
     /// <summary>
-    /// Tests for "turn", "point in direction" and "point towards"
+    /// Test the blocks 'set x', 'change x', 'set y' and 'change y'
+    /// </summary>
+    [Test]
+    public void ChangeXYPosition() =>
+        TestHelpers.DoParseTest(MotionCodes.ChangeXYPositionCode);
+
+    /// <summary>
+    /// Test for the block 'bouce on edge'
+    /// </summary>
+    [Test]
+    public void BounceOnEdge() =>
+        TestHelpers.DoParseTest(MotionCodes.BounceOnEdgeCode);
+
+    /// <summary>
+    /// Test for the value blocks 'x position', 'y position' and 'direction'
+    /// </summary>
+    [Test]
+    public void MotionVariables() =>
+        TestHelpers.DoParseTest(MotionCodes.MotionVariablesCode);
+
+    /// <summary>
+    /// Test for the blocks 'glide in ... s to' and 'glide in ... s to XY'
+    /// </summary>
+    [Test]
+    public void Glide() =>
+        TestHelpers.DoParseTest(MotionCodes.GlideCode);
+
+    /// <summary>
+    /// Test for the blocks 'turn right', 'turn left', 'point in direction' and 'point towards'
     /// </summary>
     [Test]
     public void Rotation() =>
         TestHelpers.DoParseTest(MotionCodes.RotationCode);
 
     /// <summary>
-    /// Tests for the movements variables "x-Position", "y-Position" and "direction"
+    /// Test for the blocks 'set rotation style'
     /// </summary>
     [Test]
-    public void MovementVariables() =>
-        TestHelpers.DoParseTest(MotionCodes.MovementVariablesCode);
-
-    /// <summary>
-    /// Tests for the "set direction type" block
-    /// </summary>
-    [Test]
-    public void SetDirectionType() =>
-        TestHelpers.DoParseTest(MotionCodes.SetDirectionTypeCode);
-
-    /// <summary>
-    /// Tests for other stuff
-    /// </summary>
-    [Test]
-    public void Others() =>
-        TestHelpers.DoParseTest(MotionCodes.OthersCode);
+    public void SetRotationStyle() =>
+        TestHelpers.DoParseTest(MotionCodes.SetRotationStyleCode);
 }
