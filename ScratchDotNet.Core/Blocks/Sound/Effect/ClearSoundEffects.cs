@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using System;
 using System.Collections.Generic;
@@ -42,8 +43,8 @@ public class ClearSoundEffects : ExecutionBlockBase
 
     protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        context.Executor.SoundPitch = 0f;
-        context.Executor.SoundPanorama = 0f;
+        context.RuntimeData.Remove($"{context.Executor.Name}_{nameof(SoundEffect.Pitch)}");
+        context.RuntimeData.Remove($"{context.Executor.Name}_{nameof(SoundEffect.Panorama)}");
 
         return Task.CompletedTask;
     }

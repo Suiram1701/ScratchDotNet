@@ -8,6 +8,9 @@ namespace ScratchDotNet.Core.StageObjects;
 /// </summary>
 public interface IStageObject
 {
+    /// <summary>
+    /// Called when the volume of the object could have been changed
+    /// </summary>
     internal event Action<double> OnVolumeChanged;
 
     /// <summary>
@@ -45,25 +48,12 @@ public interface IStageObject
     public double SoundVolume { get; set; }
 
     /// <summary>
-    /// A modifier for the sound frequency
-    /// </summary>
-    internal double SoundPitch { get; set; }
-
-    /// <summary>
-    /// A modifier for the sound that specifies the positioning in a stereo-panarama
-    /// </summary>
-    internal double SoundPanorama { get; set; }
-
-    /// <summary>
-    /// A cancellation token source for sound playing
-    /// </summary>
-    /// <remarks>
-    /// <see langword="null"/> when currently no sound is playing
-    /// </remarks>
-    internal CancellationTokenSource? SoundCts { get; set; }
-
-    /// <summary>
     /// The graphical order of this object
     /// </summary>
     public int LayerOrder { get; }
+
+    /// <summary>
+    /// A list of the cts of every script owned by this object
+    /// </summary>
+    internal IEnumerable<CancellationTokenSource> ScriptsCts { get; }
 }

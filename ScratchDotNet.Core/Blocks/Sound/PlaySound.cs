@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Providers.Interfaces;
@@ -109,9 +110,11 @@ public class PlaySound : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        IStageObject executor = context.Executor;
-        if (!(executor.SoundCts?.IsCancellationRequested ?? true))
-            executor.SoundCts.Cancel();
+        context.RuntimeData.TryGetValue($"{context.Executor.Name}_soundCts", out object? soundCtsObj);
+        CancellationTokenSource? soundCts = soundCtsObj as CancellationTokenSource;
+
+        if (!(soundCts?.IsCancellationRequested ?? true))     // Stop sound playing when the object still playing a sound
+            soundCts.Cancel();
 
         if (context.Services[typeof(ISoundOutputService)] is not ISoundOutputService soundOutputProvider)
         {
@@ -120,23 +123,31 @@ public class PlaySound : ExecutionBlockBase
         }
 
         string soundName = (await SoundNameProvider.GetResultAsync(context, logger, ct)).GetStringValue();
-        SoundAsset? soundAsset = executor.Sounds.FirstOrDefault(sa => sa.Name.Equals(soundName));
+        SoundAsset? soundAsset = context.Executor.Sounds.FirstOrDefault(sa => sa.Name.Equals(soundName));
         if (soundAsset is null)
         {
             logger.LogWarning("Could not find a sound named \"{name}\"", soundName);
             return;
         }
 
-        float volume = (float)(Math.Min(Math.Max(executor.SoundVolume, 0), 100) / 100f);      // Validate that the volume is between 0 and 100 and convert it to a value between 0.0 - 1.0
-        float pitch = (float)executor.SoundPitch;
-        float pan = (float)Math.Min(Math.Max(executor.SoundPanorama, -100), 100) / 100;     // Validate that the pan is between 0 and 100 and convert it to a value between 0.0 - 1.0
+        context.RuntimeData.TryGetValue($"{context.Executor.Name}_{nameof(SoundEffect.Pitch)}", out object? pitchObj);
+        double soundPitch = pitchObj as double? ?? 0.0d;
 
-        executor.SoundCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-        Task soundPlay = soundOutputProvider.PlaySoundAsync(soundAsset, volume, pitch, pan, logger, executor.SoundCts.Token);
+        context.RuntimeData.TryGetValue($"{context.Executor.Name}_{nameof(SoundEffect.Panorama)}", out object? panObj);
+        double soundPan = panObj as double? ?? 0.0d;
+
+        float volume = (float)(Math.Min(Math.Max(context.Executor.SoundVolume, 0), 100) / 100f);      // Validate that the volume is between 0 and 100 and convert it to a value between 0.0 - 1.0
+        float pitch = (float)soundPitch;
+        float pan = (float)Math.Min(Math.Max(soundPan, -100), 100) / 100;     // Validate that the pan is between 0 and 100 and convert it to a value between 0.0 - 1.0
+
+        CancellationTokenSource newSoundCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        context.RuntimeData[$"{context.Executor.Name}_soundCts"] = newSoundCts;
+
+        Task soundPlay = soundOutputProvider.PlaySoundAsync(soundAsset, volume, pitch, pan, logger, newSoundCts.Token);
         if (AwaitEnd)
             await soundPlay;
         else
-            _ = Task.Run(async () => await soundPlay, executor.SoundCts.Token);
+            _ = Task.Run(async () => await soundPlay, newSoundCts.Token);
     }
 
     private static string GetOpCodeFromAwaitEnd(bool awaitEnd) =>

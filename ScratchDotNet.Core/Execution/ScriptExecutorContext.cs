@@ -24,6 +24,8 @@ public class ScriptExecutorContext
     /// </summary>
     public IEnumerable<IFigure> Figures { get; }
 
+    public Dictionary<string, object> RuntimeData { get; }
+
     /// <summary>
     /// The logger factory
     /// </summary>
@@ -39,6 +41,7 @@ public class ScriptExecutorContext
 #pragma warning restore CS8618
     {
         Figures = Array.Empty<IFigure>();
+        RuntimeData = new();
         LoggerFactory = NullLoggerFactory.Instance;
         Services = new Dictionary<Type, object>();
     }

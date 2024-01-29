@@ -37,7 +37,9 @@ public class StopSounds : ExecutionBlockBase
 
     protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        context.Executor.SoundCts?.Cancel();
+        context.RuntimeData.TryGetValue($"{context.Executor.Name}_soundCts", out object? soundCtsObj);
+        (soundCtsObj as CancellationTokenSource)?.Cancel();
+
         return Task.CompletedTask;
     }
 
