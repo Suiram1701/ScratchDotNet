@@ -6,7 +6,7 @@ using ScratchDotNet.Core.Execution;
 namespace ScratchDotNet.Core.Blocks.Bases;
 
 /// <summary>
-/// The base for blocks that manipulates a variable
+/// The base for blocks that work with variables
 /// </summary>
 public abstract class VariableExecutionBase : ExecutionBlockBase
 {
@@ -41,7 +41,7 @@ public abstract class VariableExecutionBase : ExecutionBlockBase
         VariableRef = reference;
     }
 
-    internal VariableExecutionBase(string blockId, JToken blockToken) : base(blockId, blockToken)
+    protected internal VariableExecutionBase(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         VariableRef = new(blockToken, "fields.VARIABLE");
     }

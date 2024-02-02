@@ -73,5 +73,5 @@ public class Variable
     /// </summary>
     /// <returns></returns>
     public VariableRef CreateReference() =>
-        new(varName: Name, varId: Id);
+        new(this);
 }

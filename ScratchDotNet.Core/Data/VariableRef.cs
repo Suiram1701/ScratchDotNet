@@ -42,7 +42,7 @@ public class VariableRef
     internal VariableRef(JToken blockToken, string jsonPath)
     {
         JToken refToken = blockToken.SelectToken(jsonPath)!;
-        VarName = refToken.First!.Value<string>()!;
-        VarId = refToken.Last!.Value<string>()!;
+        VarName = refToken[0]!.Value<string>()!;
+        VarId = refToken[1]!.Value<string>()!;
     }
 }

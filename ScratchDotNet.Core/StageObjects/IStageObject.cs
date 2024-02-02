@@ -23,7 +23,10 @@ public interface IStageObject
     /// </summary>
     public IEnumerable<Variable> Variables { get; }
 
-    // Lists
+    /// <summary>
+    /// The lists owned by this object
+    /// </summary>
+    public IEnumerable<List> Lists { get; }
 
     // Broadcasts
 
