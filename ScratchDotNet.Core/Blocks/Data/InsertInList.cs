@@ -118,7 +118,7 @@ public class InsertInList : ListExecutionBase
         }
 
         ScratchTypeBase item = await ItemProvider.GetResultAsync(context, logger, ct);
-        list.Values.Insert(index, item);
+        list.Values.Insert(--index, item);
     }
 
     private string GetDebuggerDisplay()

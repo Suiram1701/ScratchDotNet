@@ -111,7 +111,7 @@ public class ReplaceItemOfList : ListExecutionBase
         double rawIndex = (await IndexProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
         int index = (int)Math.Round(rawIndex);
 
-        if (index < 1 || index > (list.Values.Count - 1))
+        if (index < 1 || index > list.Values.Count)
         {
             logger.LogTrace("Index to replace item of list is out of range. Index: {index}; Value count: {count}", index, list.Values.Count);
             return;

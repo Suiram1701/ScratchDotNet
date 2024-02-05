@@ -49,5 +49,13 @@ public abstract class ListExecutionBase : ExecutionBlockBase
         return ExecuteInternalAsync(context, list, logger, ct);
     }
 
+    /// <summary>
+    /// The execution of this list block
+    /// </summary>
+    /// <param name="context">The context</param>
+    /// <param name="list">The list of this block</param>
+    /// <param name="logger">The logger to use</param>
+    /// <param name="ct">The cancellation token</param>
+    /// <returns>The async task</returns>
     protected abstract Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default);
 }

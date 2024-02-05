@@ -28,4 +28,18 @@ public class DataTests
     [Test]
     public void GetVariable() =>
         TestHelpers.DoParseTest(DataCodes.GetVariableCode);
+
+    /// <summary>
+    /// Test for the blocks 'add to list', 'delete # of list', 'delete all of list', 'insert ... in list' and 'replace item # of list'
+    /// </summary>
+    [Test]
+    public void Manipulate() =>
+        TestHelpers.DoParseTest(DataCodes.ManipulateListCode);
+
+    /// <summary>
+    /// Test for the blocks that read data from a list like 'item # of list', 'item # of ... in list', 'length of list' and 'list contains ...?'
+    /// </summary>
+    [Test]
+    public void GetListData() =>
+        TestHelpers.DoParseTest(DataCodes.GetListDataCode);
 }
