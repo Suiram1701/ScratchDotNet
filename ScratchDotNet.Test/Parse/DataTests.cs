@@ -42,4 +42,11 @@ public class DataTests
     [Test]
     public void GetListData() =>
         TestHelpers.DoParseTest(DataCodes.GetListDataCode);
+
+    /// <summary>
+    /// Test for the blocks 'hide list' and 'show list'
+    /// </summary>
+    [Test]
+    public void ListVisibility() =>
+        TestHelpers.DoParseTest(DataCodes.ListVisibilityCode);
 }
