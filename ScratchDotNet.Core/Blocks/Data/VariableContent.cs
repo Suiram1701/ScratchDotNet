@@ -11,7 +11,7 @@ namespace ScratchDotNet.Core.Blocks.Data;
 /// Provides the content of a variable
 /// </summary>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public class VariableResult : IValueProvider
+public class VariableContent : IValueProvider
 {
     public event Action? OnValueChanged;
 
@@ -26,7 +26,7 @@ public class VariableResult : IValueProvider
     /// Creates a new instance
     /// </summary>
     /// <param name="reference">The variable whose value should read out</param>
-    public VariableResult(VariableRef reference)
+    public VariableContent(VariableRef reference)
     {
         ArgumentNullException.ThrowIfNull(reference, nameof(reference));
         VariableRef = reference;

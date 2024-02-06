@@ -117,11 +117,14 @@ public static class BlockHelpers
             string varName = dataValue!;
             string varId = dataToken.SelectToken("[2]")!.Value<string>()!;
 
-            return new VariableResult(new(varName, varId));
+            return new VariableContent(new(varName, varId));
         }
         else if (dataType == DataType.List)
         {
-            throw new NotImplementedException();
+            string listName = dataValue!;
+            string listId= dataToken.SelectToken("[2]")!.Value<string>()!;
+
+            return new ListContent(new(listName, listId));
         }
         else
         {
