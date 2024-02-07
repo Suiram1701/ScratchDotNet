@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
@@ -20,7 +21,7 @@ namespace ScratchDotNet.Core.Blocks.Operator;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class Mathop : ValueOperatorBase
 {
-    public override event Action OnValueChanged
+    public override event EventHandler<ValueChangedEventArgs> OnValueChanged
     {
         add => ValueProvider.OnValueChanged += value;
         remove => ValueProvider.OnValueChanged -= value;

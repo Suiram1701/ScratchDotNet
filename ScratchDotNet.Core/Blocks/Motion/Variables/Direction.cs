@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
@@ -20,7 +21,7 @@ namespace ScratchDotNet.Core.Blocks.Motion.Variables;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class Direction : ValueOperatorBase
 {
-    public override event Action? OnValueChanged;
+    public override event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     private bool _delegateInitialized;
 
@@ -47,7 +48,7 @@ public class Direction : ValueOperatorBase
 
         if (!_delegateInitialized)
         {
-            figure.OnDirectionChanged += ValueChanged;
+            figure.OnDirectionChanged += Figure_OnDirectionChanged;
 
             logger.LogInformation("Value changed event of block {block} was successfully initialized", BlockId);
             _delegateInitialized = true;
@@ -57,10 +58,13 @@ public class Direction : ValueOperatorBase
         return Task.FromResult((ScratchTypeBase)new NumberType(result));
     }
 
-    private void ValueChanged(double value)
+    private void Figure_OnDirectionChanged(object? sender, GenericValueChangedEventArgs<double> e)
     {
-        if (OnValueChanged is not null)
-            OnValueChanged();
+        if (e.OldValue == e.NewValue)
+            return;
+
+        ValueChangedEventArgs eventArgs = new(new NumberType(e.OldValue), new NumberType(e.NewValue));
+        OnValueChanged?.Invoke(sender, eventArgs);
     }
 
     private static string GetDebuggerDisplay() =>

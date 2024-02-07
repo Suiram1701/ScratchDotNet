@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Data;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -17,7 +18,7 @@ namespace ScratchDotNet.Core.Blocks.Bases;
 /// </summary>
 public abstract class ListOperatorBase : ValueOperatorBase
 {
-    public sealed override event Action? OnValueChanged;
+    public sealed override event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     /// <summary>
     /// The reference to the list of that the data should were read
@@ -87,6 +88,6 @@ public abstract class ListOperatorBase : ValueOperatorBase
     /// <returns>The async task</returns>
     protected abstract Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default);
 
-    private void List_OnValueChanged() =>
-        OnValueChanged?.Invoke();
+    private void List_OnValueChanged(object? s, ValueChangedEventArgs e) =>
+        OnValueChanged?.Invoke(s, e);
 }

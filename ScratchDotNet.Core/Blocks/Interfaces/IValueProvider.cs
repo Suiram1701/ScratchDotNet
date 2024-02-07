@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types.Bases;
 
@@ -12,7 +13,7 @@ public interface IValueProvider
     /// <summary>
     /// Indicates that the result of <see cref="GetResultAsync(ScriptExecutorContext, ILogger, CancellationToken)"/> could have changed
     /// </summary>
-    public event Action OnValueChanged;
+    public event EventHandler<ValueChangedEventArgs> OnValueChanged;
 
     /// <summary>
     /// Evaluate the result

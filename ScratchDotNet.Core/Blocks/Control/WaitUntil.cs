@@ -63,7 +63,8 @@ public class WaitUntil : ExecutionBlockBase
         TaskCompletionSource tcs = new(TaskCreationOptions.LongRunning);
         using CancellationTokenRegistration ctr = ct.Register(tcs.SetCanceled);
 
-        async void ConditionChangedAsync()
+        // This method is called when the result of a value provider on which the condition depends may have changed
+        async void ConditionChangedAsync(object? s, System.EventArgs e)
         {
             if ((await ConditionProvider.GetResultAsync(context, logger, ct)).GetBoolValue())
                 tcs.SetResult();
@@ -75,7 +76,7 @@ public class WaitUntil : ExecutionBlockBase
                 return;
             ConditionProvider.OnValueChanged += ConditionChangedAsync;
 
-            await tcs.Task;
+            await tcs.Task;     // Wait until the condition were fulfilled
         }
         catch (TaskCanceledException)
         {
@@ -84,7 +85,7 @@ public class WaitUntil : ExecutionBlockBase
         {
             logger.LogError(ex, "An error happened while waiting for the {tcs}", nameof(TaskCompletionSource));
         }
-        finally
+        finally     // The condition were fulfilled or the execution was cancelled
         {
             ConditionProvider.OnValueChanged -= ConditionChangedAsync;
             ctr.Unregister();

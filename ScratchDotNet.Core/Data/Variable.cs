@@ -1,4 +1,5 @@
 ﻿using ScratchDotNet.Core.Blocks;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
 
@@ -12,7 +13,7 @@ public class Variable
     /// <summary>
     /// Called when the value of the variable could be have changed
     /// </summary>
-    public event Action? OnValueChanged;
+    public event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     /// <summary>
     /// The name of the variable
@@ -33,9 +34,10 @@ public class Variable
         set
         {
             ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ScratchTypeBase oldItem = _value;
             _value = value;
 
-            OnValueChanged?.Invoke();
+            OnValueChanged?.Invoke(this, new(oldItem, value));
         }
     }
     private ScratchTypeBase _value;

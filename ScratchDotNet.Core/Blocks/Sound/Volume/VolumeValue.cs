@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -21,7 +22,7 @@ namespace ScratchDotNet.Core.Blocks.Sound.Volume;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class VolumeValue : ValueOperatorBase
 {
-    public override event Action? OnValueChanged;
+    public override event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     private bool _delegateInitialized;
 
@@ -50,7 +51,7 @@ public class VolumeValue : ValueOperatorBase
     {
         if (!_delegateInitialized)
         {
-            context.Executor.OnVolumeChanged += ValueChanged;
+            context.Executor.OnVolumeChanged += Executor_OnVolumeChanged;
 
             logger.LogInformation("Value changed event of block {block} was successfully initialized", BlockId);
             _delegateInitialized = true;
@@ -60,8 +61,14 @@ public class VolumeValue : ValueOperatorBase
         return Task.FromResult((ScratchTypeBase)new NumberType(result));
     }
 
-    private void ValueChanged(double value) =>
-        OnValueChanged?.Invoke();
+    private void Executor_OnVolumeChanged(object? sender, GenericValueChangedEventArgs<double> e)
+    {
+        if (e.OldValue == e.NewValue)
+            return;
+
+        ValueChangedEventArgs eventArgs = new(new NumberType(e.OldValue), new  NumberType(e.NewValue));
+        OnValueChanged?.Invoke(sender, eventArgs);
+    }
 
     private static string GetDebuggerDisplay() =>
         "get volume";

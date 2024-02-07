@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -17,7 +18,7 @@ namespace ScratchDotNet.Core.Blocks.Operator.String;
 [OperatorCode(_constOpCode)]
 public class Contains : ValueOperatorBase, IBoolValueProvider
 {
-    public override event Action OnValueChanged
+    public override event EventHandler<ValueChangedEventArgs> OnValueChanged
     {
         add
         {

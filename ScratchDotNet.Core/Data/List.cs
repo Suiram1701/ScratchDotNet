@@ -1,4 +1,5 @@
 ﻿using ScratchDotNet.Core.Blocks;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Types.Bases;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,7 +11,7 @@ namespace ScratchDotNet.Core.Data;
 /// </summary>
 public class List
 {
-    public event Action? OnValueChanged;
+    public event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     /// <summary>
     /// The name of the list
@@ -78,6 +79,9 @@ public class List
     public ListRef CreateReference() =>
         new(this);
 
-    private void Values_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
-        OnValueChanged?.Invoke();
+    private void Values_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        ValueChangedEventArgs args = new(e.OldItems?[0] as ScratchTypeBase, e.NewItems?[0] as ScratchTypeBase);
+        OnValueChanged?.Invoke(sender, args);
+    }
 }

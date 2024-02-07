@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types.Bases;
 
@@ -11,7 +12,7 @@ namespace ScratchDotNet.Core.Blocks.Bases;
 /// </summary>
 public abstract class ValueOperatorBase : BlockBase, IValueProvider
 {
-    public abstract event Action OnValueChanged;
+    public abstract event EventHandler<ValueChangedEventArgs> OnValueChanged;
 
     /// <inheritdoc/>
     protected ValueOperatorBase(string opcode) : base(opcode)

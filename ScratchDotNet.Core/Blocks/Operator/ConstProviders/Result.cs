@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -19,7 +20,7 @@ public class Result : IValueProvider, IConstProvider
     /// <remarks>
     /// This will never be called
     /// </remarks>
-    public event Action OnValueChanged { add { } remove { } }
+    public event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
 
     /// <summary>
     /// The value to return

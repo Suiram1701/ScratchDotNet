@@ -1,4 +1,5 @@
 ﻿using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.EventArgs;
 
 namespace ScratchDotNet.Core.StageObjects;
 
@@ -8,19 +9,14 @@ namespace ScratchDotNet.Core.StageObjects;
 public interface IFigure : IStageObject
 {
     /// <summary>
-    /// Called when the x position of the figure could have changed
+    /// Called when the position of the figure could have changed
     /// </summary>
-    public event Action<double> OnXPositionChanged;
-
-    /// <summary>
-    /// Called when the y position of the figure could have changed
-    /// </summary>
-    public event Action<double> OnYPositionChanged;
+    public event EventHandler<PositionChangedEventArgs> OnPositionChanged;
 
     /// <summary>
     /// Called when the direction could have changed
     /// </summary>
-    public event Action<double> OnDirectionChanged;
+    public event EventHandler<GenericValueChangedEventArgs<double>> OnDirectionChanged;
 
     /// <summary>
     /// Is the figure visible

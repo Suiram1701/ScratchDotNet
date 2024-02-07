@@ -1,4 +1,5 @@
 ﻿using ScratchDotNet.Core.Data;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.StageObjects.Assets;
 
 namespace ScratchDotNet.Core.StageObjects;
@@ -11,7 +12,7 @@ public interface IStageObject
     /// <summary>
     /// Called when the volume of the object could have been changed
     /// </summary>
-    internal event Action<double> OnVolumeChanged;
+    internal event EventHandler<GenericValueChangedEventArgs<double>> OnVolumeChanged;
 
     /// <summary>
     /// The name of the figure

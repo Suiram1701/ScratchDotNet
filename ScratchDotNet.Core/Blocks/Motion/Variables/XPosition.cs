@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
@@ -20,7 +21,7 @@ namespace ScratchDotNet.Core.Blocks.Motion.Variables;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class XPosition : ValueOperatorBase
 {
-    public override event Action? OnValueChanged;
+    public override event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     private bool _delegateInitialized;
 
@@ -47,7 +48,7 @@ public class XPosition : ValueOperatorBase
 
         if (!_delegateInitialized)
         {
-            figure.OnXPositionChanged += ValueChanged;
+            figure.OnPositionChanged += Figure_OnPositionChanged;
 
             logger.LogInformation("Value changed event of block {block} was successfully initialized", BlockId);
             _delegateInitialized = true;
@@ -56,10 +57,13 @@ public class XPosition : ValueOperatorBase
         return Task.FromResult((ScratchTypeBase)new NumberType(figure.X));
     }
 
-    private void ValueChanged(double value)
+    private void Figure_OnPositionChanged(object? sender, PositionChangedEventArgs e)
     {
-        if (OnValueChanged is not null)
-            OnValueChanged();
+        if (e.OldPosition.X == e.NewPosition.X)
+            return;
+
+        ValueChangedEventArgs eventArgs = new(new NumberType(e.OldPosition.X), new NumberType(e.NewPosition.X));
+        OnValueChanged?.Invoke(sender, eventArgs);
     }
 
     private static string GetDebuggerDisplay() =>

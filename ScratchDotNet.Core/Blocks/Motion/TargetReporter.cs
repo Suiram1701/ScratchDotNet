@@ -4,6 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Motion.Glide;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
@@ -23,7 +24,7 @@ internal class TargetReporter : ValueOperatorBase
     /// <remarks>
     /// This will never be get called
     /// </remarks>
-    public override event Action OnValueChanged { add { } remove { } }
+    public override event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
 
     /// <summary>
     /// The target of this reporter

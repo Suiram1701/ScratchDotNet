@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -15,7 +16,7 @@ public class EmptyBool : IBoolValueProvider
     /// <remarks>
     /// This will never be called
     /// </remarks>
-    public event Action OnValueChanged { add { } remove { } }
+    public event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
 
     public Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
         Task.FromResult((ScratchTypeBase)new BooleanType());

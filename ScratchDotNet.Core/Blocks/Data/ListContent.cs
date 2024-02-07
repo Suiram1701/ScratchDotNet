@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Data;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Bases;
@@ -22,7 +23,7 @@ namespace ScratchDotNet.Core.Blocks.Data;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class ListContent : IValueProvider
 {
-    public event Action? OnValueChanged;
+    public event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     /// <summary>
     /// The reference to the list
@@ -63,8 +64,8 @@ public class ListContent : IValueProvider
         return Task.FromResult<ScratchTypeBase>(new StringType(result));
     }
 
-    private void List_OnValueChanged() =>
-        OnValueChanged?.Invoke();
+    private void List_OnValueChanged(object? s, ValueChangedEventArgs e) =>
+        OnValueChanged?.Invoke(s, e);
 
     private string GetDebuggerDisplay() =>
         string.Format("List {0}", ListRef.ListName);

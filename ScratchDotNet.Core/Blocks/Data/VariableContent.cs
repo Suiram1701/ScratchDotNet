@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Data;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types.Bases;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ namespace ScratchDotNet.Core.Blocks.Data;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public class VariableContent : IValueProvider
 {
-    public event Action? OnValueChanged;
+    public event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     /// <summary>
     /// A reference to the variable whose value should read out
@@ -43,7 +44,7 @@ public class VariableContent : IValueProvider
 
         if (!_delegateInitialized)
         {
-            variable.OnValueChanged += ValueChanged;
+            variable.OnValueChanged += Variable_OnValueChanged;
 
             logger.LogInformation("Value changed event to variable {id} was successfully initialized", VariableRef.VarId);
             _delegateInitialized = true;
@@ -52,8 +53,8 @@ public class VariableContent : IValueProvider
         return Task.FromResult(variable.Value);
     }
 
-    private void ValueChanged() =>
-        OnValueChanged?.Invoke();
+    private void Variable_OnValueChanged(object? sender, ValueChangedEventArgs e) =>
+        OnValueChanged?.Invoke(sender, e);
 
     private string GetDebuggerDisplay() =>
         string.Format("var {0}", VariableRef.VarName);
