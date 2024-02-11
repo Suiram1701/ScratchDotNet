@@ -9,7 +9,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,7 +42,7 @@ internal class IndexOfItemOfList : ListOperatorBase
     /// <param name="reference">The reference to the list</param>
     /// <param name="item">The item whose index should get returned</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public IndexOfItemOfList(ListRef reference, ScratchTypeBase item) : this(reference, item, BlockHelpers.GenerateBlockId())
+    public IndexOfItemOfList(ListRef reference, IScratchType item) : this(reference, item, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -54,7 +54,7 @@ internal class IndexOfItemOfList : ListOperatorBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public IndexOfItemOfList(ListRef reference, ScratchTypeBase item, string blockId) : base(reference, blockId, _constOpCode)
+    public IndexOfItemOfList(ListRef reference, IScratchType item, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
         ItemProvider = new Result(item, DataType.String);
@@ -92,17 +92,17 @@ internal class IndexOfItemOfList : ListOperatorBase
         ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM") ?? new Empty(DataType.String);
     }
 
-    protected override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
+    protected override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
     {
-        ScratchTypeBase item = await ItemProvider.GetResultAsync(context, logger, ct);
+        IScratchType item = await ItemProvider.GetResultAsync(context, logger, ct);
 
         int index = list.Values.IndexOf(item);
-        return new NumberType(index + 1);
+        return new DoubleValue(index + 1);
     }
 
     private string GetDebuggerDisplay()
     {
-        string itemString = ItemProvider.GetDefaultResult().GetStringValue();
+        string itemString = ItemProvider.GetDefaultResult().ConvertToStringValue();
 
         return string.Format("List {0}.IndexOf(\"{1}\");", ListRef.ListName, itemString);
     }

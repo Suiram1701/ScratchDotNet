@@ -69,7 +69,7 @@ public abstract class GlideBase : ExecutionBlockBase
 
     protected virtual string GetDebuggerDisplay()
     {
-        double timeSeconds = TimeProvider.GetDefaultResult().GetNumberValue();
+        double timeSeconds = TimeProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("Glide in {0}s to ", timeSeconds);
     }
 }

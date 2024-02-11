@@ -84,7 +84,7 @@ public class Wait : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double duration = (await DurationProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double duration = (await DurationProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
         if (duration < 0)
         {
@@ -98,7 +98,7 @@ public class Wait : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        double duration = DurationProvider.GetDefaultResult().GetNumberValue();
+        double duration = DurationProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("Wait: {0}s", duration);
     }
 }

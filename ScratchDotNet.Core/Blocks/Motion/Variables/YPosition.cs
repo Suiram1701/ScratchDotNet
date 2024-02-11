@@ -6,7 +6,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion.Variables;
@@ -38,12 +38,12 @@ public class YPosition : ValueOperatorBase
     {
     }
 
-    public override Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
-            return Task.FromResult((ScratchTypeBase)new NumberType());
+            return Task.FromResult<IScratchType>(new DoubleValue());
         }
 
         if (!_delegateInitialized)
@@ -54,7 +54,7 @@ public class YPosition : ValueOperatorBase
             _delegateInitialized = true;
         }
 
-        return Task.FromResult((ScratchTypeBase)new NumberType(figure.Y));
+        return Task.FromResult<IScratchType>(new DoubleValue(figure.Y));
     }
 
     private void Figure_OnPositionChanged(object? sender, PositionChangedEventArgs e)
@@ -62,7 +62,7 @@ public class YPosition : ValueOperatorBase
         if (e.OldPosition.Y == e.NewPosition.Y)
             return;
 
-        ValueChangedEventArgs eventArgs = new(new NumberType(e.OldPosition.Y), new NumberType(e.NewPosition.Y));
+        ValueChangedEventArgs eventArgs = new(new DoubleValue(e.OldPosition.Y), new DoubleValue(e.NewPosition.Y));
         OnValueChanged?.Invoke(sender, eventArgs);
     }
 

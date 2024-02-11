@@ -102,7 +102,7 @@ public class PointInDirection : ExecutionBlockBase
             return;
         }
 
-        double value = (await AngleProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double value = (await AngleProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         if (double.IsNaN(value))
         {
             logger.LogWarning("The figure could not point to an empty value.");
@@ -114,7 +114,7 @@ public class PointInDirection : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        double value = AngleProvider.GetDefaultResult().GetNumberValue();
+        double value = AngleProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("Rotate to: {0}°", value);
     }
 }

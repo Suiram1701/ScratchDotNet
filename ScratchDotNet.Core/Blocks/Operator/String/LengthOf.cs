@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator.String;
@@ -94,15 +94,15 @@ public class LengthOf : ValueOperatorBase
         StringProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING") ?? new Empty(DataType.String);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        string value = (await StringProvider.GetResultAsync(context, logger, ct)).GetStringValue();
-        return new NumberType(value.Length);
+        string value = (await StringProvider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
+        return new DoubleValue(value.Length);
     }
 
     private string GetDebuggerDisplay()
     {
-        string value = StringProvider.GetDefaultResult().GetStringValue();
+        string value = StringProvider.GetDefaultResult().ConvertToStringValue();
         return string.Format("Length of: {0}", value);
     }
 }

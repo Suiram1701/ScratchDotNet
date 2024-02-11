@@ -94,15 +94,15 @@ public class ChangeVariable : VariableExecutionBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, Variable variable, ILogger logger, CancellationToken ct = default)
     {
-        double value1 = (await ValueProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        double value2 = variable.Value.GetNumberValue();
+        double value1 = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double value2 = variable.Value.ConvertToDoubleValue();
 
-        variable.Value = new NumberType(value1 + value2);
+        variable.Value = new DoubleValue(value1 + value2);
     }
 
     private string GetDebuggerDisplay()
     {
-        double value = ValueProvider.GetDefaultResult().GetNumberValue();
+        double value = ValueProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("var {0} += {1}", VariableRef.VarName, value);
     }
 }

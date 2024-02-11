@@ -122,7 +122,7 @@ public class PlaySound : ExecutionBlockBase
             return;
         }
 
-        string soundName = (await SoundNameProvider.GetResultAsync(context, logger, ct)).GetStringValue();
+        string soundName = (await SoundNameProvider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
         SoundAsset? soundAsset = context.Executor.Sounds.FirstOrDefault(sa => sa.Name.Equals(soundName));
         if (soundAsset is null)
         {
@@ -157,7 +157,7 @@ public class PlaySound : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        string name = SoundNameProvider.GetDefaultResult().GetStringValue();
+        string name = SoundNameProvider.GetDefaultResult().ConvertToStringValue();
         string untilDone = AwaitEnd
             ? " until end"
             : string.Empty;

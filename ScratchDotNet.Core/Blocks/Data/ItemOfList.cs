@@ -9,7 +9,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,7 +53,7 @@ public class ItemOfList : ListOperatorBase
     /// <exception cref="ArgumentNullException"></exception>
     public ItemOfList(ListRef reference, int index, string blockId) : base(reference, blockId, _constOpCode)
     {
-        IndexProvider = new Result(new NumberType(index), DataType.Integer);
+        IndexProvider = new Result(new DoubleValue(index), DataType.Integer);
     }
 
     /// <summary>
@@ -88,15 +88,15 @@ public class ItemOfList : ListOperatorBase
         IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX") ?? new Empty(DataType.Integer);
     }
 
-    protected override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
+    protected override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
     {
-        double rawIndex = (await IndexProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double rawIndex = (await IndexProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         int index = (int)Math.Round(rawIndex);
 
         if (index < 1 || index > list.Values.Count)
         {
             logger.LogTrace("Index to get an item of the list is out of range. Index: {index}; Value count: {count}", index, list.Values.Count);
-            return new StringType();
+            return new StringValue();
         }
 
         return list.Values[--index];
@@ -104,7 +104,7 @@ public class ItemOfList : ListOperatorBase
 
     private string GetDebuggerDisplay()
     {
-        double rawIndex = IndexProvider.GetDefaultResult().GetNumberValue();
+        double rawIndex = IndexProvider.GetDefaultResult().ConvertToDoubleValue();
         int index = (int)Math.Round(rawIndex);
 
         return string.Format("List {0}[{1}]", ListRef.ListName, index);

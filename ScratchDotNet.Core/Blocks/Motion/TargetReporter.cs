@@ -8,7 +8,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
 
@@ -114,8 +114,8 @@ internal class TargetReporter : ValueOperatorBase
         Target = blockToken.SelectToken(jsonPath)!.Value<string>()!;
     }
 
-    public override Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
-        Task.FromResult((ScratchTypeBase)new StringType(Target));
+    public override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+        Task.FromResult<IScratchType>(new StringValue(Target));
 
     private string ThrowUnSupportedOpCodeException()
     {

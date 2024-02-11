@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.Blocks.Interfaces;
 
@@ -22,5 +22,5 @@ public interface IValueProvider
     /// <param name="logger">The logger</param>
     /// <param name="ct">The cancellation token</param>
     /// <returns>The result</returns>
-    public Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default);
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default);
 }

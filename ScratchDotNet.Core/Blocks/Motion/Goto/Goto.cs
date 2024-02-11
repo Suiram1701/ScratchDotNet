@@ -125,7 +125,7 @@ public class Goto : ExecutionBlockBase
             return;
         }
 
-        string target = (await TargetProvider.GetResultAsync(context, logger, ct)).GetStringValue();
+        string target = (await TargetProvider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
         (double x, double y) = MotionHelpers.GetTargetPosition(target, context, logger);
 
         figure.MoveTo(x, y);
@@ -133,7 +133,7 @@ public class Goto : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        string target = TargetProvider.GetDefaultResult().GetStringValue();
+        string target = TargetProvider.GetDefaultResult().ConvertToStringValue();
         string targetString = target switch
         {
             "_random_" => "random position",

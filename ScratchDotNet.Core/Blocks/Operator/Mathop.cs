@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator;
@@ -75,7 +75,7 @@ public class Mathop : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         Operation = operation;
-        ValueProvider = new Result(new NumberType(value), DataType.Number);
+        ValueProvider = new Result(new DoubleValue(value), DataType.Number);
     }
 
     /// <summary>
@@ -115,7 +115,7 @@ public class Mathop : ValueOperatorBase
         ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM") ?? new Empty(DataType.Number);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         Func<double, double> func = Operation switch
         {
@@ -136,13 +136,13 @@ public class Mathop : ValueOperatorBase
             _ => throw new NotSupportedException("The specified mathop operation isn't supported.")
         };
 
-        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        return new NumberType(func(value));
+        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        return new DoubleValue(func(value));
     }
 
     private string GetDebuggerDisplay()
     {
-        double value = ValueProvider.GetDefaultResult().GetNumberValue();
+        double value = ValueProvider.GetDefaultResult().ConvertToDoubleValue();
         string operation = Operation.ToString();
 
         return string.Format("{0} of {1}", operation, value);

@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.Extensions;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Control;
@@ -66,14 +67,15 @@ public class WaitUntil : ExecutionBlockBase
         // This method is called when the result of a value provider on which the condition depends may have changed
         async void ConditionChangedAsync(object? s, System.EventArgs e)
         {
-            if ((await ConditionProvider.GetResultAsync(context, logger, ct)).GetBoolValue())
+            if (await ConditionProvider.GetBooleanResultAsync(context, logger, ct))
                 tcs.SetResult();
         }
 
         try
         {
-            if ((await ConditionProvider.GetResultAsync(context, logger, ct)).GetBoolValue())
+            if (await ConditionProvider.GetBooleanResultAsync(context, logger, ct))
                 return;
+
             ConditionProvider.OnValueChanged += ConditionChangedAsync;
 
             await tcs.Task;     // Wait until the condition were fulfilled

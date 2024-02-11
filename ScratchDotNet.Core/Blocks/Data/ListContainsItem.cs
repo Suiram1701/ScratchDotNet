@@ -9,7 +9,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,7 +39,7 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
     /// <param name="reference">The reference to the list</param>
     /// <param name="item">The item which one could be contained in the list</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ListContainsItem(ListRef reference, ScratchTypeBase item) : this(reference, item, BlockHelpers.GenerateBlockId())
+    public ListContainsItem(ListRef reference, IScratchType item) : this(reference, item, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -51,7 +51,7 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
     /// <param name="blockId">The id of this block</param>
     /// <exception cref=ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public ListContainsItem(ListRef reference, ScratchTypeBase item, string blockId) : base(reference, blockId, _constOpCode)
+    public ListContainsItem(ListRef reference, IScratchType item, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(reference, nameof(reference));
         ItemProvider = new Result(item, DataType.String);
@@ -62,17 +62,17 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
         ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM") ?? new Empty(DataType.String);
     }
 
-    protected override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
+    protected override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
     {
-        ScratchTypeBase item = await ItemProvider.GetResultAsync(context, logger, ct);
+        IScratchType item = await ItemProvider.GetResultAsync(context, logger, ct);
 
         bool result = list.Values.Contains(item);
-        return new BooleanType(result);
+        return new BooleanValue(result);
     }
 
     private string GetDebuggerDisplay()
     {
-        string itemString = ItemProvider.GetDefaultResult().GetStringValue();
+        string itemString = ItemProvider.GetDefaultResult().ConvertToStringValue();
 
         return string.Format("List {0}.Conatins(\"{1}\")", ListRef.ListName, itemString);
     }

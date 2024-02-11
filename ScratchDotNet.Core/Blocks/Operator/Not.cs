@@ -8,7 +8,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator;
@@ -67,18 +67,18 @@ public class Not : ValueOperatorBase, IBoolValueProvider
         ValueProvider = BlockHelpers.GetBoolDataProvider(blockToken, "inputs.OPERAND");
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         if (ValueProvider is null)
-            return new BooleanType(false);
+            return new BooleanValue(false);
 
-        bool value = (await ValueProvider.GetResultAsync(context, logger, ct)).GetBoolValue();
-        return new BooleanType(!value);
+        bool value = await ValueProvider.GetBooleanResultAsync(context, logger, ct);
+        return new BooleanValue(!value);
     }
 
     private string GetDebuggerDisplay()
     {
-        bool value = ValueProvider?.GetDefaultResult().GetBoolValue()
+        bool value = ValueProvider?.GetDefaultResult() as BooleanValue?
             ?? true;
         return string.Format("!{0}", value);
     }

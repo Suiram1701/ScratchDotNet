@@ -94,7 +94,7 @@ public class MoveSteps : ExecutionBlockBase
 
         double radians = figure.Direction * (Math.PI / 180.0);
 
-        double value = (await StepsProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double value = (await StepsProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         double rx = value * Math.Sin(radians);
         double ry = value * Math.Cos(radians);
 
@@ -105,7 +105,7 @@ public class MoveSteps : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        double value = StepsProvider.GetDefaultResult().GetNumberValue();
+        double value = StepsProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("Move steps: {0}", value);
     }
 }

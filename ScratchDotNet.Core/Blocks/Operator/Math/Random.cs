@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator.Math;
@@ -98,7 +98,7 @@ public class Random : ValueOperatorBase
     /// </summary>
     /// <param name="minProvider">The provider of the minimum value</param>
     /// <param name="maxProvider">The provider of the maximum value</param>
-    /// <param name="blockId">The of of this block</param>
+    /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public Random(IValueProvider minProvider, IValueProvider maxProvider, string blockId) : base(_constOpCode, blockId)
@@ -123,12 +123,12 @@ public class Random : ValueOperatorBase
             ?? new Empty(DataType.Number);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        ScratchTypeBase minType = await MinProvider.GetResultAsync(context, logger, ct);
-        double orgMin = minType.GetNumberValue();
-        ScratchTypeBase maxType = await MaxProvider.GetResultAsync(context, logger, ct);
-        double orgMax = maxType.GetNumberValue();
+        IScratchType minType = await MinProvider.GetResultAsync(context, logger, ct);
+        double orgMin = minType.ConvertToDoubleValue();
+        IScratchType maxType = await MaxProvider.GetResultAsync(context, logger, ct);
+        double orgMax = maxType.ConvertToDoubleValue();
 
         double min = System.Math.Min(orgMin, orgMax);
         double max = System.Math.Max(orgMin, orgMax);
@@ -138,7 +138,7 @@ public class Random : ValueOperatorBase
             result = System.Random.Shared.NextDouble() * (max - min);
         else
             result = System.Random.Shared.Next((int)min, (int)max);
-        return new NumberType(result);
+        return new DoubleValue(result);
     }
 
     private static bool HasDecimal(double value) =>
@@ -146,8 +146,8 @@ public class Random : ValueOperatorBase
 
     private string GetDebuggerDisplay()
     {
-        double min = MinProvider.GetDefaultResult().GetNumberValue();
-        double max = MaxProvider.GetDefaultResult().GetNumberValue();
+        double min = MinProvider.GetDefaultResult().ConvertToDoubleValue();
+        double max = MaxProvider.GetDefaultResult().ConvertToDoubleValue();
 
         return string.Format("Random: {0} - {1}", min, max);
     }

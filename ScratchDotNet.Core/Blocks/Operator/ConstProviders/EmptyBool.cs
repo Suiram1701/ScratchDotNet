@@ -3,7 +3,7 @@ using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 
@@ -18,6 +18,6 @@ public class EmptyBool : IBoolValueProvider
     /// </remarks>
     public event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
 
-    public Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
-        Task.FromResult((ScratchTypeBase)new BooleanType());
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+        Task.FromResult<IScratchType>(new BooleanValue());
 }

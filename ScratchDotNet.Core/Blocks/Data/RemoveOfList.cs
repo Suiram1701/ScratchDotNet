@@ -57,7 +57,7 @@ public class RemoveOfList : ListExecutionBase
     public RemoveOfList(ListRef reference, int index, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(reference, nameof(reference));
-        IndexProvider = new Result(new NumberType(index), DataType.Integer);
+        IndexProvider = new Result(new DoubleValue(index), DataType.Integer);
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public class RemoveOfList : ListExecutionBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
     {
-        double rawIndex = (await IndexProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double rawIndex = (await IndexProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         int index = (int)Math.Round(rawIndex);
 
         if (index >= 1 && index <= list.Values.Count)
@@ -105,7 +105,7 @@ public class RemoveOfList : ListExecutionBase
 
     private string GetDebuggerDisplay()
     {
-        double rawIndex = IndexProvider.GetDefaultResult().GetNumberValue();
+        double rawIndex = IndexProvider.GetDefaultResult().ConvertToDoubleValue();
         int index = Math.Max((int)Math.Round(rawIndex), 1);
 
         return string.Format("List {0}.RemoveAt({1})", ListRef.ListName, index);

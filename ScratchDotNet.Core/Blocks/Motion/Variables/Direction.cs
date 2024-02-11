@@ -6,7 +6,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion.Variables;
@@ -38,12 +38,12 @@ public class Direction : ValueOperatorBase
     {
     }
 
-    public override Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         if (context.Executor is not IFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
-            return Task.FromResult((ScratchTypeBase)new NumberType(0d));
+            return Task.FromResult<IScratchType>(new DoubleValue(0d));
         }
 
         if (!_delegateInitialized)
@@ -55,7 +55,7 @@ public class Direction : ValueOperatorBase
         }
 
         double result = figure.Direction;
-        return Task.FromResult((ScratchTypeBase)new NumberType(result));
+        return Task.FromResult((IScratchType)new DoubleValue(result));
     }
 
     private void Figure_OnDirectionChanged(object? sender, GenericValueChangedEventArgs<double> e)
@@ -63,7 +63,7 @@ public class Direction : ValueOperatorBase
         if (e.OldValue == e.NewValue)
             return;
 
-        ValueChangedEventArgs eventArgs = new(new NumberType(e.OldValue), new NumberType(e.NewValue));
+        ValueChangedEventArgs eventArgs = new(new DoubleValue(e.OldValue), new DoubleValue(e.NewValue));
         OnValueChanged?.Invoke(sender, eventArgs);
     }
 

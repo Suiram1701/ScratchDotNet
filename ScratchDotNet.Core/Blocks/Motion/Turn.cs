@@ -120,7 +120,7 @@ public class Turn : ExecutionBlockBase
             return;
         }
 
-        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         double direction = figure.Direction + Direction switch
         {
             Direction.Left => -value,
@@ -144,7 +144,7 @@ public class Turn : ExecutionBlockBase
     private string GetDebuggerDisplay()
     {
         string direction = Direction.ToString().ToLower();
-        double value = ValueProvider.GetDefaultResult().GetNumberValue();
+        double value = ValueProvider.GetDefaultResult().ConvertToDoubleValue();
 
         return string.Format("Turn {0}: {1}°", direction, value);
     }

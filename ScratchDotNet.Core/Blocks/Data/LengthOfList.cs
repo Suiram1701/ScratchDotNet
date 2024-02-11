@@ -5,7 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -48,8 +48,8 @@ public class LengthOfList : ListOperatorBase
     {
     }
 
-    protected override Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default) =>
-        Task.FromResult<ScratchTypeBase>(new NumberType(list.Values.Count));
+    protected override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default) =>
+        Task.FromResult<IScratchType>(new DoubleValue(list.Values.Count));
 
     private string GetDebuggerDisplay() =>
         string.Format("List {0}.Count", ListRef.ListName);

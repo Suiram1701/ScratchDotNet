@@ -129,7 +129,7 @@ public class PointTowards : ExecutionBlockBase
             return;
         }
 
-        string target = (await TargetProvider.GetResultAsync(context, logger, ct)).GetStringValue();
+        string target = (await TargetProvider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
         Func<double> degreeFunc = target switch
         {
             "_random_" => () => Random.Shared.Next(1, 359),
@@ -183,7 +183,7 @@ public class PointTowards : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        string target = TargetProvider.GetDefaultResult().GetStringValue();
+        string target = TargetProvider.GetDefaultResult().ConvertToStringValue();
         string targetString = target switch
         {
             "_random_" => "random direction",

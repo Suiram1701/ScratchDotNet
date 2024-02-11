@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator.Math;
@@ -94,15 +94,15 @@ public class Round : ValueOperatorBase
             ?? new Empty(DataType.Number);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double number = (await NumProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        return new NumberType(System.Math.Round(number, 0));
+        double number = (await NumProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        return new DoubleValue(System.Math.Round(number, 0));
     }
 
     private string GetDebuggerDisplay()
     {
-        double number = NumProvider.GetDefaultResult().GetNumberValue();
+        double number = NumProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("Round: {0}", number);
     }
 }

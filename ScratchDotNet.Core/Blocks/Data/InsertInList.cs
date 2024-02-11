@@ -9,7 +9,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,7 +45,7 @@ public class InsertInList : ListExecutionBase
     /// <param name="item">The item to insert at the index</param>
     /// <param name="index">The 1 based index where the item should be insert to</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public InsertInList(ListRef reference, ScratchTypeBase item, int index) : this(reference, item, index, BlockHelpers.GenerateBlockId())
+    public InsertInList(ListRef reference, IScratchType item, int index) : this(reference, item, index, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -58,12 +58,12 @@ public class InsertInList : ListExecutionBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public InsertInList(ListRef reference, ScratchTypeBase item, int index, string blockId) : base(reference, _constOpCode, blockId)
+    public InsertInList(ListRef reference, IScratchType item, int index, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
         ItemProvider = new Result(item, DataType.String);
 
-        IndexProvider = new Result(new NumberType(index), DataType.Integer);
+        IndexProvider = new Result(new DoubleValue(index), DataType.Integer);
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class InsertInList : ListExecutionBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
     {
-        double rawIndex = (await IndexProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double rawIndex = (await IndexProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         int index = (int)Math.Round(rawIndex);
 
         if (index < 1 || index > (list.Values.Count + 1))
@@ -117,15 +117,15 @@ public class InsertInList : ListExecutionBase
             return;
         }
 
-        ScratchTypeBase item = await ItemProvider.GetResultAsync(context, logger, ct);
+        IScratchType item = await ItemProvider.GetResultAsync(context, logger, ct);
         list.Values.Insert(--index, item);
     }
 
     private string GetDebuggerDisplay()
     {
-        string itemString = ItemProvider.GetDefaultResult().GetStringValue();
+        string itemString = ItemProvider.GetDefaultResult().ConvertToStringValue();
 
-        double rawIndex = IndexProvider.GetDefaultResult().GetNumberValue();
+        double rawIndex = IndexProvider.GetDefaultResult().ConvertToDoubleValue();
         int index = (int)Math.Round(rawIndex);
 
         return string.Format("List {0}.Insert({1}, \"{2}\")", ListRef.ListName, index, itemString);

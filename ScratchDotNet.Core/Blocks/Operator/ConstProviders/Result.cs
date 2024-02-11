@@ -4,7 +4,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -25,7 +25,7 @@ public class Result : IValueProvider, IConstProvider
     /// <summary>
     /// The value to return
     /// </summary>
-    public ScratchTypeBase Value { get; }
+    public IScratchType Value { get; }
 
     public DataType DataType { get; set; }
 
@@ -36,14 +36,14 @@ public class Result : IValueProvider, IConstProvider
     /// <param name="dataType">The type of the value</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public Result(ScratchTypeBase value, DataType dataType)
+    public Result(IScratchType value, DataType dataType)
     {
         ArgumentNullException.ThrowIfNull(value, nameof(value));
         ArgumentNullException.ThrowIfNull(dataType, nameof(dataType));
 
-        if (value is BooleanType)
+        if (value is BooleanValue)
         {
-            string message = string.Format("Result of the type {0} are not supported.", nameof(BooleanType));
+            string message = string.Format("Result of the type {0} are not supported.", nameof(BooleanValue));
             throw new ArgumentException(message, nameof(value));
         }
 
@@ -71,7 +71,7 @@ public class Result : IValueProvider, IConstProvider
         DataType = positive
             ? DataType.PositiveNumber
             : DataType.Number;
-        Value = new NumberType(value);
+        Value = new DoubleValue(value);
     }
 
     /// <summary>
@@ -107,7 +107,7 @@ public class Result : IValueProvider, IConstProvider
         DataType = positive
             ? DataType.PositiveInteger
             : DataType.Integer;
-        Value = new NumberType(value);
+        Value = new DoubleValue(value);
     }
 
     /// <summary>
@@ -123,20 +123,7 @@ public class Result : IValueProvider, IConstProvider
             throw new ArgumentOutOfRangeException(nameof(value), value, "The count of degree have to be between -180 and 180.");
 
         DataType = DataType.Angle;
-        Value = new NumberType(value);
-    }
-
-    /// <summary>
-    /// Creates a new instance that provides a value
-    /// </summary>
-    /// <param name="value">The value</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public Result(Color value)
-    {
-        ArgumentNullException.ThrowIfNull(value, nameof(value));
-
-        DataType = DataType.Color;
-        Value = new ColorType(value);
+        Value = new DoubleValue(value);
     }
 
     /// <summary>
@@ -149,10 +136,10 @@ public class Result : IValueProvider, IConstProvider
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         DataType = DataType.String;
-        Value = new StringType(value);
+        Value = new StringValue(value);
     }
 
-    public Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
         Task.FromResult(Value);
 
     private string GetDebuggerDisplay()

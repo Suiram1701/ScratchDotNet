@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.Extensions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -118,7 +119,7 @@ public class IfElse : ExecutionBlockBase
     {
         bool condition = false;
         if (ConditionProvider is not null)
-            condition = (await ConditionProvider.GetResultAsync(context, logger, ct)).GetBoolValue();
+            condition = await ConditionProvider.GetBooleanResultAsync(context, logger, ct);
 
         if (condition)
             await BlockHelpers.InvokeSubstackAsync(Substack, context, logger, ct);

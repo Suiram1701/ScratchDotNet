@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator.Math;
@@ -156,10 +156,10 @@ public class Arithmetic : ValueOperatorBase
             ?? new Empty(DataType.Number);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double num1 = (await Num1Provider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        double num2 = (await Num2Provider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double num1 = (await Num1Provider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double num2 = (await Num2Provider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
         double result = Operator switch
         {
@@ -169,7 +169,7 @@ public class Arithmetic : ValueOperatorBase
             ArithmeticOperator.Divide => num1 / num2,
             _ => throw new NotSupportedException("The specified operator isn't supported.")
         };
-        return new NumberType(result);
+        return new DoubleValue(result);
     }
 
     private static string GetOpCodeFromOperation(ArithmeticOperator @operator)
@@ -186,8 +186,8 @@ public class Arithmetic : ValueOperatorBase
 
     private string GetDebuggerDisplay()
     {
-        double num1 = Num1Provider.GetDefaultResult().GetNumberValue();
-        double num2 = Num2Provider.GetDefaultResult().GetNumberValue();
+        double num1 = Num1Provider.GetDefaultResult().ConvertToDoubleValue();
+        double num2 = Num2Provider.GetDefaultResult().ConvertToDoubleValue();
         string @operator = Operator switch
         {
             ArithmeticOperator.Add => "+",

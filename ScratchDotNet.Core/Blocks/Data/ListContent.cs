@@ -4,7 +4,7 @@ using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -43,7 +43,7 @@ public class ListContent : IValueProvider
         ListRef = reference;
     }
 
-    public Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         List? list = context.Executor.Lists.FirstOrDefault(l => l.Id.Equals(ListRef.ListId));
         if (list is null)
@@ -61,7 +61,7 @@ public class ListContent : IValueProvider
         }
 
         string result = string.Join(' ', list.Values);
-        return Task.FromResult<ScratchTypeBase>(new StringType(result));
+        return Task.FromResult<IScratchType>(new StringValue(result));
     }
 
     private void List_OnValueChanged(object? s, ValueChangedEventArgs e) =>

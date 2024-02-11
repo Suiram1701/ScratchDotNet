@@ -4,7 +4,7 @@ using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,13 +58,13 @@ public abstract class ListOperatorBase : ValueOperatorBase
         ListRef = new(blockToken, "fields.LIST");
     }
 
-    public sealed override Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public sealed override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         List? list = context.Executor.Lists.FirstOrDefault(list => list.Id.Equals(ListRef.ListId));
         if (list is null)
         {
             logger.LogError("Could not find list with id \"{id}\" and name \"{name}\"", ListRef.ListId, ListRef.ListName);
-            return Task.FromResult<ScratchTypeBase>(new StringType());
+            return Task.FromResult<IScratchType>(new StringValue());
         }
 
         if (!_delegateInitialized)
@@ -86,7 +86,7 @@ public abstract class ListOperatorBase : ValueOperatorBase
     /// <param name="logger">The logger to use</param>
     /// <param name="ct">The cancellation token</param>
     /// <returns>The async task</returns>
-    protected abstract Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default);
+    protected abstract Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default);
 
     private void List_OnValueChanged(object? s, ValueChangedEventArgs e) =>
         OnValueChanged?.Invoke(s, e);

@@ -117,16 +117,16 @@ public class GotoXY : ExecutionBlockBase
             return;
         }
 
-        double targetX = (await TargetXProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        double targetY = (await TargetYProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double targetX = (await TargetXProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double targetY = (await TargetYProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
         figure.MoveTo(targetX, targetY);
     }
 
     private string GetDebuggerDisplay()
     {
-        double targetX = TargetXProvider.GetDefaultResult().GetNumberValue();
-        double targetY = TargetYProvider.GetDefaultResult().GetNumberValue();
+        double targetX = TargetXProvider.GetDefaultResult().ConvertToDoubleValue();
+        double targetY = TargetYProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("Goto coordinates X: {0}; Y: {1}", targetX, targetY);
     }
 }

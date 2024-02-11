@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator;
@@ -111,10 +111,10 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
         Operand2Provider = BlockHelpers.GetBoolDataProvider(blockToken, "inputs.OPERAND2");
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        bool opr1 = (await Operand1Provider.GetResultAsync(context, logger, ct)).GetBoolValue();
-        bool opr2 = (await Operand2Provider.GetResultAsync(context, logger, ct)).GetBoolValue();
+        bool opr1 = await Operand1Provider.GetBooleanResultAsync(context, logger, ct);
+        bool opr2 = await Operand2Provider.GetBooleanResultAsync(context, logger, ct);
 
         bool result = Operator switch
         {
@@ -122,7 +122,7 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
             LogicalOperation.OR => opr1 || opr2,
             _ => throw new NotSupportedException("The specified operator isn't supported")
         };
-        return new BooleanType(result);
+        return new BooleanValue(result);
     }
 
     private static string GetOpCodeFromOperator(LogicalOperation op)
@@ -137,8 +137,8 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
 
     private string GetDebuggerDisplay()
     {
-        bool opr1 = Operand1Provider?.GetDefaultResult().GetBoolValue() ?? false;
-        bool opr2 = Operand2Provider?.GetDefaultResult().GetBoolValue() ?? false;
+        bool opr1 = Operand1Provider?.GetDefaultResult() as BooleanValue? ?? false;
+        bool opr2 = Operand2Provider?.GetDefaultResult() as BooleanValue? ?? false;
         string @operator = Operator switch
         {
             LogicalOperation.AND => "&&",

@@ -119,9 +119,9 @@ public class GlideToXY : GlideBase
             return;
         }
 
-        double targetX = (await TargetXProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        double targetY = (await TargetYProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        double timeSeconds = (await TimeProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double targetX = (await TargetXProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double targetY = (await TargetYProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double timeSeconds = (await TimeProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
         if (timeSeconds < 0)
         {
@@ -134,8 +134,8 @@ public class GlideToXY : GlideBase
 
     protected override string GetDebuggerDisplay()
     {
-        double targetX = TargetXProvider.GetDefaultResult().GetNumberValue();
-        double targetY = TargetYProvider.GetDefaultResult().GetNumberValue();
+        double targetX = TargetXProvider.GetDefaultResult().ConvertToDoubleValue();
+        double targetY = TargetYProvider.GetDefaultResult().ConvertToDoubleValue();
 
         string baseMessage = base.GetDebuggerDisplay();
         return baseMessage + string.Format("X: {0}; Y: {1}", targetX, targetY);

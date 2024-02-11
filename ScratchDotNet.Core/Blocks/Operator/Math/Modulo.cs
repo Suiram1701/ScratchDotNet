@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator.Math;
@@ -81,8 +81,8 @@ public class Modulo : ValueOperatorBase
 
         Num1Provider = new Result(num1, false);
         Num2Provider = new Result(num2, false);
-    }
 
+    }
     /// <summary>
     /// Creates a new instance
     /// </summary>
@@ -122,18 +122,18 @@ public class Modulo : ValueOperatorBase
             ?? new Empty(DataType.Number);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double dividend = (await Num1Provider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        double divisor = (await Num2Provider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double dividend = (await Num1Provider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double divisor = (await Num2Provider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
-        return new NumberType(dividend % divisor);
+        return new DoubleValue(dividend % divisor);
     }
 
     private string GetDebuggerDisplay()
     {
-        double dividend = Num1Provider.GetDefaultResult().GetNumberValue();
-        double dividor = Num2Provider.GetDefaultResult().GetNumberValue();
+        double dividend = Num1Provider.GetDefaultResult().ConvertToDoubleValue();
+        double dividor = Num2Provider.GetDefaultResult().ConvertToDoubleValue();
 
         return string.Format("{0} % {1}", dividend, dividor);
     }

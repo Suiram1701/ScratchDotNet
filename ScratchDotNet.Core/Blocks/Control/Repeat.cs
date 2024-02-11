@@ -109,7 +109,7 @@ public class Repeat : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double times = (await TimesProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double times = (await TimesProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         if (times < 0)
         {
             logger.LogWarning("The value that indicates how many times the substack should be executed have to be larger or same that 0. Value: {times}", times);
@@ -133,7 +133,7 @@ public class Repeat : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        int times = (int)Math.Round(TimesProvider.GetDefaultResult().GetNumberValue(), 0);
+        int times = (int)Math.Round(TimesProvider.GetDefaultResult().ConvertToDoubleValue(), 0);
         return string.Format("Repeat {0} times; Substack: {1} blocks", times, Substack.Count);
     }
 }

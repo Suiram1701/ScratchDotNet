@@ -1,7 +1,7 @@
 ﻿using ScratchDotNet.Core.Blocks;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.Data;
 
@@ -28,19 +28,19 @@ public class Variable
     /// <summary>
     /// The value of this variable
     /// </summary>
-    public ScratchTypeBase Value
+    public IScratchType Value
     {
         get => _value;
         set
         {
             ArgumentNullException.ThrowIfNull(value, nameof(value));
-            ScratchTypeBase oldItem = _value;
+            IScratchType oldItem = _value;
             _value = value;
 
             OnValueChanged?.Invoke(this, new(oldItem, value));
         }
     }
-    private ScratchTypeBase _value;
+    private IScratchType _value;
 
     /// <summary>
     /// Creates a new instance
@@ -48,7 +48,7 @@ public class Variable
     /// <param name="name">The name of the variable</param>
     /// <param name="value">The default value of the variable</param>
     /// <exception cref="ArgumentException"></exception>
-    public Variable(string name, ScratchTypeBase? value) : this(name, BlockHelpers.GenerateBlockId(), value)
+    public Variable(string name, IScratchType? value) : this(name, BlockHelpers.GenerateBlockId(), value)
     {
     }
 
@@ -59,15 +59,14 @@ public class Variable
     /// <param name="value">The default value of the variable</param>
     /// <param name="id">The id of the variable</param>
     /// <exception cref="ArgumentException"></exception>
-    public Variable(string name, string id, ScratchTypeBase? value)
+    public Variable(string name, string id, IScratchType? value)
     {
         ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
         ArgumentException.ThrowIfNullOrEmpty(id, nameof(id));
 
         Name = name;
         Id = id;
-        _value = value
-            ?? new StringType();
+        _value = value ?? new StringValue();
     }
 
     /// <summary>

@@ -87,7 +87,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         double volume = context.Executor.SoundVolume + value;
 
         volume = Math.Min(Math.Max(volume, 0), 100);     // Validate that the volume id between 0 and 100
@@ -96,7 +96,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        double value = ValueProvider.GetDefaultResult().GetNumberValue();
+        double value = ValueProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("change volume by {0}", value);
     }
 }

@@ -126,7 +126,7 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         string effectKey = $"{context.Executor.Name}_{Effect}";
 
         context.RuntimeData.TryGetValue(effectKey, out object? effectObj);
@@ -139,7 +139,7 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
     private string GetDebuggerDisplay()
     {
         string effect = Effect.ToString();
-        double value = ValueProvider.GetDefaultResult().GetNumberValue();
+        double value = ValueProvider.GetDefaultResult().ConvertToDoubleValue();
 
         return string.Format("Change sound effect {0} by {1}", effect, value);
     }

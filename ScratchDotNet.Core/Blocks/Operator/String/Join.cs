@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator.String;
@@ -122,19 +122,19 @@ public class Join : ValueOperatorBase
         String2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING2") ?? new Empty(DataType.String);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        string string1 = (await String1Provider.GetResultAsync(context, logger, ct)).GetStringValue();
-        string string2 = (await String2Provider.GetResultAsync(context, logger, ct)).GetStringValue();
+        string string1 = (await String1Provider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
+        string string2 = (await String2Provider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
 
         string result = string1 + string2;
-        return new StringType(result);
+        return new StringValue(result);
     }
 
     private string GetDebuggerDisplay()
     {
-        string string1 = String1Provider.GetDefaultResult().GetStringValue();
-        string string2 = String2Provider.GetDefaultResult().GetStringValue();
+        string string1 = String1Provider.GetDefaultResult().ConvertToStringValue();
+        string string2 = String2Provider.GetDefaultResult().ConvertToStringValue();
 
         return string.Format("Join: {0} + {1}", string1, string2);
     }

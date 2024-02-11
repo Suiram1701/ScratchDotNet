@@ -1,6 +1,6 @@
 ﻿using ScratchDotNet.Core.Blocks;
 using ScratchDotNet.Core.EventArgs;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
@@ -26,7 +26,7 @@ public class List
     /// <summary>
     /// The list
     /// </summary>
-    public ObservableCollection<ScratchTypeBase> Values { get; }
+    public ObservableCollection<IScratchType> Values { get; }
 
     /// <summary>
     /// Creates a new instance with an empty list
@@ -41,7 +41,7 @@ public class List
     /// </summary>
     /// <param name="name">The name of the list</param>
     /// <param name="values">The content of the list. When <see langword="null"/> an empty list will be created</param>
-    public List(string name, IEnumerable<ScratchTypeBase>? values) : this(name, BlockHelpers.GenerateBlockId(), values)
+    public List(string name, IEnumerable<IScratchType>? values) : this(name, BlockHelpers.GenerateBlockId(), values)
     {
     }
 
@@ -60,7 +60,7 @@ public class List
     /// <param name="name">The name of the list</param>
     /// <param name="id">The internal id of the list</param>
     /// <param name="values">The content of the list. When <see langword="null"/> an empty list will be created</param>
-    public List(string name, string id, IEnumerable<ScratchTypeBase>? values)
+    public List(string name, string id, IEnumerable<IScratchType>? values)
     {
         ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
         ArgumentException.ThrowIfNullOrEmpty(id, nameof(id));
@@ -68,7 +68,7 @@ public class List
         Name = name;
         Id = id;
 
-        Values = new(values ?? new List<ScratchTypeBase>());
+        Values = new(values ?? new List<IScratchType>());
         Values.CollectionChanged += Values_CollectionChanged;
     }
 
@@ -81,7 +81,7 @@ public class List
 
     private void Values_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        ValueChangedEventArgs args = new(e.OldItems?[0] as ScratchTypeBase, e.NewItems?[0] as ScratchTypeBase);
+        ValueChangedEventArgs args = new(e.OldItems?[0] as IScratchType, e.NewItems?[0] as IScratchType);
         OnValueChanged?.Invoke(sender, args);
     }
 }

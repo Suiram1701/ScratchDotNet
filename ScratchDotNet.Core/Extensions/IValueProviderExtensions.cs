@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging.Abstractions;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.Extensions;
 
@@ -15,6 +15,6 @@ internal static class IValueProviderExtensions
     /// <typeparam name="TResult">The type of the result</typeparam>
     /// <param name="provider"></param>
     /// <returns>The result</returns>
-    public static ScratchTypeBase GetDefaultResult(this IValueProvider provider) =>
+    public static IScratchType GetDefaultResult(this IValueProvider provider) =>
         provider.GetResultAsync(new(), NullLogger.Instance, CancellationToken.None).Result;
 }

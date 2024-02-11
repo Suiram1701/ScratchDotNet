@@ -8,7 +8,7 @@ using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Data;
@@ -96,13 +96,13 @@ public class SetVariable : VariableExecutionBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, Variable variable, ILogger logger, CancellationToken ct = default)
     {
-        ScratchTypeBase value = await ValueProvider.GetResultAsync(context, logger, ct);
+        IScratchType value = await ValueProvider.GetResultAsync(context, logger, ct);
         variable.Value = value;
     }
 
     private string GetDebuggerDisplay()
     {
-        string value = ValueProvider.GetDefaultResult().GetStringValue();
+        string value = ValueProvider.GetDefaultResult().ConvertToStringValue();
         return string.Format("var {0} = {1}", VariableRef.VarName, value);
     }
 }

@@ -4,7 +4,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -37,17 +37,17 @@ public class Empty : IValueProvider, IConstProvider
         DataType = dataType;
     }
 
-    public Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        ScratchTypeBase result = DataType switch
+        IScratchType result = DataType switch
         {
             DataType.Number or
             DataType.PositiveNumber or
             DataType.Integer or
             DataType.PositiveNumber or
-            DataType.Angle => new NumberType(0d),
-            DataType.Color => new ColorType(Color.Empty),
-            DataType.String => new StringType(string.Empty),
+            DataType.Angle => new DoubleValue(0d),
+            DataType.Color => throw new NotImplementedException(),
+            DataType.String => new StringValue(string.Empty),
             _ => throw new NotSupportedException(string.Format("The specified data type {0} isn't supported.", DataType))
         };
         return Task.FromResult(result);

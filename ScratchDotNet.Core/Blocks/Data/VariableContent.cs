@@ -3,7 +3,7 @@ using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Data;
@@ -33,7 +33,7 @@ public class VariableContent : IValueProvider
         VariableRef = reference;
     }
 
-    public Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         Variable? variable = context.Executor.Variables.FirstOrDefault(var => var.Id.Equals(VariableRef.VarId));
         if (variable is null)

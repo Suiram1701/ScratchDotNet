@@ -8,7 +8,7 @@ using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
@@ -75,7 +75,7 @@ public static class BlockHelpers
         if (string.IsNullOrEmpty(dataValue))
             return new Empty(dataType);
 
-        ScratchTypeBase result;
+        IScratchType result;
         if ((int)dataType >= 4 && (int)dataType <= 7)     // Number values
         {
             double value = double.Parse(dataValue);
@@ -91,7 +91,7 @@ public static class BlockHelpers
                     break;
             }
 
-            result = new NumberType(value);
+            result = new DoubleValue(value);
         }
         else if (dataType == DataType.Angle)
         {
@@ -99,15 +99,14 @@ public static class BlockHelpers
             while (angle < 0)
                 angle += 360;
 
-            result = new NumberType(angle);
+            result = new DoubleValue(angle);
         }
         else if (dataType == DataType.Color)
         {
-            Color value = ParseColorFromHex(dataValue);
-            result = new ColorType(value);
+            throw new NotImplementedException();
         }
         else if (dataType == DataType.String)
-            result = new StringType(dataValue);
+            result = new StringValue(dataValue);
         else if (dataType == DataType.Broadcast)
         {
             throw new NotImplementedException();

@@ -5,6 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.Extensions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -89,7 +90,7 @@ public class RepeatUntil : ExecutionBlockBase
         if (ConditionProvider is null)     // No condition
             return;
 
-        while (!(await ConditionProvider.GetResultAsync(context, logger, ct)).GetBoolValue())
+        while (!await ConditionProvider.GetBooleanResultAsync(context, logger, ct))
         {
             if (ct.IsCancellationRequested)
                 break;

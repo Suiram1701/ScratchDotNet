@@ -132,7 +132,7 @@ public class ChangeXY : ExecutionBlockBase
             return;
         }
 
-        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
         double cx = figure.X;
         double cy = figure.Y;
@@ -182,7 +182,7 @@ public class ChangeXY : ExecutionBlockBase
             PositionChangeKind.DY => "relative y",
             _ => "unknown"
         };
-        double value = ValueProvider.GetDefaultResult().GetNumberValue();
+        double value = ValueProvider.GetDefaultResult().ConvertToDoubleValue();
 
         return string.Format("Change {0} position with {1}", kind, value);
     }

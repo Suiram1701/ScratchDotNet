@@ -5,7 +5,7 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,7 +47,7 @@ public class VolumeValue : ValueOperatorBase
     {
     }
 
-    public override Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         if (!_delegateInitialized)
         {
@@ -58,7 +58,7 @@ public class VolumeValue : ValueOperatorBase
         }
 
         double result = context.Executor.SoundVolume;
-        return Task.FromResult((ScratchTypeBase)new NumberType(result));
+        return Task.FromResult((IScratchType)new DoubleValue(result));
     }
 
     private void Executor_OnVolumeChanged(object? sender, GenericValueChangedEventArgs<double> e)
@@ -66,7 +66,7 @@ public class VolumeValue : ValueOperatorBase
         if (e.OldValue == e.NewValue)
             return;
 
-        ValueChangedEventArgs eventArgs = new(new NumberType(e.OldValue), new  NumberType(e.NewValue));
+        ValueChangedEventArgs eventArgs = new(new DoubleValue(e.OldValue), new  DoubleValue(e.NewValue));
         OnValueChanged?.Invoke(sender, eventArgs);
     }
 

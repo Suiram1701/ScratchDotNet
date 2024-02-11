@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator;
@@ -77,7 +77,7 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     /// <param name="operand2">The second operand</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Comparison(ComparisonOperator @operator, ScratchTypeBase operand1, ScratchTypeBase operand2, string blockId) : base(GetOpCodeFromOperator(@operator), blockId)
+    public Comparison(ComparisonOperator @operator, IScratchType operand1, IScratchType operand2, string blockId) : base(GetOpCodeFromOperator(@operator), blockId)
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
 
@@ -125,10 +125,10 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
         Operand2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.OPERAND2") ?? new Empty(DataType.String);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        ScratchTypeBase opr1 = await Operand1Provider.GetResultAsync(context, logger, ct);
-        ScratchTypeBase opr2 = await Operand2Provider.GetResultAsync(context, logger, ct);
+        IScratchType opr1 = await Operand1Provider.GetResultAsync(context, logger, ct);
+        IScratchType opr2 = await Operand2Provider.GetResultAsync(context, logger, ct);
 
         bool result = Operator switch
         {
@@ -137,7 +137,7 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
             ComparisonOperator.Equals => opr1.Equals(opr2),
             _ => throw new NotSupportedException("The specified operation isn't supported.")
         };
-        return new BooleanType(result);
+        return new BooleanValue(result);
     }
 
     private static string GetOpCodeFromOperator(ComparisonOperator op)
@@ -153,8 +153,8 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
 
     private string GetDebuggerDisplay()
     {
-        double opr1 = Operand1Provider.GetDefaultResult().GetNumberValue();
-        double opr2 = Operand2Provider.GetDefaultResult().GetNumberValue();
+        double opr1 = Operand1Provider.GetDefaultResult().ConvertToDoubleValue();
+        double opr2 = Operand2Provider.GetDefaultResult().ConvertToDoubleValue();
         string @operator = Operator switch
         {
             ComparisonOperator.GreaterThan => ">",

@@ -8,7 +8,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.Blocks.Operator.String;
 
@@ -118,12 +118,12 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
         String2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING2") ?? new Empty(DataType.String);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        string string1 = (await String1Provider.GetResultAsync(context, logger, ct)).GetStringValue();
-        string string2 = (await String2Provider.GetResultAsync(context, logger, ct)).GetStringValue();
+        string string1 = (await String1Provider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
+        string string2 = (await String2Provider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
 
         bool result = string1.Contains(string2, StringComparison.OrdinalIgnoreCase);
-        return new BooleanType(result);
+        return new BooleanValue(result);
     }
 }

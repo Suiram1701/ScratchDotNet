@@ -129,8 +129,8 @@ public class GlideTo : GlideBase
             return;
         }
 
-        string target = (await TargetProvider.GetResultAsync(context, logger, ct)).GetStringValue();
-        double timeSeconds = (await TimeProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
+        string target = (await TargetProvider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
+        double timeSeconds = (await TimeProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
         (double x, double y) = MotionHelpers.GetTargetPosition(target, context, logger);
         await figure.GlideToAsync(x, y, TimeSpan.FromSeconds(timeSeconds), ct);
@@ -138,7 +138,7 @@ public class GlideTo : GlideBase
 
     protected override string GetDebuggerDisplay()
     {
-        string target = TargetProvider.GetDefaultResult().GetStringValue();
+        string target = TargetProvider.GetDefaultResult().ConvertToStringValue();
         string targetString = target switch
         {
             "_random_" => "random position",

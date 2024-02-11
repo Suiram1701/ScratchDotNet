@@ -6,7 +6,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.StageObjects.Assets;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Sound;
@@ -80,8 +80,8 @@ internal class SoundNameReporter : ValueOperatorBase
         Name = blockToken.SelectToken("fields.SOUND_MENU[0]")!.Value<string>()!;
     }
 
-    public override Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
-        Task.FromResult((ScratchTypeBase)new StringType(Name));
+    public override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+        Task.FromResult((IScratchType)new StringValue(Name));
 
     private string GetDebuggerDisplay() =>
         string.Format("Sound: {0}", Name);

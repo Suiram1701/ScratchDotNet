@@ -8,7 +8,7 @@ using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,7 +38,7 @@ public class AddToList : ListExecutionBase
     /// <param name="reference">The reference to the list</param>
     /// <param name="item">The item to append</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public AddToList(ListRef reference, ScratchTypeBase item) : this(reference, item, BlockHelpers.GenerateBlockId())
+    public AddToList(ListRef reference, IScratchType item) : this(reference, item, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -50,7 +50,7 @@ public class AddToList : ListExecutionBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public AddToList(ListRef reference, ScratchTypeBase item, string blockId) : base(reference, _constOpCode, blockId)
+    public AddToList(ListRef reference, IScratchType item, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
         ItemProvider = new Result(item, DataType.String);
@@ -90,13 +90,13 @@ public class AddToList : ListExecutionBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)
     {
-        ScratchTypeBase item = await ItemProvider.GetResultAsync(context, logger, ct);
+        IScratchType item = await ItemProvider.GetResultAsync(context, logger, ct);
         list.Values.Add(item);
     }
 
     private string GetDebuggerDisplay()
     {
-        string itemString = ItemProvider.GetDefaultResult().GetStringValue();
+        string itemString = ItemProvider.GetDefaultResult().ConvertToStringValue();
         return string.Format("List {0}.Add(\"{1}\")", ListRef.ListName, itemString);
     }
 }

@@ -9,7 +9,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Operator.String;
@@ -125,10 +125,10 @@ public class CharAt : ValueOperatorBase
         StringProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING") ?? new Empty(DataType.String);
     }
 
-    public override async Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double index = (await IndexProvider.GetResultAsync(context, logger, ct)).GetNumberValue();
-        string sourceString = (await StringProvider.GetResultAsync(context, logger, ct)).GetStringValue();
+        double index = (await IndexProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        string sourceString = (await StringProvider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
 
         if (index % 1 != 0)
         {
@@ -138,16 +138,16 @@ public class CharAt : ValueOperatorBase
         }
 
         if (index <= 0 || index > sourceString.Length)     // Return string.empty when the index is out of range
-            return new StringType(string.Empty);
+            return new StringValue(string.Empty);
 
         char c = sourceString[(int)index + 1];
-        return new StringType(c.ToString());
+        return new StringValue(c.ToString());
     }
 
     private string GetDebuggerDisplay()
     {
-        double index = IndexProvider.GetDefaultResult().GetNumberValue();
-        string sourceString = StringProvider.GetDefaultResult().GetStringValue();
+        double index = IndexProvider.GetDefaultResult().ConvertToDoubleValue();
+        string sourceString = StringProvider.GetDefaultResult().ConvertToStringValue();
 
         return string.Format("{0}th char of \"{1}\"", index, sourceString);
     }

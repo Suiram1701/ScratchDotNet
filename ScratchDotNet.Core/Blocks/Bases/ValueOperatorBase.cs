@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Types.Bases;
+using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.Blocks.Bases;
 
@@ -29,5 +29,5 @@ public abstract class ValueOperatorBase : BlockBase, IValueProvider
     {
     }
 
-    public abstract Task<ScratchTypeBase> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default);
+    public abstract Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default);
 }
