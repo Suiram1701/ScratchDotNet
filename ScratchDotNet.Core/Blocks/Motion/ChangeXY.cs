@@ -3,17 +3,17 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
 
 /// <summary>
-/// Changes the position of the figure by a specified kind and value
+/// Changes the position of the figure in a specified direction and by value
 /// </summary>
 /// <remarks>
 /// This block have to got executed by a figure
@@ -44,19 +44,6 @@ public class ChangeXY : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <param name="kind">The kind how the position of the figure should be changed</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public ChangeXY(PositionChangeKind kind) : base(GetOpCodeFromKind(kind))
-    {
-        ArgumentNullException.ThrowIfNull(kind, nameof(kind));
-
-        ChangeKind = kind;
-        ValueProvider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="kind">The kind how the position of the figure should be changed</param>
     /// <param name="value">The value to change by</param>
     /// <exception cref="ArgumentNullException"></exception>
     public ChangeXY(PositionChangeKind kind, double value) : this(kind, value, BlockHelpers.GenerateBlockId())
@@ -77,7 +64,7 @@ public class ChangeXY : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         ChangeKind = kind;
-        ValueProvider = new Result(value, false);
+        ValueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -105,8 +92,6 @@ public class ChangeXY : ExecutionBlockBase
 
         ChangeKind = kind;
         ValueProvider = valueProvider;
-        if (ValueProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     internal ChangeXY(string blockId, JToken blockToken) : base(blockId, blockToken)
@@ -121,7 +106,7 @@ public class ChangeXY : ExecutionBlockBase
         };
 
         string jsonPath = string.Format("inputs.{0}", ChangeKind.ToString());
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, jsonPath) ?? new Empty(DataType.Number);
+        ValueProvider = BlockHelpers.GetDataProvider(blockToken, jsonPath);
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

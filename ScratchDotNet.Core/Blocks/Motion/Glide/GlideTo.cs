@@ -6,6 +6,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion.Glide;
@@ -104,11 +105,11 @@ public class GlideTo : GlideBase
         ArgumentNullException.ThrowIfNull(targetProvider, nameof(targetProvider));
 
         TargetProvider = targetProvider;
-        if (TargetProvider is IConstProvider)
+        if (TargetProvider is IScratchType)
         {
             string message = string.Format(
                 "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
-                nameof(IConstProvider),
+                nameof(IScratchType),
                 nameof(SpecialTarget),
                 nameof(IFigure));
             throw new ArgumentException(message, nameof(targetProvider));

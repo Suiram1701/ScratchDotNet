@@ -1,4 +1,8 @@
-﻿using ScratchDotNet.Core.Types.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.EventArgs;
+using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,8 +18,14 @@ namespace ScratchDotNet.Core.Types;
 /// </summary>
 /// <param name="value">The initialized value</param>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public sealed class StringValue(string value) : IScratchType
+public sealed class StringValue(string value) : IScratchType, IValueProvider
 {
+    /// <inheritdoc/>
+    /// <remarks>
+    /// This will be never get called
+    /// </remarks>
+    public event EventHandler<ValueChangedEventArgs> OnValueChanged {  add { } remove { } }
+
     /// <summary>
     /// The string value this instance contains
     /// </summary>
@@ -62,6 +72,9 @@ public sealed class StringValue(string value) : IScratchType
         string otherString = other.ConvertToStringValue().Value;
         return Value.CompareTo(otherString);
     }
+
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+        Task.FromResult<IScratchType>(this);
 
     public static bool operator ==(StringValue left, StringValue right) =>
         left.Equals(right);

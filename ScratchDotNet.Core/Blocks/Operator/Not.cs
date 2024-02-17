@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
@@ -34,13 +33,6 @@ public class Not : ValueOperatorBase, IBoolValueProvider
     private const string _constOpCode = "operator_not";
 
     /// <summary>
-    /// Creates a new instance that always returns true
-    /// </summary>
-    public Not() : this(new EmptyBool())
-    {
-    }
-
-    /// <summary>
     /// Creates a new instance
     /// </summary>
     /// <param name="valueProvider">The provider of the value to invert</param>
@@ -69,17 +61,13 @@ public class Not : ValueOperatorBase, IBoolValueProvider
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (ValueProvider is null)
-            return new BooleanValue(false);
-
         bool value = await ValueProvider.GetBooleanResultAsync(context, logger, ct);
         return new BooleanValue(!value);
     }
 
     private string GetDebuggerDisplay()
     {
-        bool value = ValueProvider?.GetDefaultResult() as BooleanValue?
-            ?? true;
+        bool value = ValueProvider?.GetDefaultResult() as BooleanValue? ?? true;
         return string.Format("!{0}", value);
     }
 }

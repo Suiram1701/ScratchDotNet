@@ -3,11 +3,11 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -33,14 +33,6 @@ public class MoveSteps : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public MoveSteps() : base(_constOpCode)
-    {
-        StepsProvider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="steps">The count of steps to move</param>
     /// <exception cref="ArgumentNullException"></exception>
     public MoveSteps(double steps) : this(steps, BlockHelpers.GenerateBlockId())
@@ -57,7 +49,7 @@ public class MoveSteps : ExecutionBlockBase
     public MoveSteps(double steps, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(steps, nameof(steps));
-        StepsProvider = new Result(steps, false);
+        StepsProvider = new DoubleValue(steps);
     }
 
     /// <summary>
@@ -69,10 +61,7 @@ public class MoveSteps : ExecutionBlockBase
     public MoveSteps(IValueProvider stepsProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(stepsProvider, nameof(stepsProvider));
-
         StepsProvider = stepsProvider;
-        if (StepsProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     /// <summary>
@@ -81,7 +70,7 @@ public class MoveSteps : ExecutionBlockBase
     /// <param name="blockToken">The block to parse</param>
     internal MoveSteps(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        StepsProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STEPS") ?? new Empty(DataType.Number);
+        StepsProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STEPS");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

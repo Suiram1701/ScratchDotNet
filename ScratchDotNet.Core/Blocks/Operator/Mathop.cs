@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -43,18 +42,6 @@ public class Mathop : ValueOperatorBase
     /// Creates a new instance
     /// </summary>
     /// <param name="operation">The operation to execute</param>
-    public Mathop(MathopOperation operation) : base(_constOpCode)
-    {
-        ArgumentNullException.ThrowIfNull(operation, nameof(operation));
-
-        Operation = operation;
-        ValueProvider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="operation">The operation to execute</param>
     /// <param name="value">The value to be calculated with</param>
     /// <exception cref="ArgumentNullException"></exception>
     public Mathop(MathopOperation operation, double value) : this(operation, value, BlockHelpers.GenerateBlockId())
@@ -75,7 +62,7 @@ public class Mathop : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         Operation = operation;
-        ValueProvider = new Result(new DoubleValue(value), DataType.Number);
+        ValueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -103,8 +90,6 @@ public class Mathop : ValueOperatorBase
 
         Operation = operation;
         ValueProvider = valueProvider;
-        if (ValueProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     internal Mathop(string blockId, JToken blockToken) : base(blockId, blockToken)
@@ -112,7 +97,7 @@ public class Mathop : ValueOperatorBase
         string @operator = blockToken.SelectToken("fields.OPERATOR[0]")!.Value<string>()!;
         Operation = EnumNameAttributeHelpers.ParseEnumWithName<MathopOperation>(@operator);
 
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM") ?? new Empty(DataType.Number);
+        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

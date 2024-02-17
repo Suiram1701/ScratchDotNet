@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -37,14 +36,6 @@ public class Round : ValueOperatorBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public Round() : base(_constOpCode)
-    {
-        NumProvider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="number">The number to round</param>
     /// <exception cref="ArgumentNullException"></exception>
     public Round(double number) : this(number, BlockHelpers.GenerateBlockId())
@@ -61,7 +52,7 @@ public class Round : ValueOperatorBase
     public Round(double number, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(number, nameof(number));
-        NumProvider = new Result(number, false);
+        NumProvider = new DoubleValue(number);
     }
 
     /// <summary>
@@ -84,14 +75,11 @@ public class Round : ValueOperatorBase
     {
         ArgumentNullException.ThrowIfNull(numProvider, nameof(NumProvider));
         NumProvider = numProvider;
-        if (NumProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     internal Round(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        NumProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM")
-            ?? new Empty(DataType.Number);
+        NumProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

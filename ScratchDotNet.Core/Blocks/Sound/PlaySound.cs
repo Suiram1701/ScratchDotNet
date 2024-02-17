@@ -9,6 +9,7 @@ using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Providers.Interfaces;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.StageObjects.Assets;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Sound;
@@ -62,7 +63,7 @@ public class PlaySound : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// Providers that implements <see cref="IConstProvider"/> are not supported for this block. To provide a constant sound name you have to use a constructor that takes a instance of <see cref="SoundAsset"/> to refer to the sound to use.
+    /// A providers that implements <see cref="IScratchType"/> are not supported for this block. To provide a constant sound name you have to use a constructor that takes a instance of <see cref="SoundAsset"/> to refer to the sound to use.
     /// </remarks>
     /// <param name="soundNameProvider">The provider of the sound name</param>
     /// <param name="awaitEnd">Indicates the end of the playing the sound should be awaited</param>
@@ -76,7 +77,7 @@ public class PlaySound : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// Providers that implements <see cref="IConstProvider"/> are not supported for this block. To provide a constant sound name you have to use a constructor that takes a instance of <see cref="SoundAsset"/> to refer to the sound to use.
+    /// A providers that implements <see cref="IScratchType"/> are not supported for this block. To provide a constant sound name you have to use a constructor that takes a instance of <see cref="SoundAsset"/> to refer to the sound to use.
     /// </remarks>
     /// <param name="soundNameProvider">The provider of the sound name</param>
     /// <param name="awaitEnd">Indicates the end of the playing the sound should be awaited</param>
@@ -88,11 +89,11 @@ public class PlaySound : ExecutionBlockBase
     {
         ArgumentNullException.ThrowIfNull(soundNameProvider, nameof(soundNameProvider));
 
-        if (soundNameProvider is IConstProvider)
+        if (soundNameProvider is IScratchType)
         {
             string message = string.Format(
                 "Providers that implements {0} are not supported for this block. To provide a constant sound name you have to use a constructor that takes a instance of {1} to refer to the sound to use.",
-                nameof(IConstProvider),
+                nameof(IScratchType),
                 nameof(SoundAsset));
             throw new NotSupportedException(message);
         }
@@ -116,7 +117,7 @@ public class PlaySound : ExecutionBlockBase
         if (!(soundCts?.IsCancellationRequested ?? true))     // Stop sound playing when the object still playing a sound
             soundCts.Cancel();
 
-        if (context.Services[typeof(ISoundOutputService)] is not ISoundOutputService soundOutputProvider)
+        if (context.Services[typeof(ISoundOutputService)] is not ISoundOutputService soundOutputService)
         {
             logger.LogCritical("Could not find any registered service that implements {provider}", nameof(ISoundOutputService));
             return;
@@ -126,7 +127,7 @@ public class PlaySound : ExecutionBlockBase
         SoundAsset? soundAsset = context.Executor.Sounds.FirstOrDefault(sa => sa.Name.Equals(soundName));
         if (soundAsset is null)
         {
-            logger.LogWarning("Could not find a sound named \"{name}\"", soundName);
+            logger.LogTrace("Could not find a sound named \"{name}\"", soundName);
             return;
         }
 
@@ -143,7 +144,7 @@ public class PlaySound : ExecutionBlockBase
         CancellationTokenSource newSoundCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         context.RuntimeData[$"{context.Executor.Name}_soundCts"] = newSoundCts;
 
-        Task soundPlay = soundOutputProvider.PlaySoundAsync(soundAsset, volume, pitch, pan, logger, newSoundCts.Token);
+        Task soundPlay = soundOutputService.PlaySoundAsync(soundAsset, volume, pitch, pan, logger, newSoundCts.Token);
         if (AwaitEnd)
             await soundPlay;
         else

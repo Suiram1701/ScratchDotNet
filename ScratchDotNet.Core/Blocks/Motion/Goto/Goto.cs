@@ -7,6 +7,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion.Goto;
@@ -31,6 +32,9 @@ public class Goto : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
+    /// <remarks>
+    /// The <see cref="SpecialTarget"/> <see cref="SpecialTarget.Random"/> isn't supported by this block
+    /// </remarks>
     /// <param name="target">The special target where the figure should go to</param>
     /// <exception cref="ArgumentNullException"></exception>
     public Goto(SpecialTarget target) : this(target, BlockHelpers.GenerateBlockId())
@@ -40,6 +44,9 @@ public class Goto : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
+    /// <remarks>
+    /// The <see cref="SpecialTarget"/> <see cref="SpecialTarget.Random"/> isn't supported by this block
+    /// </remarks>
     /// <param name="target">The special target where the figure should go to</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
@@ -47,6 +54,12 @@ public class Goto : ExecutionBlockBase
     public Goto(SpecialTarget target, string blockId) : this(MotionHelpers.GetTargetString(target), blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
+        if (target == SpecialTarget.Random)
+        {
+            string message = string.Format("The {0} {1} isn't supported by this block.", nameof(SpecialTarget), nameof(SpecialTarget.Random));
+            throw new ArgumentException(message);
+        }
+
         TargetProvider = new TargetReporter(target, TargetReporter.GotoOpCode);
     }
 
@@ -100,11 +113,11 @@ public class Goto : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(targetProvider, nameof(targetProvider));
 
         TargetProvider = targetProvider;
-        if (targetProvider is IConstProvider)
+        if (targetProvider is IScratchType)
         {
             string message = string.Format(
                 "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
-                nameof(IConstProvider),
+                nameof(IScratchType),
                 nameof(SpecialTarget),
                 nameof(IFigure));
             throw new ArgumentException(message, nameof(targetProvider));

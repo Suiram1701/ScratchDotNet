@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -53,13 +52,13 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
     /// <exception cref="ArgumentNullException"></exception>
     public ListContainsItem(ListRef reference, IScratchType item, string blockId) : base(reference, blockId, _constOpCode)
     {
-        ArgumentNullException.ThrowIfNull(reference, nameof(reference));
-        ItemProvider = new Result(item, DataType.String);
+        ArgumentNullException.ThrowIfNull(item, nameof(item));
+        ItemProvider = item.ConvertToStringValue();
     }
 
     internal ListContainsItem(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM") ?? new Empty(DataType.String);
+        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM");
     }
 
     protected override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

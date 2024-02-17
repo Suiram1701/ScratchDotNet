@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -30,68 +29,55 @@ public class SetVariable : VariableExecutionBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="reference">A reference to the variable to set</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public SetVariable(VariableRef reference) : base(reference, _constOpCode)
-    {
-        ValueProvider = new Empty(DataType.String);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="value">The value to put into the variable</param>
     /// <param name="reference">A reference to the variable to change</param>
+    /// <param name="value">The value to put into the variable</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public SetVariable(string value, VariableRef reference) : this(value, reference, BlockHelpers.GenerateBlockId())
+    public SetVariable(VariableRef reference, IScratchType value) : this(reference, value, BlockHelpers.GenerateBlockId())
     {
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="value">The value to put into the variable</param>
     /// <param name="reference">A reference to the variable to change</param>
+    /// <param name="value">The value to put into the variable</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public SetVariable(string value, VariableRef reference, string blockId) : base(reference, blockId, _constOpCode)
+    public SetVariable(VariableRef reference, IScratchType value, string blockId) : base(reference, blockId, _constOpCode)
     {
-        ArgumentException.ThrowIfNullOrEmpty(value, nameof(value));
-        ValueProvider = new Result(value);
+        ArgumentNullException.ThrowIfNull(value, nameof(value));
+        ValueProvider = value.ConvertToStringValue();
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="valueProvider">The provider of the value to put into the variable</param>
     /// <param name="reference">A reference to the variable to change</param>
+    /// <param name="valueProvider">The provider of the value to put into the variable</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public SetVariable(IValueProvider valueProvider, VariableRef reference) : this(valueProvider, reference, BlockHelpers.GenerateBlockId())
+    public SetVariable(VariableRef reference, IValueProvider valueProvider) : this(reference, valueProvider, BlockHelpers.GenerateBlockId())
     {
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="valueProvider">The provider of the value to put into the variable</param>
     /// <param name="reference">A reference to the variable to change</param>
+    /// <param name="valueProvider">The provider of the value to put into the variable</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public SetVariable(IValueProvider valueProvider, VariableRef reference, string blockId) : base(reference, blockId, _constOpCode)
+    public SetVariable(VariableRef reference, IValueProvider valueProvider, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
-
         ValueProvider = valueProvider;
-        if (ValueProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.String;
     }
 
     internal SetVariable(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE") ?? new Empty(DataType.String);
+        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, Variable variable, ILogger logger, CancellationToken ct = default)

@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -53,7 +52,7 @@ public class ItemOfList : ListOperatorBase
     /// <exception cref="ArgumentNullException"></exception>
     public ItemOfList(ListRef reference, int index, string blockId) : base(reference, blockId, _constOpCode)
     {
-        IndexProvider = new Result(new DoubleValue(index), DataType.Integer);
+        IndexProvider = new DoubleValue(index);
     }
 
     /// <summary>
@@ -77,15 +76,12 @@ public class ItemOfList : ListOperatorBase
     public ItemOfList(ListRef reference, IValueProvider indexProvider, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(indexProvider, nameof(indexProvider));
-
         IndexProvider = indexProvider;
-        if (IndexProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Integer;
     }
 
     internal ItemOfList(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX") ?? new Empty(DataType.Integer);
+        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX");
     }
 
     protected override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

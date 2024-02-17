@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -57,7 +56,7 @@ internal class IndexOfItemOfList : ListOperatorBase
     public IndexOfItemOfList(ListRef reference, IScratchType item, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
-        ItemProvider = new Result(item, DataType.String);
+        ItemProvider = item.ConvertToStringValue();
     }
 
     /// <summary>
@@ -81,15 +80,12 @@ internal class IndexOfItemOfList : ListOperatorBase
     public IndexOfItemOfList(ListRef reference, IValueProvider itemProvider, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(itemProvider, nameof(itemProvider));
-
         ItemProvider = itemProvider;
-        if (ItemProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.String;
     }
 
     internal IndexOfItemOfList(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM") ?? new Empty(DataType.String);
+        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM");
     }
 
     protected override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

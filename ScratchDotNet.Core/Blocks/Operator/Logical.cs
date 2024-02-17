@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -53,19 +52,6 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
 
     private const string _constAndOpCode = "operator_and";
     private const string _constOrOpCode = "operator_or";
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="operator">The operator to use</param>
-    public Logical(LogicalOperation @operator) : base(GetOpCodeFromOperator(@operator))
-    {
-        ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-
-        Operator = @operator;
-        Operand1Provider = new EmptyBool();
-        Operand2Provider = new EmptyBool();
-    }
 
     /// <summary>
     /// Creates a new instance

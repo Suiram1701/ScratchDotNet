@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -60,19 +59,6 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     /// Creates a new instance
     /// </summary>
     /// <param name="operator">The comparison operation to execute</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public Comparison(ComparisonOperator @operator) : base(GetOpCodeFromOperator(@operator))
-    {
-        ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-
-        Operand1Provider = new Empty(DataType.String);
-        Operand2Provider = new Empty(DataType.String);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="operator">The comparison operation to execute</param>
     /// <param name="operand1">The first operand</param>
     /// <param name="operand2">The second operand</param>
     /// <param name="blockId">The id of this block</param>
@@ -82,8 +68,8 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
 
         Operator = @operator;
-        Operand1Provider = new Result(operand1, DataType.String);
-        Operand2Provider = new Result(operand2, DataType.String);
+        Operand1Provider = operand1.ConvertToStringValue();
+        Operand2Provider = operand2.ConvertToStringValue();
     }
 
     /// <summary>
@@ -103,13 +89,7 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
 
         Operator = @operator;
         Operand1Provider = operand1Provider;
-        if (Operand1Provider is IConstProvider opr1ConstProvider)
-            opr1ConstProvider.DataType = DataType.String;
-
-        Operand2Provider = operand2Provider;
-        if (Operand2Provider is IConstProvider opr2ConstProvider)
-            opr2ConstProvider.DataType = DataType.String;
-    }
+        Operand2Provider = operand2Provider;}
 
     internal Comparison(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
@@ -121,8 +101,8 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
             _ => throw new NotSupportedException("The specified operation isn't supported.")
         };
 
-        Operand1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.OPERAND1") ?? new Empty(DataType.String);
-        Operand2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.OPERAND2") ?? new Empty(DataType.String);
+        Operand1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.OPERAND1");
+        Operand2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.OPERAND2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

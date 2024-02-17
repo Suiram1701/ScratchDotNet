@@ -3,10 +3,10 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Types;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -30,15 +30,6 @@ public class Repeat : ExecutionBlockBase
     public IReadOnlyCollection<ExecutionBlockBase> Substack { get; }
 
     private const string _constOpCode = "control_repeat";
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    public Repeat() : base(_constOpCode)
-    {
-        TimesProvider = new Empty(DataType.PositiveInteger);
-        Substack = new ReadOnlyCollection<ExecutionBlockBase>(new List<ExecutionBlockBase>());
-    }
 
     /// <summary>
     /// Creates a new instance
@@ -67,7 +58,7 @@ public class Repeat : ExecutionBlockBase
             throw new ArgumentOutOfRangeException(nameof(times), times, "A value greater or same than 0 was expected.");
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
-        TimesProvider = new Result(times, true);
+        TimesProvider = new DoubleValue(times);
         Substack = new ReadOnlyCollection<ExecutionBlockBase>(substack);
     }
 
@@ -95,15 +86,12 @@ public class Repeat : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
         TimesProvider = timesProvider;
-        if (TimesProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.PositiveInteger;
-
         Substack = new ReadOnlyCollection<ExecutionBlockBase>(substack);
     }
 
     internal Repeat(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        TimesProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TIMES") ?? new Empty(DataType.PositiveInteger);
+        TimesProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TIMES");
         Substack = BlockHelpers.GetSubstack(blockToken, "inputs.SUBSTACK");
     }
 

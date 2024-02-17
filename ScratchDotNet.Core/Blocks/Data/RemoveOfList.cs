@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -56,8 +55,8 @@ public class RemoveOfList : ListExecutionBase
     /// <exception cref="ArgumentNullException"></exception>
     public RemoveOfList(ListRef reference, int index, string blockId) : base(reference, _constOpCode, blockId)
     {
-        ArgumentNullException.ThrowIfNull(reference, nameof(reference));
-        IndexProvider = new Result(new DoubleValue(index), DataType.Integer);
+        ArgumentNullException.ThrowIfNull(index, nameof(index));
+        IndexProvider = new DoubleValue(index);
     }
 
     /// <summary>
@@ -80,16 +79,13 @@ public class RemoveOfList : ListExecutionBase
     /// <exception cref="ArgumentNullException"></exception>
     public RemoveOfList(ListRef reference, IValueProvider indexProvider, string blockId) : base(reference, _constOpCode, blockId)
     {
-        ArgumentNullException.ThrowIfNull(reference, nameof(reference));
-
+        ArgumentNullException.ThrowIfNull(indexProvider, nameof(indexProvider));
         IndexProvider = indexProvider;
-        if (IndexProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Integer;
     }
 
     internal RemoveOfList(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX") ?? new Empty(DataType.Integer);
+        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

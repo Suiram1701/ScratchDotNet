@@ -3,10 +3,10 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Types;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,14 +33,6 @@ public class SetVolume : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public SetVolume() : base(_constOpCode)
-    {
-        VolumeProvider = new Result(100d, false);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="volume">The count of percent to set</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public SetVolume(double volume) : this(volume, BlockHelpers.GenerateBlockId())
@@ -58,7 +50,7 @@ public class SetVolume : ExecutionBlockBase
     {
         if (volume < 0d || volume > 100d)
             throw new ArgumentOutOfRangeException(nameof(volume), volume, "The volume have to be between 0 - 100");
-        VolumeProvider = new Result(volume, false);
+        VolumeProvider = new DoubleValue(volume);
     }
 
     /// <summary>
@@ -80,15 +72,12 @@ public class SetVolume : ExecutionBlockBase
     public SetVolume(IValueProvider volumeProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(volumeProvider, nameof(volumeProvider));
-
         VolumeProvider = volumeProvider;
-        if (VolumeProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     internal SetVolume(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        VolumeProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VOLUME") ?? new Empty(DataType.Number);
+        VolumeProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VOLUME");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

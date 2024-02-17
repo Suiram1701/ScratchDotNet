@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -50,15 +49,6 @@ public class Join : ValueOperatorBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public Join() : base(_constOpCode)
-    {
-        String1Provider = new Empty(DataType.String);
-        String2Provider = new Empty(DataType.String);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="string1">The first string to join</param>
     /// <param name="string2">The second string to join</param>
     /// <exception cref="ArgumentNullException"></exception>
@@ -79,8 +69,8 @@ public class Join : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(string1, string2);
         ArgumentNullException.ThrowIfNull(string2, string2);
 
-        String1Provider = new Result(string1);
-        String2Provider = new Result(string2);
+        String1Provider = new StringValue(string1);
+        String2Provider = new StringValue(string2);
     }
 
     /// <summary>
@@ -108,18 +98,13 @@ public class Join : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(string2Provider, nameof(string2Provider));
 
         String1Provider = string1Provider;
-        if (String1Provider is IConstProvider const1Provider)
-            const1Provider.DataType = DataType.String;
-
         String2Provider = string2Provider;
-        if (String2Provider is IConstProvider const2Provider)
-            const2Provider.DataType = DataType.String;
     }
 
     internal Join(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        String1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING1") ?? new Empty(DataType.String);
-        String2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING2") ?? new Empty(DataType.String);
+        String1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING1");
+        String2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

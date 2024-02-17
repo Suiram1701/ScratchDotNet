@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -50,15 +49,6 @@ public class Modulo : ValueOperatorBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public Modulo() : base(_constOpCode)
-    {
-        Num1Provider = new Empty(DataType.Number);
-        Num2Provider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="num1">The dividend</param>
     /// <param name="num2">The divisor</param>
     /// <exception cref="ArgumentNullException"></exception>
@@ -79,8 +69,8 @@ public class Modulo : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(num1, nameof(num1));
         ArgumentNullException.ThrowIfNull(num2, nameof(num2));
 
-        Num1Provider = new Result(num1, false);
-        Num2Provider = new Result(num2, false);
+        Num1Provider = new DoubleValue(num1);
+        Num2Provider = new DoubleValue(num2);
 
     }
     /// <summary>
@@ -104,22 +94,16 @@ public class Modulo : ValueOperatorBase
     public Modulo(IValueProvider num1Provider, IValueProvider num2Provider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(num1Provider, nameof(num1Provider));
-        Num1Provider = num1Provider;
-        if (Num1Provider is IConstProvider num1ConstProvider)
-            num1ConstProvider.DataType = DataType.Number;
-
         ArgumentNullException.ThrowIfNull(num2Provider, nameof(num2Provider));
+        
+        Num1Provider = num1Provider;
         Num2Provider = num2Provider;
-        if (Num2Provider is IConstProvider num2ConstProvider)
-            num2ConstProvider.DataType = DataType.Number;
     }
 
     internal Modulo(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        Num1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM1")
-            ?? new Empty(DataType.Number);
-        Num2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM2")
-            ?? new Empty(DataType.Number);
+        Num1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM1");
+        Num2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

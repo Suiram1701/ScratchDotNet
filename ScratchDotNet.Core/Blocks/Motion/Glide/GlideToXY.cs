@@ -2,11 +2,11 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion.Glide;
@@ -36,15 +36,6 @@ public class GlideToXY : GlideBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public GlideToXY() : base(_constOpCode)
-    {
-        TargetXProvider = new Empty(DataType.Number);
-        TargetYProvider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="time">The time the figure needs to move to the position</param>
     /// <param name="targetX">The target x position</param>
     /// <param name="targetY">The target y position</param>
@@ -67,8 +58,8 @@ public class GlideToXY : GlideBase
         ArgumentNullException.ThrowIfNull(targetX, nameof(targetX));
         ArgumentNullException.ThrowIfNull(targetY, nameof(targetY));
 
-        TargetXProvider = new Result(targetX, false);
-        TargetYProvider = new Result(targetY, false);
+        TargetXProvider = new DoubleValue(targetX);
+        TargetYProvider = new DoubleValue(targetY);
     }
 
     /// <summary>
@@ -97,18 +88,13 @@ public class GlideToXY : GlideBase
         ArgumentNullException.ThrowIfNull(targetYProvider, nameof(targetYProvider));
 
         TargetXProvider = targetXProvider;
-        if (TargetXProvider is IConstProvider constXProvider)
-            constXProvider.DataType = DataType.Number;
-
         TargetYProvider = targetYProvider;
-        if (TargetYProvider is IConstProvider constYProvider)
-            constYProvider.DataType = DataType.Number;
     }
 
     internal GlideToXY(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        TargetXProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.X") ?? new Empty(DataType.Number);
-        TargetYProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.Y") ?? new Empty(DataType.Number);
+        TargetXProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.X");
+        TargetYProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.Y");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

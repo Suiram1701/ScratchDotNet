@@ -52,9 +52,6 @@ public interface IFigure : IStageObject
     /// <summary>
     /// The direction of the figure
     /// </summary>
-    /// <remarks>
-    /// The rotation works a bit different that normaly. 0° start on top and rotates to the bottom until 180°. From now until the top it goes from -179° until 0°
-    /// </remarks>
     public double Direction { get; }
 
     /// <summary>
@@ -90,9 +87,6 @@ public interface IFigure : IStageObject
     /// <summary>
     /// Set the figure to a specified count of degrees
     /// </summary>
-    /// <remarks>
-    /// The rotation works a bit different that normaly. 0° start on top and rotates to the bottom until 180°. From now until the top it goes from -179° until 0°
-    /// </remarks>
     /// <param name="degree">The count of degrees</param>
     public void RotateTo(double degree);
 

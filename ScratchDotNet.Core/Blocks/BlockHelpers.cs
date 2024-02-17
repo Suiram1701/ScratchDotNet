@@ -4,7 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Data;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
+using ScratchDotNet.Core.Converters;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
@@ -16,6 +16,9 @@ using System.Text;
 
 namespace ScratchDotNet.Core.Blocks;
 
+/// <summary>
+/// Helper methods for blocks
+/// </summary>
 public static class BlockHelpers
 {
     /// <summary>
@@ -25,14 +28,16 @@ public static class BlockHelpers
     /// <param name="blockToken">The token of the block that request the provider</param>
     /// <param name="dataPath">The relative JSON path to the data</param>
     /// <returns>The result provider. When <see langword="null"/> the result of the data path was empty</returns>
-    internal static IValueProvider? GetDataProvider(JToken blockToken, string dataPath)
+    internal static IValueProvider GetDataProvider(JToken blockToken, string dataPath)
     {
         JToken? dataToken = blockToken.SelectToken(dataPath + $"[1]");
 
         if (dataToken is null || dataToken.Type == JTokenType.Null)     // Value of path was empty
-            return null;
-        else if (dataToken.Type == JTokenType.Array)     // Const result
+            return new EmptyValue();
+
+        else if (dataToken.Type == JTokenType.Array)     // a constant value
             return GetStaticValue(dataToken);
+
         else if (dataToken.Type == JTokenType.String)     // Reference to another block
             return GetReferenceBlock(blockToken, dataToken.Value<string>()!);
         else
@@ -44,19 +49,20 @@ public static class BlockHelpers
     }
 
     /// <summary>
-    /// Read a boolean data provider from a block
+    /// Reads a boolean value provider from a block
     /// </summary>
     /// <param name="blockToken">The token of the block that request the provider</param>
     /// <param name="dataPath">The relative JSON path to the data</param>
     /// <returns>The provider</returns>
     internal static IBoolValueProvider GetBoolDataProvider(JToken blockToken, string dataPath)
     {
-        IValueProvider? valueProvider = GetDataProvider(blockToken, dataPath);
-        if (valueProvider is null)
-            return new EmptyBool();
+        IValueProvider valueProvider = GetDataProvider(blockToken, dataPath);
+        if (valueProvider is EmptyValue)
+            return new EmptyBoolValue();
+
         if (valueProvider is not IBoolValueProvider provider)
         {
-            string message = string.Format("A boolean return type was a expected at '{0}'.", dataPath);
+            string message = string.Format("A boolean value provider was a expected at '{0}'.", dataPath);
             throw new ArgumentException(message, nameof(blockToken));
         }
 
@@ -64,80 +70,65 @@ public static class BlockHelpers
     }
 
     /// <summary>
-    /// Get a const result
+    /// Reads a constant value from an input
     /// </summary>
-    /// <param name="dataToken">The array of the result</param>
+    /// <param name="dataToken">The token of the provider</param>
     /// <returns>The result</returns>
     private static IValueProvider GetStaticValue(JToken dataToken)
     {
-        DataType dataType = (DataType)dataToken.SelectToken("[0]")!.Value<int>();
+        DataType dataType = (DataType)dataToken.First!.Value<int>();
         string? dataValue = dataToken.SelectToken("[1]")?.Value<string>();
+
         if (string.IsNullOrEmpty(dataValue))
-            return new Empty(dataType);
+            return new EmptyValue();
 
-        IScratchType result;
-        if ((int)dataType >= 4 && (int)dataType <= 7)     // Number values
+        switch (dataType)
         {
-            double value = double.Parse(dataValue);
-            switch (dataType)
-            {
-                case DataType.PositiveNumber:
-                    if (value < 0)
-                        throw new ArgumentOutOfRangeException(nameof(dataToken), value, "A value larger or same than 0 was expected.");
-                    break;
-                case DataType.PositiveInteger:
-                    if (value < 0)
-                        throw new ArgumentOutOfRangeException(nameof(dataToken), value, "A value larger or same than 0 was expected.");
-                    break;
-            }
+            case DataType.Number:
+            case DataType.PositiveNumber:
+            case DataType.Integer:
+            case DataType.PositiveInteger:
+                DoubleValue doubleValue = DoubleValue.Parse(dataValue, null);
 
-            result = new DoubleValue(value);
-        }
-        else if (dataType == DataType.Angle)
-        {
-            double angle = double.Parse(dataValue);
-            while (angle < 0)
-                angle += 360;
+                if (dataType == DataType.Integer || dataType == DataType.PositiveInteger)
+                {
+                    if (doubleValue.Value < 0)
+                        throw new ArgumentOutOfRangeException(null, doubleValue.Value, "A value of the type integer mustn't be a fractional number.");
+                }
 
-            result = new DoubleValue(angle);
-        }
-        else if (dataType == DataType.Color)
-        {
-            throw new NotImplementedException();
-        }
-        else if (dataType == DataType.String)
-            result = new StringValue(dataValue);
-        else if (dataType == DataType.Broadcast)
-        {
-            throw new NotImplementedException();
-        }
-        else if (dataType == DataType.Variable)
-        {
-            string varName = dataValue!;
-            string varId = dataToken.SelectToken("[2]")!.Value<string>()!;
+                if (dataType == DataType.PositiveNumber || dataType == DataType.PositiveInteger)
+                {
+                    if (doubleValue.Value < 0)
+                        throw new ArgumentOutOfRangeException(null, doubleValue.Value, "A positive value have to be larger or same than 0.");
+                }
 
-            return new VariableContent(new(varName, varId));
-        }
-        else if (dataType == DataType.List)
-        {
-            string listName = dataValue!;
-            string listId= dataToken.SelectToken("[2]")!.Value<string>()!;
+                return doubleValue;
+            case DataType.Angle:
+                double angleDouble = double.Parse(dataValue, null);
+                AngleConverter converter = new(angleDouble);
 
-            return new ListContent(new(listName, listId));
-        }
-        else
-        {
-            string message = string.Format("The specified type code {0} isn't supported.", dataType);
-            throw new NotSupportedException(message);
-        }
+                return new DoubleValue(converter.ConvertToNormalFormat());
+            case DataType.String:
+                return new StringValue(dataValue);
+            case DataType.Variable:
+                string varName = dataValue!;
+                string varId = dataToken.SelectToken("[2]")!.Value<string>()!;
 
-        return new Result(result, dataType);
+                return new VariableContent(new(varName, varId));
+            case DataType.List:
+                string listName = dataValue!;
+                string listId = dataToken.SelectToken("[2]")!.Value<string>()!;
+
+                return new ListContent(new(listName, listId));
+            default:
+                string message = string.Format("The DataType {0} isn't implemented.", dataType);
+                throw new NotImplementedException(message);
+        }
     }
 
     /// <summary>
-    /// Get the operator block for a data
+    /// Reads a reference block of an input value
     /// </summary>
-    /// <typeparam name="TValue">The type of the data</typeparam>
     /// <param name="blockToken">The token of the main block</param>
     /// <param name="blockId">The id of the data block</param>
     /// <returns>The block</returns>
@@ -154,30 +145,6 @@ public static class BlockHelpers
         }
 
         return @operator;
-    }
-
-    private static Color ParseColorFromHex(string hex)
-    {
-        hex = hex.TrimStart('#');
-
-        if (hex.Length == 3) // Handle abbreviated format
-        {
-            hex = string.Concat(hex[0], hex[0], hex[1], hex[1], hex[2], hex[2]);
-        }
-
-        if (hex.Length == 6 || hex.Length == 8)
-        {
-            int startIndex = hex.Length == 8 ? 2 : 0;
-
-            return Color.FromArgb(
-                hex.Length == 8 ? int.Parse(hex[..2], NumberStyles.HexNumber) : 255,
-                int.Parse(hex.Substring(startIndex, 2), NumberStyles.HexNumber),
-                int.Parse(hex.Substring(startIndex + 2, 2), NumberStyles.HexNumber),
-                int.Parse(hex.Substring(startIndex + 4, 2), NumberStyles.HexNumber)
-            );
-        }
-
-        throw new ArgumentException("Invalid HEX color format. Supported formats: RGB (AABBCC) or ARGB (AARRGGBB) or abbreviated (ABC).", nameof(hex));
     }
 
     /// <summary>

@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -62,20 +61,6 @@ public class Arithmetic : ValueOperatorBase
     /// Creates a new instance
     /// </summary>
     /// <param name="operator">The operator to use</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public Arithmetic(ArithmeticOperator @operator) : base(GetOpCodeFromOperation(@operator))
-    {
-        ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
-
-        Operator = @operator;
-        Num1Provider = new Empty(DataType.Number);
-        Num2Provider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="operator">The operator to use</param>
     /// <param name="num1">The first number</param>
     /// <param name="num2">The second number</param>
     /// <exception cref="ArgumentNullException"></exception>
@@ -99,8 +84,8 @@ public class Arithmetic : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(num2, nameof(num2));
 
         Operator = @operator;
-        Num1Provider = new Result(num1, false);
-        Num2Provider = new Result(num2, false);
+        Num1Provider = new DoubleValue(num1);
+        Num2Provider = new DoubleValue(num2);
     }
 
     /// <summary>
@@ -131,12 +116,7 @@ public class Arithmetic : ValueOperatorBase
 
         Operator = @operator;
         Num1Provider = num1Provider;
-        if (Num1Provider is IConstProvider num1ConstProvider)
-            num1ConstProvider.DataType = DataType.Number;
-
         Num2Provider = num2Provider;
-        if (Num2Provider is IConstProvider num2ConstProvider)
-            num2ConstProvider.DataType = DataType.Number;
     }
 
     internal Arithmetic(string blockId, JToken blockToken) : base(blockId, blockToken)
@@ -150,10 +130,8 @@ public class Arithmetic : ValueOperatorBase
             _ => throw new NotSupportedException("The specified operator isn't supported.")
         };
 
-        Num1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM1")
-            ?? new Empty(DataType.Number);
-        Num2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM2")
-            ?? new Empty(DataType.Number);
+        Num1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM1");
+        Num2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

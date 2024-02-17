@@ -3,10 +3,10 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Types;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Control;
@@ -49,7 +49,7 @@ public class Wait : ExecutionBlockBase
         if (duration.TotalSeconds < 0)
             throw new ArgumentOutOfRangeException(nameof(duration), duration, "The duration have to be greater or same that 0");
 
-        DurationProvider = new Result(duration.TotalSeconds, true);
+        DurationProvider = new DoubleValue(duration.TotalSeconds);
     }
 
     /// <summary>
@@ -71,15 +71,12 @@ public class Wait : ExecutionBlockBase
     public Wait(IValueProvider durationProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(durationProvider, nameof(durationProvider));
-
         DurationProvider = durationProvider;
-        if (DurationProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.PositiveNumber;
     }
 
     internal Wait(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        DurationProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DURATION") ?? new Empty(DataType.PositiveNumber);
+        DurationProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DURATION");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

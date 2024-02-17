@@ -1,4 +1,8 @@
-﻿using ScratchDotNet.Core.Types.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.EventArgs;
+using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,8 +18,14 @@ namespace ScratchDotNet.Core.Types;
 /// </summary>
 /// <param name="value">The initialized value</param>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public readonly struct BooleanValue(bool value) : IScratchType
+public readonly struct BooleanValue(bool value) : IScratchType, IBoolValueProvider
 {
+    /// <inheritdoc/>
+    /// <remarks>
+    /// This will be never get called
+    /// </remarks>
+    public event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
+
     /// <summary>
     /// The value this instance contains
     /// </summary>
@@ -82,6 +92,9 @@ public readonly struct BooleanValue(bool value) : IScratchType
 
         return 1;     // By default is a boolean value larger than aonther value
     }
+
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+        Task.FromResult<IScratchType>(this);
 
     public static bool operator ==(BooleanValue left, BooleanValue right) =>
         left.Equals(right);

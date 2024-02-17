@@ -3,11 +3,11 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -40,19 +40,6 @@ public class Turn : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <param name="direction">The direction to rotate to</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public Turn(Direction direction) : base(GetOpCodeFromDirection(direction))
-    {
-        ArgumentNullException.ThrowIfNull(direction, nameof(direction));
-
-        Direction = direction;
-        ValueProvider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="direction">The direction to rotate to</param>
     /// <param name="value">The count of degrees to rotate</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
@@ -74,7 +61,7 @@ public class Turn : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         Direction = direction;
-        ValueProvider = new Result(value, false);
+        ValueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -103,13 +90,11 @@ public class Turn : ExecutionBlockBase
 
         Direction = direction;
         ValueProvider = valueProvider;
-        if (ValueProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     internal Turn(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DEGREES") ?? new Empty(DataType.Number);
+        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DEGREES");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

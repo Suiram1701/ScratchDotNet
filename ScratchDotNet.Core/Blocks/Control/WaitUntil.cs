@@ -3,9 +3,9 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Types;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Control;
@@ -23,14 +23,6 @@ public class WaitUntil : ExecutionBlockBase
     public IBoolValueProvider ConditionProvider { get; }
 
     private const string _constOpCode = "control_wait_until";
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    public WaitUntil() : base(_constOpCode)
-    {
-        ConditionProvider = new EmptyBool();
-    }
 
     /// <summary>
     /// Creates a new instance
@@ -58,7 +50,7 @@ public class WaitUntil : ExecutionBlockBase
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (ConditionProvider is EmptyBool)     // No condition
+        if (ConditionProvider is EmptyBoolValue)     // No condition
             return;
 
         TaskCompletionSource tcs = new(TaskCreationOptions.LongRunning);

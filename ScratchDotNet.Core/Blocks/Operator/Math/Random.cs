@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -50,15 +49,6 @@ public class Random : ValueOperatorBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public Random() : base(_constOpCode)
-    {
-        MinProvider = new Empty(DataType.Number);
-        MaxProvider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="min">The minimum value</param>
     /// <param name="max">The maximum value</param>
     /// <exception cref="ArgumentNullException"></exception>
@@ -79,8 +69,8 @@ public class Random : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(min, nameof(min));
         ArgumentNullException.ThrowIfNull(max, nameof(max));
 
-        MinProvider = new Result(min, false);
-        MaxProvider = new Result(max, false);
+        MinProvider = new DoubleValue(min);
+        MaxProvider = new DoubleValue(max);
     }
 
     /// <summary>
@@ -107,38 +97,36 @@ public class Random : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(maxProvider, nameof(maxProvider));
 
         MinProvider = minProvider;
-        if (MinProvider is IConstProvider minConstProvider)
-            minConstProvider.DataType = DataType.Number;
-
         MaxProvider = maxProvider;
-        if (MaxProvider is IConstProvider maxConstProvider)
-            maxConstProvider.DataType = DataType.Number;
     }
 
     internal Random(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        MinProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.FROM")
-            ?? new Empty(DataType.Number);
-        MaxProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TO")
-            ?? new Empty(DataType.Number);
-    }
+        MinProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.FROM");
+        MaxProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TO");
+    } 
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        IScratchType minType = await MinProvider.GetResultAsync(context, logger, ct);
-        double orgMin = minType.ConvertToDoubleValue();
-        IScratchType maxType = await MaxProvider.GetResultAsync(context, logger, ct);
-        double orgMax = maxType.ConvertToDoubleValue();
+        DoubleValue orgMin = (await MinProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        DoubleValue orgMax = (await MaxProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
         double min = System.Math.Min(orgMin, orgMax);
         double max = System.Math.Max(orgMin, orgMax);
 
-        double result;
-        if (HasDecimal(min) || HasDecimal(max))
-            result = System.Random.Shared.NextDouble() * (max - min);
+        if (HasDecimal(min) || HasDecimal(max))     // Generate a random fractional value only when min or max is a fractional value otherwise generate a random integer value
+        {
+            // The random value have to get scaled with min and max because NextDouble() returns a value from 0.0d to 1.0d
+            double scale = max - min;
+            double result = min + System.Random.Shared.NextDouble() * scale;
+
+            return new DoubleValue(result);
+        }
         else
-            result = System.Random.Shared.Next((int)min, (int)max);
-        return new DoubleValue(result);
+        {
+            double result = System.Random.Shared.Next((int)min, (int)max);
+            return new DoubleValue(result);
+        }
     }
 
     private static bool HasDecimal(double value) =>

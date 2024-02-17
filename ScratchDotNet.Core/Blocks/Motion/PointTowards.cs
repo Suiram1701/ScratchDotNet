@@ -8,6 +8,7 @@ using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Providers.Interfaces;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 using System.Drawing;
 using Random = System.Random;
@@ -104,11 +105,11 @@ public class PointTowards : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(targetProvider, nameof(targetProvider));
 
         TargetProvider = targetProvider;
-        if (TargetProvider is IConstProvider)
+        if (TargetProvider is IScratchType)
         {
             string message = string.Format(
                 "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
-                nameof(IConstProvider),
+                nameof(IScratchType),
                 nameof(SpecialTarget),
                 nameof(IFigure));
             throw new ArgumentException(message, nameof(targetProvider));
@@ -147,6 +148,7 @@ public class PointTowards : ExecutionBlockBase
                 return GetFigureAngle(figure, mousePosition.X, mousePosition.Y);
             }
             ,
+            // When the target string equals no special case string then is a player name meant
             _ => () =>
             {
                 IFigure? targetFigure = context.Figures.FirstOrDefault(f => f.Name.Equals(target));
@@ -159,21 +161,13 @@ public class PointTowards : ExecutionBlockBase
                 return GetFigureAngle(figure, targetFigure.X, targetFigure.Y);
             }
         };
+
         double degree = degreeFunc();
-
-        if (double.IsNaN(degree))     // Figure not found
-        {
-            logger.LogError("Cant find figure {figure} on stage", target);
-            return;
-        }
-
         figure.RotateTo(degree);
     }
 
     private static double GetFigureAngle(IFigure figure, double otherX, double otherY)
     {
-
-
         double dx = otherX - figure.X;
         double dy = otherY - figure.Y;
 

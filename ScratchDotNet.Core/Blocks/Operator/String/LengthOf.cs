@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
@@ -37,14 +36,6 @@ public class LengthOf : ValueOperatorBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public LengthOf() : base(_constOpCode)
-    {
-        StringProvider = new Empty(DataType.String);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="string">The string to get the length from</param>
     /// <exception cref="ArgumentNullException"></exception>
     public LengthOf(string @string) : this(@string, BlockHelpers.GenerateBlockId())
@@ -61,7 +52,7 @@ public class LengthOf : ValueOperatorBase
     public LengthOf(string @string, string blockId) : base(blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(@string, nameof(@string));
-        StringProvider = new Result(@string);
+        StringProvider = new StringValue(@string);
     }
 
     /// <summary>
@@ -83,15 +74,12 @@ public class LengthOf : ValueOperatorBase
     public LengthOf(IValueProvider stringProvider, string blockId) : base(blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(stringProvider, nameof(@stringProvider));
-
         StringProvider = stringProvider;
-        if (StringProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.String;
     }
 
     internal LengthOf(string blockId, JToken blockToken) : base(blockId, _constOpCode)
     {
-        StringProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING") ?? new Empty(DataType.String);
+        StringProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

@@ -3,11 +3,11 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Motion;
@@ -32,14 +32,6 @@ public class PointInDirection : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public PointInDirection() : base(_constOpCode)
-    {
-        AngleProvider = new Empty(DataType.Angle);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="angle">The count of degrees to set</param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
@@ -50,7 +42,7 @@ public class PointInDirection : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="angle">The count of degrees to set</param>
+    /// <param name="angle">The count of degrees to set. This value have to be between 0° and 359°</param>
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
@@ -58,10 +50,10 @@ public class PointInDirection : ExecutionBlockBase
     public PointInDirection(double angle, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(angle, nameof(angle));
-        if (angle < -180 || angle > 180)
-            throw new ArgumentOutOfRangeException(nameof(angle), angle, "The count of degree have to be between -180 and 180.");
+        if (angle < 0 || angle >= 360)
+            throw new ArgumentOutOfRangeException(nameof(angle), angle, "The count of degree have to be between 0° and 359°.");
 
-        AngleProvider = new Result(angle);
+        AngleProvider = new DoubleValue(angle);
     }
 
     /// <summary>
@@ -83,15 +75,11 @@ public class PointInDirection : ExecutionBlockBase
     public PointInDirection(IValueProvider angleProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(angleProvider, nameof(angleProvider));
-
-        AngleProvider = angleProvider;
-        if (AngleProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Angle;
-    }
+        AngleProvider = angleProvider;}
 
     internal PointInDirection(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        AngleProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DIRECTION") ?? new Empty(DataType.Angle);
+        AngleProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DIRECTION");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

@@ -3,10 +3,10 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Types;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,14 +33,6 @@ public class ChangeVolumeBy : ExecutionBlockBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public ChangeVolumeBy() : base(_constOpCode)
-    {
-        ValueProvider = new Result(0, false);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="value">The value to change the volume by</param>
     public ChangeVolumeBy(double value) : this(value, BlockHelpers.GenerateBlockId())
     {
@@ -54,7 +46,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
     /// <exception cref="ArgumentException"></exception>
     public ChangeVolumeBy(double value, string blockId) : base(_constOpCode, blockId)
     {
-        ValueProvider = new Result(value, false);
+        ValueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -74,15 +66,12 @@ public class ChangeVolumeBy : ExecutionBlockBase
     public ChangeVolumeBy(IValueProvider valueProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
-
         ValueProvider = valueProvider;
-        if (ValueProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     internal ChangeVolumeBy(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VOLUME") ?? new Empty(DataType.Number);
+        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VOLUME");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

@@ -3,10 +3,10 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Types;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,30 +36,6 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
     private const string _constOpCode = "sound_changeeffectby";
 
     /// <summary>
-    /// Creates a new inszance
-    /// </summary>
-    /// <param name="effect">The sound effect to modify</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public ChangeSoundEffectBy(SoundEffect effect) : this(effect, BlockHelpers.GenerateBlockId())
-    {
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="effect">The sound effect to modify</param>
-    /// <param name="blockId">The id of this block</param>
-    /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="ArgumentNullException"></exception>
-    public ChangeSoundEffectBy(SoundEffect effect, string blockId) : base(_constOpCode, blockId)
-    {
-        ArgumentNullException.ThrowIfNull(effect, nameof(effect));
-        Effect = effect;
-
-        ValueProvider = new Result(0, false);
-    }
-
-    /// <summary>
     /// Creates a new instance
     /// </summary>
     /// <param name="effect">The sound effect to modify</param>
@@ -83,7 +59,7 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         Effect = effect;
-        ValueProvider = new Result(value, false);
+        ValueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -110,10 +86,7 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
 
         Effect = effect;
-
         ValueProvider = valueProvider;
-        if (ValueProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     internal ChangeSoundEffectBy(string blockId, JToken blockToken) : base(blockId, blockToken)
@@ -121,7 +94,7 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
         string effectString = blockToken.SelectToken("fields.EFFECT[0]")!.Value<string>()!;
         Effect = EnumNameAttributeHelpers.ParseEnumWithName<SoundEffect>(effectString);
 
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE") ?? new Empty(DataType.Number);
+        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -30,15 +29,6 @@ public class ChangeVariable : VariableExecutionBase
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    /// <param name="reference">A reference to A reference to the variable to change</param>
-    public ChangeVariable(VariableRef reference) : base(reference, _constOpCode)
-    {
-        ValueProvider = new Empty(DataType.Number);
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
     /// <param name="value">The value to change by</param>
     /// <param name="reference">A reference to A reference to the variable to change</param>
     /// <exception cref="ArgumentNullException"></exception>
@@ -57,7 +47,7 @@ public class ChangeVariable : VariableExecutionBase
     public ChangeVariable(double value, VariableRef reference, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(value, nameof(value));
-        ValueProvider = new Result(value, false);
+        ValueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -81,15 +71,12 @@ public class ChangeVariable : VariableExecutionBase
     public ChangeVariable(IValueProvider valueProvider, VariableRef reference, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
-
         ValueProvider = valueProvider;
-        if (ValueProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.Number;
     }
 
     internal ChangeVariable(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE") ?? new Empty(DataType.Number);
+        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, Variable variable, ILogger logger, CancellationToken ct = default)

@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -62,8 +61,8 @@ public class ReplaceItemOfList : ListExecutionBase
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
 
-        ItemProvider = new Result(item, DataType.String);
-        IndexProvider = new Result(new DoubleValue(index), DataType.Integer);
+        ItemProvider = item.ConvertToStringValue();
+        IndexProvider = new DoubleValue(index);
     }
 
     /// <summary>
@@ -92,18 +91,13 @@ public class ReplaceItemOfList : ListExecutionBase
         ArgumentNullException.ThrowIfNull(indexProvider, nameof(indexProvider));
 
         ItemProvider = itemProvider;
-        if (ItemProvider is IConstProvider constItemProvider)
-            constItemProvider.DataType = DataType.String;
-
         IndexProvider = indexProvider;
-        if (IndexProvider is IConstProvider constIndexProvider)
-            constIndexProvider.DataType = DataType.Integer;
     }
 
     internal ReplaceItemOfList(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM") ?? new Empty(DataType.String);
-        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX") ?? new Empty(DataType.Integer);
+        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM");
+        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

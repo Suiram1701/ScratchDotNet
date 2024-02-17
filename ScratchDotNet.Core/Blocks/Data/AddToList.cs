@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
@@ -53,7 +52,7 @@ public class AddToList : ListExecutionBase
     public AddToList(ListRef reference, IScratchType item, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
-        ItemProvider = new Result(item, DataType.String);
+        ItemProvider = item.ConvertToStringValue();
     }
 
     /// <summary>
@@ -77,15 +76,12 @@ public class AddToList : ListExecutionBase
     public AddToList(ListRef reference, IValueProvider itemProvider, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(itemProvider, nameof(itemProvider));
-
         ItemProvider = itemProvider;
-        if (ItemProvider is IConstProvider constProvider)
-            constProvider.DataType = DataType.String;
     }
 
     internal AddToList(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
-        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM") ?? new Empty(DataType.String);
+        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

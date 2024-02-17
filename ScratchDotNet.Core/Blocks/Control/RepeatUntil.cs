@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Blocks.Operator.ConstProviders;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using System.Collections.ObjectModel;
@@ -29,28 +28,6 @@ public class RepeatUntil : ExecutionBlockBase
     public IReadOnlyCollection<ExecutionBlockBase> Substack { get; }
 
     private const string _constOpCode = "control_repeat_until";
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    public RepeatUntil() : base(_constOpCode)
-    {
-        ConditionProvider = new EmptyBool();
-        Substack = new ReadOnlyCollection<ExecutionBlockBase>(new List<ExecutionBlockBase>(0));
-    }
-
-    /// <summary>
-    /// Creates a new instance
-    /// </summary>
-    /// <param name="substack">The substack to execute until the condition returns false</param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public RepeatUntil(IList<ExecutionBlockBase> substack) : base(_constOpCode)
-    {
-        ArgumentNullException.ThrowIfNull(substack, nameof(substack));
-
-        ConditionProvider = new EmptyBool();
-        Substack = new ReadOnlyCollection<ExecutionBlockBase>(substack);
-    }
 
     /// <summary>
     /// Creates a new instance

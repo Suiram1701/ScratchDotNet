@@ -1,4 +1,8 @@
-﻿using ScratchDotNet.Core.Types.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using ScratchDotNet.Core.Blocks.Interfaces;
+using ScratchDotNet.Core.EventArgs;
+using ScratchDotNet.Core.Execution;
+using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,8 +19,14 @@ namespace ScratchDotNet.Core.Types;
 /// </summary>
 /// <param name="value">The initialized value</param>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public readonly struct DoubleValue(double value) : IScratchType, IParsable<DoubleValue>
+public readonly struct DoubleValue(double value) : IScratchType, IParsable<DoubleValue>, IValueProvider
 {
+    /// <inheritdoc/>
+    /// <remarks>
+    /// This will be never get called
+    /// </remarks>
+    public event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
+
     /// <summary>
     /// The value this instance contains
     /// </summary>
@@ -75,6 +85,9 @@ public readonly struct DoubleValue(double value) : IScratchType, IParsable<Doubl
         double value = double.Parse(s, provider);
         return new(value);
     }
+
+    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+        Task.FromResult<IScratchType>(this);
 
     public static DoubleValue operator +(DoubleValue left, DoubleValue right)
     {
