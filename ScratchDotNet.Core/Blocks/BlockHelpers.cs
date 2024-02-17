@@ -34,10 +34,8 @@ public static class BlockHelpers
 
         if (dataToken is null || dataToken.Type == JTokenType.Null)     // Value of path was empty
             return new EmptyValue();
-
         else if (dataToken.Type == JTokenType.Array)     // a constant value
             return GetStaticValue(dataToken);
-
         else if (dataToken.Type == JTokenType.String)     // Reference to another block
             return GetReferenceBlock(blockToken, dataToken.Value<string>()!);
         else
@@ -76,8 +74,8 @@ public static class BlockHelpers
     /// <returns>The result</returns>
     private static IValueProvider GetStaticValue(JToken dataToken)
     {
-        DataType dataType = (DataType)dataToken.First!.Value<int>();
-        string? dataValue = dataToken.SelectToken("[1]")?.Value<string>();
+        DataType dataType = (DataType)dataToken[0]!.Value<int>();
+        string? dataValue = dataToken[1]?.Value<string>();
 
         if (string.IsNullOrEmpty(dataValue))
             return new EmptyValue();
@@ -88,19 +86,8 @@ public static class BlockHelpers
             case DataType.PositiveNumber:
             case DataType.Integer:
             case DataType.PositiveInteger:
-                DoubleValue doubleValue = DoubleValue.Parse(dataValue, null);
-
-                if (dataType == DataType.Integer || dataType == DataType.PositiveInteger)
-                {
-                    if (doubleValue.Value < 0)
-                        throw new ArgumentOutOfRangeException(null, doubleValue.Value, "A value of the type integer mustn't be a fractional number.");
-                }
-
-                if (dataType == DataType.PositiveNumber || dataType == DataType.PositiveInteger)
-                {
-                    if (doubleValue.Value < 0)
-                        throw new ArgumentOutOfRangeException(null, doubleValue.Value, "A positive value have to be larger or same than 0.");
-                }
+                DoubleValue doubleValue = DoubleValue.Parse(dataValue ?? string.Empty, null);
+                ThrowWhenNotDataType(doubleValue, dataType);
 
                 return doubleValue;
             case DataType.Angle:
@@ -112,12 +99,12 @@ public static class BlockHelpers
                 return new StringValue(dataValue);
             case DataType.Variable:
                 string varName = dataValue!;
-                string varId = dataToken.SelectToken("[2]")!.Value<string>()!;
+                string varId = dataToken[2]!.Value<string>()!;
 
                 return new VariableContent(new(varName, varId));
             case DataType.List:
                 string listName = dataValue!;
-                string listId = dataToken.SelectToken("[2]")!.Value<string>()!;
+                string listId = dataToken[2]!.Value<string>()!;
 
                 return new ListContent(new(listName, listId));
             default:
@@ -145,6 +132,27 @@ public static class BlockHelpers
         }
 
         return @operator;
+    }
+
+    /// <summary>
+    /// Throws an exception when type <paramref name="type"/> not accept <paramref name="value"/>
+    /// </summary>
+    /// <param name="value">The value to validate</param>
+    /// <param name="type">The type with which <paramref name="value"/> should be validated</param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    private static void ThrowWhenNotDataType(DoubleValue value, DataType type)
+    {
+        if (type == DataType.Integer || type == DataType.PositiveInteger)
+        {
+            if (value.Value < 0)
+                throw new ArgumentOutOfRangeException(null, value.Value, "A value of the type integer mustn't be a fractional number.");
+        }
+
+        if (type == DataType.PositiveNumber || type == DataType.PositiveInteger)
+        {
+            if (value.Value < 0)
+                throw new ArgumentOutOfRangeException(null, value.Value, "A positive value have to be larger or same than 0.");
+        }
     }
 
     /// <summary>

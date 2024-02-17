@@ -1,22 +1,14 @@
-﻿// Code copied from https://github.com/naudio/NAudio/blob/master/NAudio/Mp3FileReader.cs
+﻿// Code used from https://github.com/naudio/NAudio/blob/master/NAudio/Mp3FileReader.cs
 
-using System.IO;
+using NAudio.Wave;
 
-// ReSharper disable once CheckNamespace
-namespace NAudio.Wave
+namespace ScratchDotNet.Core.NAudio.Wave
 {
-
     /// <summary>
     /// Class for reading from MP3 files
     /// </summary>
     public class Mp3FileReader : Mp3FileReaderBase
     {
-        /// <summary>Supports opening a MP3 file</summary>
-        public Mp3FileReader(string mp3FileName)
-            : base(File.OpenRead(mp3FileName), CreateAcmFrameDecompressor, true)
-        {
-        }
-
         /// <summary>
         /// Opens MP3 from a stream rather than a file
         /// Will not dispose of this stream itself
@@ -25,7 +17,6 @@ namespace NAudio.Wave
         public Mp3FileReader(Stream inputStream)
             : base(inputStream, CreateAcmFrameDecompressor, false)
         {
-
         }
 
         /// <summary>

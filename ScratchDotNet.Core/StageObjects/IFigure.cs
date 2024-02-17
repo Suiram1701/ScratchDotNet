@@ -1,6 +1,5 @@
 ﻿using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
-using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.StageObjects;
 

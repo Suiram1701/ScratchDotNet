@@ -3,7 +3,6 @@ using System.Reflection;
 
 internal static class EnumNameAttributeHelpers
 {
-
     /// <summary>
     /// Returns the <see cref="EnumNameAttribute"/> value with the enum value
     /// </summary>

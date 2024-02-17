@@ -2,7 +2,7 @@
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.StageObjects.Assets;
 
-namespace ScratchDotNet.Core.Types.Interfaces;
+namespace ScratchDotNet.Core.StageObjects;
 
 /// <summary>
 /// Provides all properties a object on the stage needs

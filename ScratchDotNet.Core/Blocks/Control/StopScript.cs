@@ -4,7 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Types.Interfaces;
+using ScratchDotNet.Core.StageObjects;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

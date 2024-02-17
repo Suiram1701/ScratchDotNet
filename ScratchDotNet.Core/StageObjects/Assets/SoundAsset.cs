@@ -8,7 +8,7 @@ namespace ScratchDotNet.Core.StageObjects.Assets;
 public class SoundAsset : AssetBase
 {
     /// <summary>
-    /// The frequency of the audio
+    /// The sampling rate of the audio in Hz
     /// </summary>
     public uint Rate { get; set; }
 

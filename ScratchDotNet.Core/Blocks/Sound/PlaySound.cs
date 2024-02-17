@@ -6,7 +6,7 @@ using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
-using ScratchDotNet.Core.Providers.Interfaces;
+using ScratchDotNet.Core.Services.Interfaces;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.StageObjects.Assets;
 using ScratchDotNet.Core.Types.Interfaces;

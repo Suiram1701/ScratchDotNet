@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
-using ScratchDotNet.Core.Providers.Interfaces;
+using ScratchDotNet.Core.Services.Interfaces;
 using ScratchDotNet.Core.StageObjects;
 using System.Drawing;
 

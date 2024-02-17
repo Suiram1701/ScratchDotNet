@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ScratchDotNet.Core.Providers.Interfaces;
+namespace ScratchDotNet.Core.Services.Interfaces;
 
 /// <summary>
 /// An interface that provides every mouse and keyboard input

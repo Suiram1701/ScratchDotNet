@@ -71,7 +71,6 @@ public class Modulo : ValueOperatorBase
 
         Num1Provider = new DoubleValue(num1);
         Num2Provider = new DoubleValue(num2);
-
     }
     /// <summary>
     /// Creates a new instance

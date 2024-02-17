@@ -118,7 +118,7 @@ public class Random : ValueOperatorBase
         {
             // The random value have to get scaled with min and max because NextDouble() returns a value from 0.0d to 1.0d
             double scale = max - min;
-            double result = min + System.Random.Shared.NextDouble() * scale;
+            double result = min + (System.Random.Shared.NextDouble() * scale);
 
             return new DoubleValue(result);
         }

@@ -1,6 +1,4 @@
-﻿using ScratchDotNet.Core.Types.Interfaces;
-
-namespace ScratchDotNet.Core.StageObjects;
+﻿namespace ScratchDotNet.Core.StageObjects;
 
 /// <summary>
 /// Provides all properties a stage needs
