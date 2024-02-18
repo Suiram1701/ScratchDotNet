@@ -1,10 +1,10 @@
 ﻿using ScratchDotNet.Core.Attributes;
-using ScratchDotNet.Core.Blocks.Operator;
+using ScratchDotNet.Core.Blocks.Operator.Math;
 
 namespace ScratchDotNet.Core.Enums;
 
 /// <summary>
-/// All operation of the <see cref="Mathop"/> block
+/// All operations of the <see cref="Mathop"/> block
 /// </summary>
 public enum MathopOperation
 {

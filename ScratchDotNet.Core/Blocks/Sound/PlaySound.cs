@@ -144,7 +144,7 @@ public class PlaySound : ExecutionBlockBase
         CancellationTokenSource newSoundCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         context.RuntimeData[$"{context.Executor.Name}_soundCts"] = newSoundCts;
 
-        Task soundPlay = soundOutputService.PlaySoundAsync(soundAsset, volume, pitch, pan, logger, newSoundCts.Token);
+        Task soundPlay = soundOutputService.PlaySoundAsync(soundAsset, volume, pitch, pan, newSoundCts.Token);
         if (AwaitEnd)
             await soundPlay;
         else

@@ -11,7 +11,7 @@ using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
-namespace ScratchDotNet.Core.Blocks.Operator;
+namespace ScratchDotNet.Core.Blocks.Operator.Math;
 
 /// <summary>
 /// Provides some mathematics functions
@@ -102,7 +102,15 @@ public class Mathop : ValueOperatorBase
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        Func<double, double> func = Operation switch
+        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double result = GetOperationDelegate()(value);
+
+        return new DoubleValue(result);
+    }
+    
+    private Func<double, double> GetOperationDelegate()
+    {
+        return Operation switch
         {
             MathopOperation.Abs => System.Math.Abs,
             MathopOperation.Floor => System.Math.Floor,
@@ -120,9 +128,6 @@ public class Mathop : ValueOperatorBase
             MathopOperation.Pow10 => x => System.Math.Pow(10, x),
             _ => throw new NotSupportedException("The specified mathop operation isn't supported.")
         };
-
-        double value = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
-        return new DoubleValue(func(value));
     }
 
     private string GetDebuggerDisplay()

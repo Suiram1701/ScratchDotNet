@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using ScratchDotNet.Core.NAudio.Wave;
 using ScratchDotNet.Core.Services.Interfaces;
 using ScratchDotNet.Core.StageObjects.Assets;
 using System;
