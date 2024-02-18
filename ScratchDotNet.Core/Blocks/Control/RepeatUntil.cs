@@ -5,7 +5,6 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Control;
@@ -25,7 +24,7 @@ public class RepeatUntil : ExecutionBlockBase
     /// <summary>
     /// The substack to execute
     /// </summary>
-    public IReadOnlyCollection<ExecutionBlockBase> Substack { get; }
+    public Substack Substack { get; }
 
     private const string _constOpCode = "control_repeat_until";
 
@@ -53,25 +52,23 @@ public class RepeatUntil : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
         ConditionProvider = conditionProvider;
-        Substack = new ReadOnlyCollection<ExecutionBlockBase>(substack);
+        Substack = new(substack);
     }
 
     internal RepeatUntil(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         ConditionProvider = BlockHelpers.GetBoolDataProvider(blockToken.Root, "inputs.CONDITION");
-        Substack = BlockHelpers.GetSubstack(blockToken, "inputs.SUBSTACK");
+        Substack = new(blockToken, "inputs.SUBSTACK");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (ConditionProvider is null)     // No condition
-            return;
-
         while (!await ConditionProvider.GetBooleanResultAsync(context, logger, ct))
         {
+            await Substack.InvokeAsync(context, logger, ct);
+
             if (ct.IsCancellationRequested)
                 break;
-            await BlockHelpers.InvokeSubstackAsync(Substack, context, logger, ct);
         }
     }
 

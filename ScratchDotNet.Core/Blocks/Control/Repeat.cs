@@ -27,7 +27,7 @@ public class Repeat : ExecutionBlockBase
     /// <summary>
     /// The blocks that will be executed at invokation
     /// </summary>
-    public IReadOnlyCollection<ExecutionBlockBase> Substack { get; }
+    public Substack Substack { get; }
 
     private const string _constOpCode = "control_repeat";
 
@@ -59,7 +59,7 @@ public class Repeat : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
         TimesProvider = new DoubleValue(times);
-        Substack = new ReadOnlyCollection<ExecutionBlockBase>(substack);
+        Substack = new(substack);
     }
 
     /// <summary>
@@ -86,13 +86,13 @@ public class Repeat : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
         TimesProvider = timesProvider;
-        Substack = new ReadOnlyCollection<ExecutionBlockBase>(substack);
+        Substack = new(substack);
     }
 
     internal Repeat(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         TimesProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TIMES");
-        Substack = BlockHelpers.GetSubstack(blockToken, "inputs.SUBSTACK");
+        Substack = new(blockToken, "inputs.SUBSTACK");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
@@ -112,10 +112,10 @@ public class Repeat : ExecutionBlockBase
 
         for (int i = 0; i < times; i++)
         {
+            await Substack.InvokeAsync(context, logger, ct);
+
             if (ct.IsCancellationRequested)
                 break;
-
-            await BlockHelpers.InvokeSubstackAsync(Substack, context, logger, ct);
         }
     }
 

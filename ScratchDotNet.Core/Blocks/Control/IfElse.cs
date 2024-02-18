@@ -26,12 +26,12 @@ public class IfElse : ExecutionBlockBase
     /// <summary>
     /// The substack to execute at positive condition
     /// </summary>
-    public ReadOnlyCollection<ExecutionBlockBase> Substack { get; }
+    public Substack Substack { get; }
 
     /// <summary>
     /// The substack to execute at negative condition
     /// </summary>
-    public ReadOnlyCollection<ExecutionBlockBase>? ElseSubstack { get; }
+    public Substack? ElseSubstack { get; }
 
     private const string _constIfOpCode = "control_if";
     private const string _constIfElseOpCode = "control_if_else";
@@ -60,7 +60,7 @@ public class IfElse : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
         ConditionProvider = conditionProvider;
-        Substack = new ReadOnlyCollection<ExecutionBlockBase>(substack);
+        Substack = new(substack);
     }
 
     /// <summary>
@@ -90,31 +90,27 @@ public class IfElse : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(elseSubstack, nameof(elseSubstack));
 
         ConditionProvider = conditionProvider;
-        Substack = new ReadOnlyCollection<ExecutionBlockBase>(substack);
-        ElseSubstack = new ReadOnlyCollection<ExecutionBlockBase>(elseSubstack);
+        Substack = new(substack);
+        ElseSubstack = new(elseSubstack);
     }
 
     internal IfElse(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         ConditionProvider = BlockHelpers.GetBoolDataProvider(blockToken, "inputs.CONDITION");
 
-        Substack = BlockHelpers.GetSubstack(blockToken, "inputs.SUBSTACK");
+        Substack = new(blockToken, "inputs.SUBSTACK");
         if (_opCode == _constIfElseOpCode)
-            ElseSubstack = BlockHelpers.GetSubstack(blockToken, "inputs.SUBSTACK2");
+            ElseSubstack = new(blockToken, "inputs.SUBSTACK2");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        bool condition = false;
-        if (ConditionProvider is not null)
-            condition = await ConditionProvider.GetBooleanResultAsync(context, logger, ct);
-
-        if (condition)
-            await BlockHelpers.InvokeSubstackAsync(Substack, context, logger, ct);
+        if (await ConditionProvider.GetBooleanResultAsync(context, logger, ct))
+            await Substack.InvokeAsync(context, logger, ct);
         else
         {
-            if (ElseSubstack?.Count > 0)
-                await BlockHelpers.InvokeSubstackAsync(ElseSubstack, context, logger, ct);
+            if (ElseSubstack is not null)     // When ElseSubstack is null this block represents a simple if-condition and otherwise this represents a if-else-condition
+                await ElseSubstack.InvokeAsync(context, logger, ct);
         }
     }
 
