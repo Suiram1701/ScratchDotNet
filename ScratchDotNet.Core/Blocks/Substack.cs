@@ -67,7 +67,7 @@ public class Substack : Collection<ExecutionBlockBase>
                     throw new Exception(message);
                 }
 
-                Add(blockInstance);
+                base.InsertItem(Count, blockInstance);     // Here the base method is used because the overridden method will throw an exception because 'Editable' is false
             }
             else
             {
