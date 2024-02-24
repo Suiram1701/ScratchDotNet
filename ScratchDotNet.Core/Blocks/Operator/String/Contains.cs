@@ -34,11 +34,13 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the main string
     /// </summary>
+    [InputProvider]
     public IValueProvider String1Provider { get; }
 
     /// <summary>
     /// The provider of the string that could be contained in the main string
     /// </summary>
+    [InputProvider]
     public IValueProvider String2Provider { get; }
 
     private const string _constOpCode = "operator_contains";
@@ -97,10 +99,10 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
         String2Provider = string2Provider;
     }
 
+#pragma warning disable CS8618
     internal Contains(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        String1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING1");
-        String2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

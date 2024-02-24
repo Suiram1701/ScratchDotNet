@@ -34,6 +34,7 @@ public class Mathop : ValueOperatorBase
     /// <summary>
     /// The provider of the value to be calculated with
     /// </summary>
+    [InputProvider("NUM")]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "operator_mathop";
@@ -92,12 +93,12 @@ public class Mathop : ValueOperatorBase
         ValueProvider = valueProvider;
     }
 
+#pragma warning disable CS8618
     internal Mathop(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
         string @operator = blockToken.SelectToken("fields.OPERATOR[0]")!.Value<string>()!;
         Operation = EnumNameAttributeHelpers.ParseEnumWithName<MathopOperation>(@operator);
-
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

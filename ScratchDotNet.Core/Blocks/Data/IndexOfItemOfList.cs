@@ -31,6 +31,7 @@ internal class IndexOfItemOfList : ListOperatorBase
     /// <summary>
     /// The item whose index should get read
     /// </summary>
+    [InputProvider]
     public IValueProvider ItemProvider { get; }
 
     private const string _constOpCode = "data_itemnumoflist";
@@ -83,9 +84,10 @@ internal class IndexOfItemOfList : ListOperatorBase
         ItemProvider = itemProvider;
     }
 
+#pragma warning disable CS8618
     internal IndexOfItemOfList(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM");
     }
 
     protected override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

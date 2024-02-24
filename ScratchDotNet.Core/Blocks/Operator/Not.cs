@@ -28,6 +28,7 @@ public class Not : ValueOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the value to invert
     /// </summary>
+    [InputProvider("OPERAND")]
     public IBoolValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "operator_not";
@@ -54,9 +55,10 @@ public class Not : ValueOperatorBase, IBoolValueProvider
         ValueProvider = valueProvider;
     }
 
+#pragma warning disable CS8618
     internal Not(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ValueProvider = BlockHelpers.GetBoolDataProvider(blockToken, "inputs.OPERAND");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

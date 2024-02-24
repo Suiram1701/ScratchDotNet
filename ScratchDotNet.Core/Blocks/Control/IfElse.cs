@@ -21,6 +21,7 @@ public class IfElse : ExecutionBlockBase
     /// <summary>
     /// The provider of the condition to execute
     /// </summary>
+    [InputProvider]
     public IBoolValueProvider ConditionProvider { get; }
 
     /// <summary>
@@ -94,10 +95,10 @@ public class IfElse : ExecutionBlockBase
         ElseSubstack = new(elseSubstack);
     }
 
+#pragma warning disable CS8618
     internal IfElse(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ConditionProvider = BlockHelpers.GetBoolDataProvider(blockToken, "inputs.CONDITION");
-
         Substack = new(blockToken, "inputs.SUBSTACK");
         if (_opCode == _constIfElseOpCode)
             ElseSubstack = new(blockToken, "inputs.SUBSTACK2");

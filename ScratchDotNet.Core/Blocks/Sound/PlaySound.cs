@@ -25,6 +25,7 @@ public class PlaySound : ExecutionBlockBase
     /// <summary>
     /// The provider of the name of the sound to play
     /// </summary>
+    [InputProvider("SOUND_MENU")]
     public IValueProvider SoundNameProvider { get; }
 
     /// <summary>
@@ -101,11 +102,10 @@ public class PlaySound : ExecutionBlockBase
         SoundNameProvider = soundNameProvider;
     }
 
+#pragma warning disable CS8618
     internal PlaySound(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        SoundNameProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.SOUND_MENU")
-            ?? throw new ArgumentNullException(nameof(blockToken), string.Format("Could not determine the sound name of block {0}", blockId));
-
         AwaitEnd = _opCode.Equals(_constPlayUntilDoneOpCode);
     }
 

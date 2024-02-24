@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
@@ -20,6 +21,7 @@ public abstract class GlideBase : ExecutionBlockBase
     /// <summary>
     /// The provider of the seconds the figure needs to move to the position
     /// </summary>
+    [InputProvider("SECS")]
     public IValueProvider TimeProvider { get; }
 
     /// <summary>
@@ -50,9 +52,10 @@ public abstract class GlideBase : ExecutionBlockBase
         TimeProvider = timeProvider;
     }
 
+#pragma warning disable CS8618
     internal GlideBase(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        TimeProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.SECS");
     }
 
     protected virtual string GetDebuggerDisplay()

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using ScratchDotNet.Core.Helpers;
 
 namespace ScratchDotNet.Core.Blocks.Bases;
 
@@ -41,9 +42,12 @@ public abstract class BlockBase
     /// </summary>
     /// <param name="blockId">The id of this block</param>
     /// <param name="blockToken">The JToken to read the block from</param>
-    protected BlockBase(string blockId, JToken blockToken)
+    protected internal BlockBase(string blockId, JToken blockToken)
     {
         BlockId = blockId;
         _opCode = blockToken["opcode"]!.Value<string>()!;
+
+        BlockConstructionHelper helper = new(this);
+        helper.ConstructInputs(blockToken);
     }
 }

@@ -22,6 +22,7 @@ public class Repeat : ExecutionBlockBase
     /// <summary>
     /// The provider of the value how many times the substack should be executed
     /// </summary>
+    [InputProvider]
     public IValueProvider TimesProvider { get; }
 
     /// <summary>
@@ -89,9 +90,10 @@ public class Repeat : ExecutionBlockBase
         Substack = new(substack);
     }
 
+#pragma warning disable CS8618
     internal Repeat(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        TimesProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TIMES");
         Substack = new(blockToken, "inputs.SUBSTACK");
     }
 

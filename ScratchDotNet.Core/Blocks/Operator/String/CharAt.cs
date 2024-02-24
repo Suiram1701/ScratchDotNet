@@ -28,24 +28,26 @@ public class CharAt : ValueOperatorBase
         add
         {
             IndexProvider.OnValueChanged += value;
-            SourceProvider.OnValueChanged += value;
+            StringProvider.OnValueChanged += value;
         }
         remove
         {
             IndexProvider.OnValueChanged -= value;
-            SourceProvider.OnValueChanged -= value;
+            StringProvider.OnValueChanged -= value;
         }
     }
 
     /// <summary>
     /// The provider of the index
     /// </summary>
+    [InputProvider("LETTER")]
     public IValueProvider IndexProvider { get; }
 
     /// <summary>
     /// The provider of the source string
     /// </summary>
-    public IValueProvider SourceProvider { get; }
+    [InputProvider]
+    public IValueProvider StringProvider { get; }
 
     private const string _constOpCode = "operator_letter_of";
 
@@ -77,7 +79,7 @@ public class CharAt : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(source, nameof(source));
 
         IndexProvider = new DoubleValue(index);
-        SourceProvider = new StringValue(source);
+        StringProvider = new StringValue(source);
     }
 
     /// <summary>
@@ -104,19 +106,19 @@ public class CharAt : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(sourceProvider, nameof(sourceProvider));
 
         IndexProvider = indexProvider;
-        SourceProvider = sourceProvider;
+        StringProvider = sourceProvider;
     }
 
-    internal CharAt(string blockId, JToken blockToken) : base(blockId, _constOpCode)
+#pragma warning disable CS8618
+    internal CharAt(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.LETTER");
-        SourceProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         double index = (await IndexProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
-        string sourceString = (await SourceProvider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
+        string sourceString = (await StringProvider.GetResultAsync(context, logger, ct)).ConvertToStringValue();
 
         if (index % 1 != 0)     // Check wether the index is fractional
         {
@@ -135,7 +137,7 @@ public class CharAt : ValueOperatorBase
     private string GetDebuggerDisplay()
     {
         double index = IndexProvider.GetDefaultResult().ConvertToDoubleValue();
-        string sourceString = SourceProvider.GetDefaultResult().ConvertToStringValue();
+        string sourceString = StringProvider.GetDefaultResult().ConvertToStringValue();
 
         return string.Format("{0}th char of \"{1}\"", ++index, sourceString);
     }

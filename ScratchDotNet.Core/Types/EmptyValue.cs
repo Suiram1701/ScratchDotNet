@@ -16,7 +16,7 @@ namespace ScratchDotNet.Core.Types;
 /// Represents a empty value in the scratch type system
 /// </summary>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public class EmptyValue : IScratchType, IValueProvider
+public class EmptyValue : IScratchType, IBoolValueProvider
 {
     /// <inheritdoc/>
     /// <remarks>
@@ -32,7 +32,7 @@ public class EmptyValue : IScratchType, IValueProvider
 
     public virtual int CompareTo(IScratchType? other)
     {
-        // Empty is always smaller than another value excpet when the other value is also an empty value
+        // Empty is always smaller than other value excpet when the other value is also an empty value
         if (other is EmptyValue)
             return 0;
         return -1;

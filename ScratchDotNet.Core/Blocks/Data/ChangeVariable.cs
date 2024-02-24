@@ -22,6 +22,7 @@ public class ChangeVariable : VariableExecutionBase
     /// <summary>
     /// The provider of the value to change by
     /// </summary>
+    [InputProvider]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "data_changevariableby";
@@ -74,9 +75,10 @@ public class ChangeVariable : VariableExecutionBase
         ValueProvider = valueProvider;
     }
 
+#pragma warning disable CS8618
     internal ChangeVariable(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, Variable variable, ILogger logger, CancellationToken ct = default)

@@ -24,25 +24,27 @@ public class Modulo : ValueOperatorBase
     {
         add
         {
-            Num1Provider.OnValueChanged += value;
-            Num2Provider.OnValueChanged += value;
+            DividendProvider.OnValueChanged += value;
+            DivisorProvider.OnValueChanged += value;
         }
         remove
         {
-            Num1Provider.OnValueChanged -= value;
-            Num2Provider.OnValueChanged -= value;
+            DividendProvider.OnValueChanged -= value;
+            DivisorProvider.OnValueChanged -= value;
         }
     }
 
     /// <summary>
-    /// The provider of the num1Provider
+    /// The provider of the dividend for modulo
     /// </summary>
-    public IValueProvider Num1Provider { get; }
+    [InputProvider("NUM1")]
+    public IValueProvider DividendProvider { get; }
 
     /// <summary>
-    /// The provider of the num2Provider
+    /// The provider of the divisor for modulo
     /// </summary>
-    public IValueProvider Num2Provider { get; }
+    [InputProvider("NUM2")]
+    public IValueProvider DivisorProvider { get; }
 
     private const string _constOpCode = "operator_mod";
 
@@ -69,8 +71,8 @@ public class Modulo : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(num1, nameof(num1));
         ArgumentNullException.ThrowIfNull(num2, nameof(num2));
 
-        Num1Provider = new DoubleValue(num1);
-        Num2Provider = new DoubleValue(num2);
+        DividendProvider = new DoubleValue(num1);
+        DivisorProvider = new DoubleValue(num2);
     }
     /// <summary>
     /// Creates a new instance
@@ -95,28 +97,28 @@ public class Modulo : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(num1Provider, nameof(num1Provider));
         ArgumentNullException.ThrowIfNull(num2Provider, nameof(num2Provider));
         
-        Num1Provider = num1Provider;
-        Num2Provider = num2Provider;
+        DividendProvider = num1Provider;
+        DivisorProvider = num2Provider;
     }
 
+#pragma warning disable CS8618
     internal Modulo(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        Num1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM1");
-        Num2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        double dividend = (await Num1Provider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
-        double divisor = (await Num2Provider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double dividend = (await DividendProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double divisor = (await DivisorProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 
         return new DoubleValue(dividend % divisor);
     }
 
     private string GetDebuggerDisplay()
     {
-        double dividend = Num1Provider.GetDefaultResult().ConvertToDoubleValue();
-        double dividor = Num2Provider.GetDefaultResult().ConvertToDoubleValue();
+        double dividend = DividendProvider.GetDefaultResult().ConvertToDoubleValue();
+        double dividor = DivisorProvider.GetDefaultResult().ConvertToDoubleValue();
 
         return string.Format("{0} % {1}", dividend, dividor);
     }

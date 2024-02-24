@@ -46,7 +46,7 @@ public class Substack : Collection<ExecutionBlockBase>
     {
         Editable = false;
 
-        string? startId = blockToken.SelectToken(jsonPath + "[1]")?.Value<string>();
+        string? startId = blockToken.SelectToken(jsonPath)?[1]?.Value<string>();
         if (string.IsNullOrEmpty(startId))     // The substack is empty
             return;
 

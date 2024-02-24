@@ -37,11 +37,13 @@ public class Join : ValueOperatorBase
     /// <summary>
     /// The provider of the first string to join
     /// </summary>
+    [InputProvider]
     public IValueProvider String1Provider { get; }
 
     /// <summary>
     /// The provider of the seconds string to join
     /// </summary>
+    [InputProvider]
     public IValueProvider String2Provider { get; }
 
     private const string _constOpCode = "operator_join";
@@ -101,10 +103,10 @@ public class Join : ValueOperatorBase
         String2Provider = string2Provider;
     }
 
+#pragma warning disable CS8618
     internal Join(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        String1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING1");
-        String2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

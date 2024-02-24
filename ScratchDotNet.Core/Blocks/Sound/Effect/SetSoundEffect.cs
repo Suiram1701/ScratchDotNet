@@ -88,12 +88,12 @@ public class SetSoundEffect : ExecutionBlockBase
         Effect = effect;
         ValueProvider = valueProvider;    }
 
+#pragma warning disable CS8618
     internal SetSoundEffect(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
         string effectString = blockToken.SelectToken("fields.EFFECT[0]")!.Value<string>()!;
         Effect = EnumNameAttributeHelpers.ParseEnumWithName<SoundEffect>(effectString);
-
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

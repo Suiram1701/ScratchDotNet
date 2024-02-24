@@ -43,11 +43,13 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the first operand
     /// </summary>
+    [InputProvider]
     public IBoolValueProvider Operand1Provider { get; }
 
     /// <summary>
     /// The provider of the second operand
     /// </summary>
+    [InputProvider]
     public IBoolValueProvider Operand2Provider { get; }
 
     private const string _constAndOpCode = "operator_and";
@@ -84,7 +86,9 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
         Operand2Provider = operand2Provider;
     }
 
+#pragma warning disable CS8618
     internal Logical(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
         Operator = _opCode switch
         {
@@ -92,9 +96,6 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
             _constOrOpCode => LogicalOperation.OR,
             _ => throw new NotSupportedException("The specified operation ins't supported.")
         };
-
-        Operand1Provider = BlockHelpers.GetBoolDataProvider(blockToken, "inputs.OPERAND1");
-        Operand2Provider = BlockHelpers.GetBoolDataProvider(blockToken, "inputs.OPERAND2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

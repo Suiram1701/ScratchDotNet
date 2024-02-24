@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScratchDotNet.Core.Converters;
+namespace ScratchDotNet.Core.Helpers;
 
 /// <summary>
 /// A converter that converts the scratch angle format to the ussaly used format and backwards

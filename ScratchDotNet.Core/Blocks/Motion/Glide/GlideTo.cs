@@ -6,6 +6,7 @@ using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
@@ -24,6 +25,7 @@ public class GlideTo : GlideBase
     /// <summary>
     /// The provider position to move to
     /// </summary>
+    [InputProvider("TO")]
     public IValueProvider TargetProvider { get; }
 
     private const string _constOpCode = "motion_glideto";
@@ -116,10 +118,12 @@ public class GlideTo : GlideBase
         }
     }
 
+#pragma warning disable CS8618
     internal GlideTo(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        TargetProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TO")
-            ?? new TargetReporter(SpecialTarget.Random, TargetReporter.GlideToOpCode);     // random by default
+        if (TargetProvider is EmptyValue)
+            TargetProvider = new TargetReporter(SpecialTarget.Random, TargetReporter.GlideToOpCode);     // the target provider doesn't allow empty values so a default target reporter is used
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

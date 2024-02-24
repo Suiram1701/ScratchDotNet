@@ -26,6 +26,7 @@ public class MoveSteps : ExecutionBlockBase
     /// <summary>
     /// The provider of steps how much steps the figure should do
     /// </summary>
+    [InputProvider]
     public IValueProvider StepsProvider { get; }
 
     private const string _constOpCode = "motion_movesteps";
@@ -68,9 +69,10 @@ public class MoveSteps : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <param name="blockToken">The block to parse</param>
+#pragma warning disable CS8618
     internal MoveSteps(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        StepsProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STEPS");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

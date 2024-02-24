@@ -20,7 +20,7 @@ public abstract class ExecutionBlockBase : BlockBase
     }
 
     /// <inheritdoc/>
-    protected ExecutionBlockBase(string blockId, JToken blockToken) : base(blockId, blockToken)
+    protected internal ExecutionBlockBase(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
     }
 

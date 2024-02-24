@@ -22,6 +22,7 @@ public class SetVariable : VariableExecutionBase
     /// <summary>
     /// The provider of the value to set
     /// </summary>
+    [InputProvider]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "data_setvariableto";
@@ -75,9 +76,10 @@ public class SetVariable : VariableExecutionBase
         ValueProvider = valueProvider;
     }
 
+#pragma warning disable CS8618
     internal SetVariable(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, Variable variable, ILogger logger, CancellationToken ct = default)

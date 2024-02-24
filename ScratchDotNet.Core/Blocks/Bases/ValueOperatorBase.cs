@@ -25,7 +25,7 @@ public abstract class ValueOperatorBase : BlockBase, IValueProvider
     }
 
     /// <inheritdoc/>
-    protected ValueOperatorBase(string blockId, JToken blockToken) : base(blockId, blockToken)
+    protected internal ValueOperatorBase(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
     }
 

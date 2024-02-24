@@ -53,7 +53,7 @@ public abstract class ListOperatorBase : ValueOperatorBase
         ListRef = reference;
     }
 
-    protected ListOperatorBase(string blockId, JToken blockToken) : base(blockId, blockToken)
+    protected internal ListOperatorBase(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
         ListRef = new(blockToken, "fields.LIST");
     }

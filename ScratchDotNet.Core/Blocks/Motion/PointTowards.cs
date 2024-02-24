@@ -8,6 +8,7 @@ using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Services.Interfaces;
 using ScratchDotNet.Core.StageObjects;
+using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 using System.Drawing;
@@ -28,6 +29,7 @@ public class PointTowards : ExecutionBlockBase
     /// <summary>
     /// The provider target to rotate to
     /// </summary>
+    [InputProvider("TOWARDS")]
     public IValueProvider TargetProvider { get; }
 
     private const string _constOpCode = "motion_pointtowards";
@@ -116,10 +118,12 @@ public class PointTowards : ExecutionBlockBase
         }
     }
 
+#pragma warning disable CS8618
     internal PointTowards(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        TargetProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TOWARDS")
-            ?? new TargetReporter(SpecialTarget.Random, TargetReporter.PointTowardsOpCode);     // Random position as default
+        if (TargetProvider is EmptyValue)
+            TargetProvider = new TargetReporter(SpecialTarget.Random, TargetReporter.PointTowardsOpCode);     // the target provider doesn't allow empty values so a default target reporter is used
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

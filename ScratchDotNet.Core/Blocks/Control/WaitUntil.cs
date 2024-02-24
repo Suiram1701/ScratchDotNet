@@ -20,6 +20,7 @@ public class WaitUntil : ExecutionBlockBase
     /// <summary>
     /// The provider of the condition to wait for
     /// </summary>
+    [InputProvider]
     public IBoolValueProvider ConditionProvider { get; }
 
     private const string _constOpCode = "control_wait_until";
@@ -43,14 +44,15 @@ public class WaitUntil : ExecutionBlockBase
         ConditionProvider = conditionProvider;
     }
 
+#pragma warning disable CS8618
     internal WaitUntil(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ConditionProvider = BlockHelpers.GetBoolDataProvider(blockToken, "inputs.CONDITION");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (ConditionProvider is EmptyBoolValue)     // No condition
+        if (ConditionProvider is EmptyValue)     // No condition
             return;
 
         TaskCompletionSource tcs = new(TaskCreationOptions.LongRunning);

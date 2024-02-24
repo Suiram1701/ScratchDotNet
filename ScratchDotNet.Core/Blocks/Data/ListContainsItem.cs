@@ -28,6 +28,7 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the item which one could be contained in the list
     /// </summary>
+    [InputProvider]
     public IValueProvider ItemProvider { get; }
 
     private const string _constOpCode = "data_listcontainsitem";
@@ -56,9 +57,10 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
         ItemProvider = item.ConvertToStringValue();
     }
 
+#pragma warning disable CS8618
     internal ListContainsItem(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM");
     }
 
     protected override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

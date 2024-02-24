@@ -24,11 +24,13 @@ public class GlideToXY : GlideBase
     /// <summary>
     /// The X target position provider
     /// </summary>
+    [InputProvider("X")]
     public IValueProvider TargetXProvider { get; }
 
     /// <summary>
     /// The Y target position provider
     /// </summary>
+    [InputProvider("Y")]
     public IValueProvider TargetYProvider { get; }
 
     private const string _constOpCode = "motion_glidesecstoxy";
@@ -91,10 +93,10 @@ public class GlideToXY : GlideBase
         TargetYProvider = targetYProvider;
     }
 
+#pragma warning disable CS8618
     internal GlideToXY(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        TargetXProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.X");
-        TargetYProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.Y");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

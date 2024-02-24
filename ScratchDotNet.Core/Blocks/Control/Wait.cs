@@ -21,6 +21,7 @@ public class Wait : ExecutionBlockBase
     /// <summary>
     /// The provider of the seconds to wait
     /// </summary>
+    [InputProvider]
     public IValueProvider DurationProvider { get; }
 
     private const string _constOpCode = "control_wait";
@@ -74,9 +75,10 @@ public class Wait : ExecutionBlockBase
         DurationProvider = durationProvider;
     }
 
+#pragma warning disable CS8618
     internal Wait(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        DurationProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DURATION");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

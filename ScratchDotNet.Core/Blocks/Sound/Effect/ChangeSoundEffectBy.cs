@@ -31,6 +31,7 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
     /// <summary>
     /// The provider of the value the sound effect should be set to
     /// </summary>
+    [InputProvider]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "sound_changeeffectby";
@@ -89,12 +90,12 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
         ValueProvider = valueProvider;
     }
 
+#pragma warning disable CS8618
     internal ChangeSoundEffectBy(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
         string effectString = blockToken.SelectToken("fields.EFFECT[0]")!.Value<string>()!;
         Effect = EnumNameAttributeHelpers.ParseEnumWithName<SoundEffect>(effectString);
-
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VALUE");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

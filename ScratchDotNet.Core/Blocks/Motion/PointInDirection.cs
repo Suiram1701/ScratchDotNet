@@ -25,7 +25,8 @@ public class PointInDirection : ExecutionBlockBase
     /// <summary>
     /// The provider of the degree to set
     /// </summary>
-    public IValueProvider AngleProvider { get; }
+    [InputProvider]
+    public IValueProvider DirectionProvider { get; }
 
     private const string _constOpCode = "motion_pointindirection";
 
@@ -53,7 +54,7 @@ public class PointInDirection : ExecutionBlockBase
         if (angle < 0 || angle >= 360)
             throw new ArgumentOutOfRangeException(nameof(angle), angle, "The count of degree have to be between 0° and 359°.");
 
-        AngleProvider = new DoubleValue(angle);
+        DirectionProvider = new DoubleValue(angle);
     }
 
     /// <summary>
@@ -75,11 +76,12 @@ public class PointInDirection : ExecutionBlockBase
     public PointInDirection(IValueProvider angleProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(angleProvider, nameof(angleProvider));
-        AngleProvider = angleProvider;}
+        DirectionProvider = angleProvider;}
 
+#pragma warning disable CS8618
     internal PointInDirection(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        AngleProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DIRECTION");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
@@ -90,7 +92,7 @@ public class PointInDirection : ExecutionBlockBase
             return;
         }
 
-        double value = (await AngleProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
+        double value = (await DirectionProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         if (double.IsNaN(value))
         {
             logger.LogWarning("The figure could not point to an empty value.");
@@ -102,7 +104,7 @@ public class PointInDirection : ExecutionBlockBase
 
     private string GetDebuggerDisplay()
     {
-        double value = AngleProvider.GetDefaultResult().ConvertToDoubleValue();
+        double value = DirectionProvider.GetDefaultResult().ConvertToDoubleValue();
         return string.Format("Rotate to: {0}°", value);
     }
 }

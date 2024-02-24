@@ -26,6 +26,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
     /// <summary>
     /// The provider of the count of percent to change the volume by
     /// </summary>
+    [InputProvider("VOLUME")]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "sound_changevolumeby";
@@ -69,9 +70,10 @@ public class ChangeVolumeBy : ExecutionBlockBase
         ValueProvider = valueProvider;
     }
 
+#pragma warning disable CS8618
     internal ChangeVolumeBy(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VOLUME");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

@@ -28,11 +28,13 @@ public class ReplaceItemOfList : ListExecutionBase
     /// <summary>
     /// The provider of the item with that the item at the index should get replaced
     /// </summary>
+    [InputProvider]
     public IValueProvider ItemProvider { get; }
 
     /// <summary>
     /// The provider of the index of the item to replace
     /// </summary>
+    [InputProvider]
     public IValueProvider IndexProvider { get; }
 
     private const string _constOpCode = "data_replaceitemoflist";
@@ -94,10 +96,10 @@ public class ReplaceItemOfList : ListExecutionBase
         IndexProvider = indexProvider;
     }
 
+#pragma warning disable CS8618
     internal ReplaceItemOfList(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM");
-        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

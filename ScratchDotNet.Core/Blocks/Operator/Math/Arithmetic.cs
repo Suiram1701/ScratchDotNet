@@ -45,11 +45,13 @@ public class Arithmetic : ValueOperatorBase
     /// <summary>
     /// The provider of the first number
     /// </summary>
+    [InputProvider]
     public IValueProvider Num1Provider { get; }
 
     /// <summary>
     /// The provider of the second number
     /// </summary>
+    [InputProvider]
     public IValueProvider Num2Provider { get; }
 
     private const string _constAddOpCode = "operator_add";
@@ -119,7 +121,9 @@ public class Arithmetic : ValueOperatorBase
         Num2Provider = num2Provider;
     }
 
+#pragma warning disable CS8618
     internal Arithmetic(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
         Operator = _opCode switch
         {
@@ -129,9 +133,6 @@ public class Arithmetic : ValueOperatorBase
             _constDivOpCode => ArithmeticOperator.Divide,
             _ => throw new NotSupportedException("The specified operator isn't supported.")
         };
-
-        Num1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM1");
-        Num2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

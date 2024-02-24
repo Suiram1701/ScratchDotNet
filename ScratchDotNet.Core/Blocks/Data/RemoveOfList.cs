@@ -31,6 +31,7 @@ public class RemoveOfList : ListExecutionBase
     /// <summary>
     /// The provider of the index to remove the item from
     /// </summary>
+    [InputProvider]
     public IValueProvider IndexProvider { get; }
 
     private const string _constOpCode = "data_deleteoflist";
@@ -83,9 +84,10 @@ public class RemoveOfList : ListExecutionBase
         IndexProvider = indexProvider;
     }
 
+#pragma warning disable CS8618
     internal RemoveOfList(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

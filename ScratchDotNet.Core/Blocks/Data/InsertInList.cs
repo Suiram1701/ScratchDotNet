@@ -28,11 +28,13 @@ public class InsertInList : ListExecutionBase
     /// <summary>
     /// The provider of the item to insert
     /// </summary>
+    [InputProvider]
     public IValueProvider ItemProvider { get; }
 
     /// <summary>
     /// The provider of the index where the item should be insert
     /// </summary>
+    [InputProvider]
     public IValueProvider IndexProvider { get; }
 
     private const string _constOpCode = "data_insertatlist";
@@ -94,10 +96,10 @@ public class InsertInList : ListExecutionBase
         IndexProvider = indexProvider;
     }
 
+#pragma warning disable CS8618
     internal InsertInList(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ItemProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.ITEM");
-        IndexProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.INDEX");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, List list, ILogger logger, CancellationToken ct = default)

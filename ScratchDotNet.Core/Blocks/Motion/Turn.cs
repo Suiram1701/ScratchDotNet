@@ -31,6 +31,7 @@ public class Turn : ExecutionBlockBase
     /// <summary>
     /// The provider of the value to turn
     /// </summary>
+    [InputProvider("DEGREES")]
     public IValueProvider ValueProvider { get; }
 
     private const string _constLeftOpCode = "motion_turnleft";
@@ -92,9 +93,10 @@ public class Turn : ExecutionBlockBase
         ValueProvider = valueProvider;
     }
 
+#pragma warning disable CS8618
     internal Turn(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.DEGREES");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

@@ -29,6 +29,7 @@ public class Round : ValueOperatorBase
     /// <summary>
     /// The provider of the value to round
     /// </summary>
+    [InputProvider]
     public IValueProvider NumProvider { get; }
 
     private const string _constOpCode = "operator_round";
@@ -77,9 +78,10 @@ public class Round : ValueOperatorBase
         NumProvider = numProvider;
     }
 
+#pragma warning disable CS8618
     internal Round(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        NumProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.NUM");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

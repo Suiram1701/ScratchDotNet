@@ -6,6 +6,7 @@ using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Helpers;
 using ScratchDotNet.Core.StageObjects;
 using ScratchDotNet.Core.Types;
 using System.Diagnostics;
@@ -106,7 +107,7 @@ public class ChangeXY : ExecutionBlockBase
         };
 
         string jsonPath = string.Format("inputs.{0}", ChangeKind.ToString());
-        ValueProvider = BlockHelpers.GetDataProvider(blockToken, jsonPath);
+        ValueProvider = BlockConstructionHelper.GetInputProviderFromJSON(blockToken, jsonPath);
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

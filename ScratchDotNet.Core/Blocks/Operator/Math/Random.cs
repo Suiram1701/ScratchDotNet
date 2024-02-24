@@ -37,11 +37,13 @@ public class Random : ValueOperatorBase
     /// <summary>
     /// The provider of the minimum value
     /// </summary>
+    [InputProvider("FROM")]
     public IValueProvider MinProvider { get; }
 
     /// <summary>
     /// The provider of the maximum value
     /// </summary>
+    [InputProvider("TO")]
     public IValueProvider MaxProvider { get; }
 
     private const string _constOpCode = "operator_random";
@@ -100,10 +102,10 @@ public class Random : ValueOperatorBase
         MaxProvider = maxProvider;
     }
 
+#pragma warning disable CS8618
     internal Random(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        MinProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.FROM");
-        MaxProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.TO");
     } 
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

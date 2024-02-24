@@ -26,6 +26,7 @@ public class SetVolume : ExecutionBlockBase
     /// <summary>
     /// Provides the count of percent to set
     /// </summary>
+    [InputProvider("VOLUME")]
     public IValueProvider VolumeProvider { get; }
 
     private const string _constOpCode = "sound_setvolumeto";
@@ -75,9 +76,10 @@ public class SetVolume : ExecutionBlockBase
         VolumeProvider = volumeProvider;
     }
 
+#pragma warning disable CS8618
     internal SetVolume(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        VolumeProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.VOLUME");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

@@ -44,11 +44,13 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the first operand
     /// </summary>
+    [InputProvider]
     public IValueProvider Operand1Provider { get; }
 
     /// <summary>
     /// The provider of the second operand
     /// </summary>
+    [InputProvider]
     public IValueProvider Operand2Provider { get; }
 
     private const string _constGreaterThanOpCode = "operator_gt";
@@ -91,7 +93,9 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
         Operand1Provider = operand1Provider;
         Operand2Provider = operand2Provider;}
 
+#pragma warning disable CS8618
     internal Comparison(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
         Operator = _opCode switch
         {
@@ -100,9 +104,6 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
             _constEqualOpCode => ComparisonOperator.Equals,
             _ => throw new NotSupportedException("The specified operation isn't supported.")
         };
-
-        Operand1Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.OPERAND1");
-        Operand2Provider = BlockHelpers.GetDataProvider(blockToken, "inputs.OPERAND2");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

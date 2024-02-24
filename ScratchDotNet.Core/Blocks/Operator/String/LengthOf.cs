@@ -77,9 +77,10 @@ public class LengthOf : ValueOperatorBase
         StringProvider = stringProvider;
     }
 
-    internal LengthOf(string blockId, JToken blockToken) : base(blockId, _constOpCode)
+#pragma warning disable CS8618
+    internal LengthOf(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        StringProvider = BlockHelpers.GetDataProvider(blockToken, "inputs.STRING");
     }
 
     public override async Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

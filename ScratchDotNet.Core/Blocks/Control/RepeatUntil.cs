@@ -19,6 +19,7 @@ public class RepeatUntil : ExecutionBlockBase
     /// <summary>
     /// The condition to check
     /// </summary>
+    [InputProvider]
     public IBoolValueProvider ConditionProvider { get; }
 
     /// <summary>
@@ -55,9 +56,10 @@ public class RepeatUntil : ExecutionBlockBase
         Substack = new(substack);
     }
 
+#pragma warning disable CS8618
     internal RepeatUntil(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        ConditionProvider = BlockHelpers.GetBoolDataProvider(blockToken.Root, "inputs.CONDITION");
         Substack = new(blockToken, "inputs.SUBSTACK");
     }
 
