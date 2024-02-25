@@ -26,7 +26,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
     /// <summary>
     /// The provider of the count of percent to change the volume by
     /// </summary>
-    [InputProvider("VOLUME")]
+    [Input("VOLUME")]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "sound_changevolumeby";

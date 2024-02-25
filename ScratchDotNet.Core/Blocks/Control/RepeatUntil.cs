@@ -19,12 +19,13 @@ public class RepeatUntil : ExecutionBlockBase
     /// <summary>
     /// The condition to check
     /// </summary>
-    [InputProvider]
+    [Input]
     public IBoolValueProvider ConditionProvider { get; }
 
     /// <summary>
     /// The substack to execute
     /// </summary>
+    [Substack]
     public Substack Substack { get; }
 
     private const string _constOpCode = "control_repeat_until";
@@ -60,7 +61,6 @@ public class RepeatUntil : ExecutionBlockBase
     internal RepeatUntil(string blockId, JToken blockToken) : base(blockId, blockToken)
 #pragma warning restore CS8618
     {
-        Substack = new(blockToken, "inputs.SUBSTACK");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

@@ -20,7 +20,7 @@ public class WaitUntil : ExecutionBlockBase
     /// <summary>
     /// The provider of the condition to wait for
     /// </summary>
-    [InputProvider]
+    [Input]
     public IBoolValueProvider ConditionProvider { get; }
 
     private const string _constOpCode = "control_wait_until";

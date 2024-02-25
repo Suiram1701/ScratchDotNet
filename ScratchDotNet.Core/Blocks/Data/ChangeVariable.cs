@@ -22,7 +22,7 @@ public class ChangeVariable : VariableExecutionBase
     /// <summary>
     /// The provider of the value to change by
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "data_changevariableby";

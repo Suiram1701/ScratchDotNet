@@ -31,7 +31,7 @@ public class RemoveOfList : ListExecutionBase
     /// <summary>
     /// The provider of the index to remove the item from
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider IndexProvider { get; }
 
     private const string _constOpCode = "data_deleteoflist";

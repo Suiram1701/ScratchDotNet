@@ -34,7 +34,7 @@ public class Mathop : ValueOperatorBase
     /// <summary>
     /// The provider of the value to be calculated with
     /// </summary>
-    [InputProvider("NUM")]
+    [Input("NUM")]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "operator_mathop";

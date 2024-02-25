@@ -25,7 +25,7 @@ public class PointInDirection : ExecutionBlockBase
     /// <summary>
     /// The provider of the degree to set
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider DirectionProvider { get; }
 
     private const string _constOpCode = "motion_pointindirection";

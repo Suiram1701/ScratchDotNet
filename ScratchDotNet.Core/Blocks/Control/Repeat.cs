@@ -22,12 +22,13 @@ public class Repeat : ExecutionBlockBase
     /// <summary>
     /// The provider of the value how many times the substack should be executed
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider TimesProvider { get; }
 
     /// <summary>
     /// The blocks that will be executed at invokation
     /// </summary>
+    [Substack]
     public Substack Substack { get; }
 
     private const string _constOpCode = "control_repeat";
@@ -94,7 +95,6 @@ public class Repeat : ExecutionBlockBase
     internal Repeat(string blockId, JToken blockToken) : base(blockId, blockToken)
 #pragma warning restore CS8618
     {
-        Substack = new(blockToken, "inputs.SUBSTACK");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

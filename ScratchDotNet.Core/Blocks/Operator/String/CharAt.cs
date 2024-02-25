@@ -40,13 +40,13 @@ public class CharAt : ValueOperatorBase
     /// <summary>
     /// The provider of the index
     /// </summary>
-    [InputProvider("LETTER")]
+    [Input("LETTER")]
     public IValueProvider IndexProvider { get; }
 
     /// <summary>
     /// The provider of the source string
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider StringProvider { get; }
 
     private const string _constOpCode = "operator_letter_of";

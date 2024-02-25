@@ -29,7 +29,7 @@ public class Round : ValueOperatorBase
     /// <summary>
     /// The provider of the value to round
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider NumProvider { get; }
 
     private const string _constOpCode = "operator_round";

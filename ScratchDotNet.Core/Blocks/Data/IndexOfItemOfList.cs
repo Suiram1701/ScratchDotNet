@@ -31,7 +31,7 @@ internal class IndexOfItemOfList : ListOperatorBase
     /// <summary>
     /// The item whose index should get read
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider ItemProvider { get; }
 
     private const string _constOpCode = "data_itemnumoflist";

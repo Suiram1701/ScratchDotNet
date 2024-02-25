@@ -43,13 +43,13 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the first operand
     /// </summary>
-    [InputProvider]
+    [Input]
     public IBoolValueProvider Operand1Provider { get; }
 
     /// <summary>
     /// The provider of the second operand
     /// </summary>
-    [InputProvider]
+    [Input]
     public IBoolValueProvider Operand2Provider { get; }
 
     private const string _constAndOpCode = "operator_and";

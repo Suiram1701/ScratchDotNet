@@ -37,13 +37,13 @@ public class Join : ValueOperatorBase
     /// <summary>
     /// The provider of the first string to join
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider String1Provider { get; }
 
     /// <summary>
     /// The provider of the seconds string to join
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider String2Provider { get; }
 
     private const string _constOpCode = "operator_join";

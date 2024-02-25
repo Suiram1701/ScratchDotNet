@@ -31,7 +31,7 @@ public class ChangeSoundEffectBy : ExecutionBlockBase
     /// <summary>
     /// The provider of the value the sound effect should be set to
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "sound_changeeffectby";

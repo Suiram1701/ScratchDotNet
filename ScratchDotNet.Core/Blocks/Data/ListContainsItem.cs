@@ -28,7 +28,7 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the item which one could be contained in the list
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider ItemProvider { get; }
 
     private const string _constOpCode = "data_listcontainsitem";

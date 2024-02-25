@@ -26,7 +26,7 @@ public class SetVolume : ExecutionBlockBase
     /// <summary>
     /// Provides the count of percent to set
     /// </summary>
-    [InputProvider("VOLUME")]
+    [Input("VOLUME")]
     public IValueProvider VolumeProvider { get; }
 
     private const string _constOpCode = "sound_setvolumeto";

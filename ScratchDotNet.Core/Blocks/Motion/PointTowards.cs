@@ -29,7 +29,7 @@ public class PointTowards : ExecutionBlockBase
     /// <summary>
     /// The provider target to rotate to
     /// </summary>
-    [InputProvider("TOWARDS")]
+    [Input("TOWARDS")]
     public IValueProvider TargetProvider { get; }
 
     private const string _constOpCode = "motion_pointtowards";

@@ -34,13 +34,13 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the main string
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider String1Provider { get; }
 
     /// <summary>
     /// The provider of the string that could be contained in the main string
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider String2Provider { get; }
 
     private const string _constOpCode = "operator_contains";

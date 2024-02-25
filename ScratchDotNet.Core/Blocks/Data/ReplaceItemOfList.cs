@@ -28,13 +28,13 @@ public class ReplaceItemOfList : ListExecutionBase
     /// <summary>
     /// The provider of the item with that the item at the index should get replaced
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider ItemProvider { get; }
 
     /// <summary>
     /// The provider of the index of the item to replace
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider IndexProvider { get; }
 
     private const string _constOpCode = "data_replaceitemoflist";

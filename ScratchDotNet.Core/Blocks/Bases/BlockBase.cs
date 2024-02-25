@@ -49,5 +49,6 @@ public abstract class BlockBase
 
         BlockConstructionHelper helper = new(this);
         helper.ConstructInputs(blockToken);
+        helper.ConstructSubstacks(blockToken);
     }
 }

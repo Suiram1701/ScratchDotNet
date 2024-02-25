@@ -28,7 +28,7 @@ public class ItemOfList : ListOperatorBase
     /// <summary>
     /// The provider of the index of the item to get
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider IndexProvider { get; }
 
     private const string _constOpCode = "data_itemoflist";

@@ -25,7 +25,7 @@ public class GlideTo : GlideBase
     /// <summary>
     /// The provider position to move to
     /// </summary>
-    [InputProvider("TO")]
+    [Input("TO")]
     public IValueProvider TargetProvider { get; }
 
     private const string _constOpCode = "motion_glideto";

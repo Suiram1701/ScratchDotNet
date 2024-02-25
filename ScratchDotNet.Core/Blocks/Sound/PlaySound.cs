@@ -25,7 +25,7 @@ public class PlaySound : ExecutionBlockBase
     /// <summary>
     /// The provider of the name of the sound to play
     /// </summary>
-    [InputProvider("SOUND_MENU")]
+    [Input("SOUND_MENU")]
     public IValueProvider SoundNameProvider { get; }
 
     /// <summary>

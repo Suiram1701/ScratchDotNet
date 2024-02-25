@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using ScratchDotNet.Core.Blocks;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Data;
@@ -23,7 +24,7 @@ internal class BlockConstructionHelper(BlockBase block)
     private readonly BlockBase _block = block;
 
     /// <summary>
-    /// Iterate  every property of the type IValueProvider that have a InputProviderAttribute and set their value provider read from <paramref name="blockToken"/>
+    /// Iterate every property of the type <see cref="IValueProvider"/> that have a <see cref="InputAttribute"/> and set a value provider read from <paramref name="blockToken"/>
     /// </summary>
     /// <remarks>
     /// The <paramref name="blockToken"/> have to be at the root position of the block
@@ -33,14 +34,13 @@ internal class BlockConstructionHelper(BlockBase block)
     {
         IEnumerable<PropertyInfo> inputProperties = _block.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
             .Where(prop => prop.PropertyType.RecursiveTypeBaseTypeSearch(typeof(IValueProvider)))     // Only properties that has the type IValueProvider or inherit from it
-            .Where(prop => prop.IsDefined(typeof(InputProviderAttribute)))
+            .Where(prop => prop.IsDefined(typeof(InputAttribute)))
             .Where(prop => prop.CanWrite);     // skip getter-only properties
         foreach (PropertyInfo inputProperty in inputProperties)
         {
-            InputProviderAttribute inputAttribute = inputProperty.GetCustomAttribute<InputProviderAttribute>()!;
+            InputAttribute inputAttribute = inputProperty.GetCustomAttribute<InputAttribute>()!;
 
-            string inputName = inputAttribute.Name
-                ?? GetNameByMemberName(inputProperty);
+            string inputName = inputAttribute.Name ?? GetNameByMemberName(inputProperty);
             string path = "inputs." + inputName;
 
             IValueProvider valueProvider;
@@ -50,6 +50,31 @@ internal class BlockConstructionHelper(BlockBase block)
                 valueProvider = GetInputProviderFromJSON(blockToken, path);
 
             inputProperty.SetValue(_block, valueProvider, null);
+        }
+    }
+
+    /// <summary>
+    /// Iterate every property of the type <see cref="Substack"/> that have a <see cref="SubstackAttribute"/> and adds the blocks read from <paramref name="blockToken"/>
+    /// </summary>
+    /// <remarks>
+    /// The <paramref name="blockToken"/> have to be at the root position of the block
+    /// </remarks>
+    /// <param name="blockToken">The json doc </param>
+    public void ConstructSubstacks(JToken blockToken)
+    {
+        IEnumerable<PropertyInfo> substackProperties = _block.GetType().GetProperties(BindingFlags.Instance| BindingFlags.Public)
+            .Where(prop => prop.PropertyType == typeof(Substack))
+            .Where(prop => prop.IsDefined(typeof(SubstackAttribute)))
+            .Where(prop => prop.CanWrite);     // skip getter-only properties
+        foreach (PropertyInfo substackProperty in substackProperties)
+        {
+            SubstackAttribute substackAttribute = substackProperty.GetCustomAttribute<SubstackAttribute>()!;
+
+            string substackName = substackProperty.Name ?? GetNameByMemberName(substackProperty);
+            string path = "inputs." + substackName;
+
+            Substack substack = new(blockToken, path);
+            substackProperty.SetValue(_block, substack, null);
         }
     }
 
@@ -66,7 +91,7 @@ internal class BlockConstructionHelper(BlockBase block)
         if (dataToken is null || dataToken.Type == JTokenType.Null)     // value of path was empty
             return new EmptyValue();
         else if (dataToken.Type == JTokenType.Array)     // a constant value
-            return GetContValue(dataToken);
+            return GetCosntValue(dataToken);
         else if (dataToken.Type == JTokenType.String)     // Reference to another block
             return GetReferenceBlock(blockToken, dataToken.Value<string>()!);
         else
@@ -100,7 +125,7 @@ internal class BlockConstructionHelper(BlockBase block)
     /// </summary>
     /// <param name="dataToken">The json token of data</param>
     /// <returns>The created provider</returns>
-    private static IValueProvider GetContValue(JToken dataToken)
+    private static IValueProvider GetCosntValue(JToken dataToken)
     {
         DataType dataType = (DataType)dataToken[0]!.Value<int>();
         string? dataValue = dataToken[1]?.Value<string>();

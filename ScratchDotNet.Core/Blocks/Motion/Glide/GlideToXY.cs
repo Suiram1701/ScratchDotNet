@@ -24,13 +24,13 @@ public class GlideToXY : GlideBase
     /// <summary>
     /// The X target position provider
     /// </summary>
-    [InputProvider("X")]
+    [Input("X")]
     public IValueProvider TargetXProvider { get; }
 
     /// <summary>
     /// The Y target position provider
     /// </summary>
-    [InputProvider("Y")]
+    [Input("Y")]
     public IValueProvider TargetYProvider { get; }
 
     private const string _constOpCode = "motion_glidesecstoxy";

@@ -22,6 +22,7 @@ public class Forever : ExecutionBlockBase
     /// <summary>
     /// The substack to execute forever
     /// </summary>
+    [Substack]
     public Substack Substack { get; }
 
     private const string _constOpCode = "control_forever";
@@ -48,9 +49,10 @@ public class Forever : ExecutionBlockBase
         Substack = new(substack);
     }
 
+#pragma warning disable CS8618
     internal Forever(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
     {
-        Substack = new(blockToken, "inputs.SUBSTACK");
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

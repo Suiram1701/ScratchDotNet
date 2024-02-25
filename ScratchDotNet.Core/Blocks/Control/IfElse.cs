@@ -21,12 +21,13 @@ public class IfElse : ExecutionBlockBase
     /// <summary>
     /// The provider of the condition to execute
     /// </summary>
-    [InputProvider]
+    [Input]
     public IBoolValueProvider ConditionProvider { get; }
 
     /// <summary>
     /// The substack to execute at positive condition
     /// </summary>
+    [Substack]
     public Substack Substack { get; }
 
     /// <summary>
@@ -99,7 +100,6 @@ public class IfElse : ExecutionBlockBase
     internal IfElse(string blockId, JToken blockToken) : base(blockId, blockToken)
 #pragma warning restore CS8618
     {
-        Substack = new(blockToken, "inputs.SUBSTACK");
         if (_opCode == _constIfElseOpCode)
             ElseSubstack = new(blockToken, "inputs.SUBSTACK2");
     }

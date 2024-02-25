@@ -21,7 +21,7 @@ public abstract class GlideBase : ExecutionBlockBase
     /// <summary>
     /// The provider of the seconds the figure needs to move to the position
     /// </summary>
-    [InputProvider("SECS")]
+    [Input("SECS")]
     public IValueProvider TimeProvider { get; }
 
     /// <summary>

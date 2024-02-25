@@ -22,7 +22,7 @@ public class SetVariable : VariableExecutionBase
     /// <summary>
     /// The provider of the value to set
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "data_setvariableto";

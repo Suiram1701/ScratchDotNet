@@ -26,7 +26,7 @@ public class MoveSteps : ExecutionBlockBase
     /// <summary>
     /// The provider of steps how much steps the figure should do
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider StepsProvider { get; }
 
     private const string _constOpCode = "motion_movesteps";

@@ -28,7 +28,7 @@ public class Not : ValueOperatorBase, IBoolValueProvider
     /// <summary>
     /// The provider of the value to invert
     /// </summary>
-    [InputProvider("OPERAND")]
+    [Input("OPERAND")]
     public IBoolValueProvider ValueProvider { get; }
 
     private const string _constOpCode = "operator_not";

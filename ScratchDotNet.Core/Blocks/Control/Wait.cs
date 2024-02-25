@@ -21,7 +21,7 @@ public class Wait : ExecutionBlockBase
     /// <summary>
     /// The provider of the seconds to wait
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider DurationProvider { get; }
 
     private const string _constOpCode = "control_wait";

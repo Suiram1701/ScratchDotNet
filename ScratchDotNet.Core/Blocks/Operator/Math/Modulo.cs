@@ -37,13 +37,13 @@ public class Modulo : ValueOperatorBase
     /// <summary>
     /// The provider of the dividend for modulo
     /// </summary>
-    [InputProvider("NUM1")]
+    [Input("NUM1")]
     public IValueProvider DividendProvider { get; }
 
     /// <summary>
     /// The provider of the divisor for modulo
     /// </summary>
-    [InputProvider("NUM2")]
+    [Input("NUM2")]
     public IValueProvider DivisorProvider { get; }
 
     private const string _constOpCode = "operator_mod";

@@ -27,7 +27,7 @@ public class AddToList : ListExecutionBase
     /// <summary>
     /// The provider of the item to append
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider ItemProvider { get; }
 
     private const string _constOpCode = "data_addtolist";

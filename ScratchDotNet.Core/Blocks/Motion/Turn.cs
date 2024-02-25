@@ -31,7 +31,7 @@ public class Turn : ExecutionBlockBase
     /// <summary>
     /// The provider of the value to turn
     /// </summary>
-    [InputProvider("DEGREES")]
+    [Input("DEGREES")]
     public IValueProvider ValueProvider { get; }
 
     private const string _constLeftOpCode = "motion_turnleft";

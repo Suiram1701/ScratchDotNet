@@ -45,13 +45,13 @@ public class Arithmetic : ValueOperatorBase
     /// <summary>
     /// The provider of the first number
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider Num1Provider { get; }
 
     /// <summary>
     /// The provider of the second number
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider Num2Provider { get; }
 
     private const string _constAddOpCode = "operator_add";

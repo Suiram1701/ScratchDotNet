@@ -37,13 +37,13 @@ public class Random : ValueOperatorBase
     /// <summary>
     /// The provider of the minimum value
     /// </summary>
-    [InputProvider("FROM")]
+    [Input("FROM")]
     public IValueProvider MinProvider { get; }
 
     /// <summary>
     /// The provider of the maximum value
     /// </summary>
-    [InputProvider("TO")]
+    [Input("TO")]
     public IValueProvider MaxProvider { get; }
 
     private const string _constOpCode = "operator_random";

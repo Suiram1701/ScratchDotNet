@@ -28,13 +28,13 @@ public class InsertInList : ListExecutionBase
     /// <summary>
     /// The provider of the item to insert
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider ItemProvider { get; }
 
     /// <summary>
     /// The provider of the index where the item should be insert
     /// </summary>
-    [InputProvider]
+    [Input]
     public IValueProvider IndexProvider { get; }
 
     private const string _constOpCode = "data_insertatlist";
