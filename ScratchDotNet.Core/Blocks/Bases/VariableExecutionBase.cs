@@ -46,7 +46,7 @@ public abstract class VariableExecutionBase : ExecutionBlockBase
         VariableRef = new(blockToken, "fields.VARIABLE");
     }
 
-    protected sealed override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal sealed override Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         Variable? variable = context.Executor.Variables.FirstOrDefault(var => var.Id.Equals(VariableRef.VarId));
         if (variable is null)

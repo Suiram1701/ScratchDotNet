@@ -81,7 +81,7 @@ public class Wait : ExecutionBlockBase
     {
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         double duration = (await DurationProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
 

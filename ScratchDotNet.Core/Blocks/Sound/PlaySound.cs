@@ -118,7 +118,7 @@ public class PlaySound : ExecutionBlockBase
         AwaitEnd = _opCode.Equals(_constPlayUntilDoneOpCode);
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         context.RuntimeData.TryGetValue($"{context.Executor.Name}_soundCts", out object? soundCtsObj);
         CancellationTokenSource? soundCts = soundCtsObj as CancellationTokenSource;

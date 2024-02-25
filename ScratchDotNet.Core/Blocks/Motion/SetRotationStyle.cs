@@ -51,7 +51,7 @@ public class SetRotationStyle : ExecutionBlockBase
         RotationStyle = EnumNameAttributeHelpers.ParseEnumWithName<RotationStyle>(styleString);
     }
 
-    protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         if (context.Executor is not IFigure figure)
         {

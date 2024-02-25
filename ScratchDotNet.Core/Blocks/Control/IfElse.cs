@@ -113,7 +113,7 @@ public class IfElse : ExecutionBlockBase
             ElseSubstack = new(blockToken, "inputs.SUBSTACK2");
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         if (await ConditionProvider.GetBooleanResultAsync(context, logger, ct))
             await Substack.InvokeAsync(context, logger, ct);

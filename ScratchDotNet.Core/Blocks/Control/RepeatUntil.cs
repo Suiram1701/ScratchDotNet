@@ -72,7 +72,7 @@ public class RepeatUntil : ExecutionBlockBase
     {
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         while (!await ConditionProvider.GetBooleanResultAsync(context, logger, ct))
         {

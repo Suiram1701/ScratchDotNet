@@ -108,7 +108,7 @@ public class Turn : ExecutionBlockBase
     {
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         if (context.Executor is not IFigure figure)
         {

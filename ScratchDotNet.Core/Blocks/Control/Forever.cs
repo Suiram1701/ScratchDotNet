@@ -55,7 +55,7 @@ public class Forever : ExecutionBlockBase
     {
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         while (!ct.IsCancellationRequested)
             await Substack.InvokeAsync(context, logger, ct);

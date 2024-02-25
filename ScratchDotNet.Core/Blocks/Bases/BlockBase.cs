@@ -16,7 +16,7 @@ public abstract class BlockBase
 
     protected readonly string _opCode;
 
-    private bool _atRuntime;
+    private readonly bool _atRuntime;
 
     /// <summary>
     /// Creates a new instance with an automatic generated block id

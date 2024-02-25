@@ -37,7 +37,7 @@ public abstract class ListExecutionBase : ExecutionBlockBase
         ListRef = new(blockToken, "fields.LIST");
     }
 
-    protected sealed override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal sealed override Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         List? list = context.Executor.Lists.FirstOrDefault(list => list.Id.Equals(ListRef.ListId));
         if (list is null)

@@ -55,7 +55,7 @@ public class StopScript : ExecutionBlockBase
         Scope = EnumNameAttributeHelpers.ParseEnumWithName<StopScope>(stopScopeString);
     }
 
-    protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         switch (Scope)
         {

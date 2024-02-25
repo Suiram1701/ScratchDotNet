@@ -85,7 +85,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
     {
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         double value = (await ValueProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         double volume = context.Executor.SoundVolume + value;

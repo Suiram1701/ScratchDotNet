@@ -41,7 +41,7 @@ public class ClearSoundEffects : ExecutionBlockBase
     {
     }
 
-    protected override Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         context.RuntimeData.Remove($"{context.Executor.Name}_{nameof(SoundEffect.Pitch)}");
         context.RuntimeData.Remove($"{context.Executor.Name}_{nameof(SoundEffect.Panorama)}");

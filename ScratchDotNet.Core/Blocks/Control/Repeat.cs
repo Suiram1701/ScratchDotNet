@@ -106,7 +106,7 @@ public class Repeat : ExecutionBlockBase
     {
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         double times = (await TimesProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         if (times < 0)

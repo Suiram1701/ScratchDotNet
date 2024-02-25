@@ -82,7 +82,7 @@ public class SetVolume : ExecutionBlockBase
     {
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         double volume = (await VolumeProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         volume = Math.Min(Math.Max(volume, 0d), 100d);     // Validate that the volume is between 0 and 100

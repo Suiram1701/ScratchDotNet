@@ -135,7 +135,7 @@ public class GlideTo : GlideBase
             TargetProvider = new TargetReporter(SpecialTarget.Random, TargetReporter.GlideToOpCode);     // the target provider doesn't allow empty values so a default target reporter is used
     }
 
-    protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
+    protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
         if (context.Executor is not IFigure figure)
         {
