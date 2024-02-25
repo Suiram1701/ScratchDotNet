@@ -29,7 +29,16 @@ public class Not : ValueOperatorBase, IBoolValueProvider
     /// The provider of the value to invert
     /// </summary>
     [Input("OPERAND")]
-    public IBoolValueProvider ValueProvider { get; }
+    public IBoolValueProvider ValueProvider
+    {
+        get => _valueProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _valueProvider = value;
+        }
+    }
+    private IBoolValueProvider _valueProvider;
 
     private const string _constOpCode = "operator_not";
 
@@ -52,7 +61,7 @@ public class Not : ValueOperatorBase, IBoolValueProvider
     public Not(IBoolValueProvider valueProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
-        ValueProvider = valueProvider;
+        _valueProvider = valueProvider;
     }
 
 #pragma warning disable CS8618

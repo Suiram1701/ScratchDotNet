@@ -29,13 +29,31 @@ public class ReplaceItemOfList : ListExecutionBase
     /// The provider of the item with that the item at the index should get replaced
     /// </summary>
     [Input]
-    public IValueProvider ItemProvider { get; }
+    public IValueProvider ItemProvider
+    {
+        get => _itemProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _itemProvider = value;
+        }
+    }
+    private IValueProvider _itemProvider;
 
     /// <summary>
     /// The provider of the index of the item to replace
     /// </summary>
     [Input]
-    public IValueProvider IndexProvider { get; }
+    public IValueProvider IndexProvider
+    {
+        get => _indexProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _indexProvider = value;
+        }
+    }
+    private IValueProvider _indexProvider;
 
     private const string _constOpCode = "data_replaceitemoflist";
 
@@ -63,8 +81,8 @@ public class ReplaceItemOfList : ListExecutionBase
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
 
-        ItemProvider = item.ConvertToStringValue();
-        IndexProvider = new DoubleValue(index);
+        _itemProvider = item.ConvertToStringValue();
+        _indexProvider = new DoubleValue(index);
     }
 
     /// <summary>
@@ -92,8 +110,8 @@ public class ReplaceItemOfList : ListExecutionBase
         ArgumentNullException.ThrowIfNull(itemProvider, nameof(itemProvider));
         ArgumentNullException.ThrowIfNull(indexProvider, nameof(indexProvider));
 
-        ItemProvider = itemProvider;
-        IndexProvider = indexProvider;
+        _itemProvider = itemProvider;
+        _indexProvider = indexProvider;
     }
 
 #pragma warning disable CS8618

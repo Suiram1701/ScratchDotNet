@@ -13,8 +13,12 @@ internal static class TypeExtension
         if (type == baseType)
             return true;
 
+        if (type.GetInterfaces().Contains(baseType))
+            return true;
+
         if (type.BaseType is null)
             return false;
+
         return type.BaseType.RecursiveTypeBaseTypeSearch(baseType);
     }
 }

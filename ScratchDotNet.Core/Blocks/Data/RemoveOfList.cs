@@ -32,7 +32,16 @@ public class RemoveOfList : ListExecutionBase
     /// The provider of the index to remove the item from
     /// </summary>
     [Input]
-    public IValueProvider IndexProvider { get; }
+    public IValueProvider IndexProvider
+    {
+        get => _indexProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _indexProvider = value;
+        }
+    }
+    private IValueProvider _indexProvider;
 
     private const string _constOpCode = "data_deleteoflist";
 
@@ -57,7 +66,7 @@ public class RemoveOfList : ListExecutionBase
     public RemoveOfList(ListRef reference, int index, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(index, nameof(index));
-        IndexProvider = new DoubleValue(index);
+        _indexProvider = new DoubleValue(index);
     }
 
     /// <summary>
@@ -81,7 +90,7 @@ public class RemoveOfList : ListExecutionBase
     public RemoveOfList(ListRef reference, IValueProvider indexProvider, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(indexProvider, nameof(indexProvider));
-        IndexProvider = indexProvider;
+        _indexProvider = indexProvider;
     }
 
 #pragma warning disable CS8618

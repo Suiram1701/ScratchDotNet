@@ -46,13 +46,31 @@ public class Arithmetic : ValueOperatorBase
     /// The provider of the first number
     /// </summary>
     [Input]
-    public IValueProvider Num1Provider { get; }
+    public IValueProvider Num1Provider
+    {
+        get => _num1Provider;
+        set
+        {
+            ThrowAtRuntime();
+            _num1Provider = value;
+        }
+    }
+    private IValueProvider _num1Provider;
 
     /// <summary>
     /// The provider of the second number
     /// </summary>
     [Input]
-    public IValueProvider Num2Provider { get; }
+    public IValueProvider Num2Provider
+    {
+        get => _num2Provider;
+        set
+        {
+            ThrowAtRuntime();
+            _num2Provider = value;
+        }
+    }
+    private IValueProvider _num2Provider;
 
     private const string _constAddOpCode = "operator_add";
     private const string _constSubOpCode = "operator_subtract";
@@ -86,8 +104,8 @@ public class Arithmetic : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(num2, nameof(num2));
 
         Operator = @operator;
-        Num1Provider = new DoubleValue(num1);
-        Num2Provider = new DoubleValue(num2);
+        _num1Provider = new DoubleValue(num1);
+        _num2Provider = new DoubleValue(num2);
     }
 
     /// <summary>
@@ -117,8 +135,8 @@ public class Arithmetic : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(num2Provider, nameof(num2Provider));
 
         Operator = @operator;
-        Num1Provider = num1Provider;
-        Num2Provider = num2Provider;
+        _num1Provider = num1Provider;
+        _num2Provider = num2Provider;
     }
 
 #pragma warning disable CS8618

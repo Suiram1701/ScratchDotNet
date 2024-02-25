@@ -38,13 +38,31 @@ public class Modulo : ValueOperatorBase
     /// The provider of the dividend for modulo
     /// </summary>
     [Input("NUM1")]
-    public IValueProvider DividendProvider { get; }
+    public IValueProvider DividendProvider
+    {
+        get => _dividendProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _dividendProvider = value;
+        }
+    }
+    private IValueProvider _dividendProvider;
 
     /// <summary>
     /// The provider of the divisor for modulo
     /// </summary>
     [Input("NUM2")]
-    public IValueProvider DivisorProvider { get; }
+    public IValueProvider DivisorProvider
+    {
+        get => _divisorProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _divisorProvider = value;
+        }
+    }
+    private IValueProvider _divisorProvider;
 
     private const string _constOpCode = "operator_mod";
 
@@ -71,9 +89,10 @@ public class Modulo : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(num1, nameof(num1));
         ArgumentNullException.ThrowIfNull(num2, nameof(num2));
 
-        DividendProvider = new DoubleValue(num1);
-        DivisorProvider = new DoubleValue(num2);
+        _dividendProvider = new DoubleValue(num1);
+        _divisorProvider = new DoubleValue(num2);
     }
+
     /// <summary>
     /// Creates a new instance
     /// </summary>
@@ -97,8 +116,8 @@ public class Modulo : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(num1Provider, nameof(num1Provider));
         ArgumentNullException.ThrowIfNull(num2Provider, nameof(num2Provider));
         
-        DividendProvider = num1Provider;
-        DivisorProvider = num2Provider;
+        _dividendProvider = num1Provider;
+        _divisorProvider = num2Provider;
     }
 
 #pragma warning disable CS8618

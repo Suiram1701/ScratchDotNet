@@ -25,13 +25,31 @@ public class GlideToXY : GlideBase
     /// The X target position provider
     /// </summary>
     [Input("X")]
-    public IValueProvider TargetXProvider { get; }
+    public IValueProvider TargetXProvider
+    {
+        get => _targetXProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _targetXProvider = value;
+        }
+    }
+    private IValueProvider _targetXProvider;
 
     /// <summary>
     /// The Y target position provider
     /// </summary>
     [Input("Y")]
-    public IValueProvider TargetYProvider { get; }
+    public IValueProvider TargetYProvider
+    {
+        get => _targetYProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _targetYProvider = value;
+        }
+    }
+    private IValueProvider _targetYProvider;
 
     private const string _constOpCode = "motion_glidesecstoxy";
 
@@ -60,8 +78,8 @@ public class GlideToXY : GlideBase
         ArgumentNullException.ThrowIfNull(targetX, nameof(targetX));
         ArgumentNullException.ThrowIfNull(targetY, nameof(targetY));
 
-        TargetXProvider = new DoubleValue(targetX);
-        TargetYProvider = new DoubleValue(targetY);
+        _targetXProvider = new DoubleValue(targetX);
+        _targetYProvider = new DoubleValue(targetY);
     }
 
     /// <summary>
@@ -89,8 +107,8 @@ public class GlideToXY : GlideBase
         ArgumentNullException.ThrowIfNull(targetXProvider, nameof(targetXProvider));
         ArgumentNullException.ThrowIfNull(targetYProvider, nameof(targetYProvider));
 
-        TargetXProvider = targetXProvider;
-        TargetYProvider = targetYProvider;
+        _targetXProvider = targetXProvider;
+        _targetYProvider = targetYProvider;
     }
 
 #pragma warning disable CS8618

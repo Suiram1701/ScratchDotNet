@@ -35,7 +35,16 @@ public class Mathop : ValueOperatorBase
     /// The provider of the value to be calculated with
     /// </summary>
     [Input("NUM")]
-    public IValueProvider ValueProvider { get; }
+    public IValueProvider ValueProvider
+    {
+        get => _valueProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _valueProvider = value;
+        }
+    }
+    private IValueProvider _valueProvider;
 
     private const string _constOpCode = "operator_mathop";
 
@@ -63,7 +72,7 @@ public class Mathop : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         Operation = operation;
-        ValueProvider = new DoubleValue(value);
+        _valueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -90,7 +99,7 @@ public class Mathop : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
 
         Operation = operation;
-        ValueProvider = valueProvider;
+        _valueProvider = valueProvider;
     }
 
 #pragma warning disable CS8618

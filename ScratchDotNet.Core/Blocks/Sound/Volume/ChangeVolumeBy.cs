@@ -27,7 +27,16 @@ public class ChangeVolumeBy : ExecutionBlockBase
     /// The provider of the count of percent to change the volume by
     /// </summary>
     [Input("VOLUME")]
-    public IValueProvider ValueProvider { get; }
+    public IValueProvider ValueProvider
+    {
+        get => _valueProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _valueProvider = value;
+        }
+    }
+    private IValueProvider _valueProvider;
 
     private const string _constOpCode = "sound_changevolumeby";
 
@@ -47,7 +56,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
     /// <exception cref="ArgumentException"></exception>
     public ChangeVolumeBy(double value, string blockId) : base(_constOpCode, blockId)
     {
-        ValueProvider = new DoubleValue(value);
+        _valueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -67,7 +76,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
     public ChangeVolumeBy(IValueProvider valueProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
-        ValueProvider = valueProvider;
+        _valueProvider = valueProvider;
     }
 
 #pragma warning disable CS8618

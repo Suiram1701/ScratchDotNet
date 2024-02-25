@@ -30,7 +30,16 @@ public class Round : ValueOperatorBase
     /// The provider of the value to round
     /// </summary>
     [Input]
-    public IValueProvider NumProvider { get; }
+    public IValueProvider NumProvider
+    {
+        get => _numProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _numProvider = value;
+        }
+    }
+    private IValueProvider _numProvider;
 
     private const string _constOpCode = "operator_round";
 
@@ -53,7 +62,7 @@ public class Round : ValueOperatorBase
     public Round(double number, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(number, nameof(number));
-        NumProvider = new DoubleValue(number);
+        _numProvider = new DoubleValue(number);
     }
 
     /// <summary>
@@ -75,7 +84,7 @@ public class Round : ValueOperatorBase
     public Round(IValueProvider numProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(numProvider, nameof(NumProvider));
-        NumProvider = numProvider;
+        _numProvider = numProvider;
     }
 
 #pragma warning disable CS8618

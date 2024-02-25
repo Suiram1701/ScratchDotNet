@@ -23,13 +23,22 @@ public class Repeat : ExecutionBlockBase
     /// The provider of the value how many times the substack should be executed
     /// </summary>
     [Input]
-    public IValueProvider TimesProvider { get; }
+    public IValueProvider TimesProvider
+    {
+        get => _timesProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _timesProvider = value;
+        }
+    }
+    private IValueProvider _timesProvider;
 
     /// <summary>
     /// The blocks that will be executed at invokation
     /// </summary>
     [Substack]
-    public Substack Substack { get; }
+    public Substack Substack { get; internal init; }
 
     private const string _constOpCode = "control_repeat";
 
@@ -60,7 +69,7 @@ public class Repeat : ExecutionBlockBase
             throw new ArgumentOutOfRangeException(nameof(times), times, "A value greater or same than 0 was expected.");
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
-        TimesProvider = new DoubleValue(times);
+        _timesProvider = new DoubleValue(times);
         Substack = new(substack);
     }
 
@@ -87,7 +96,7 @@ public class Repeat : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(timesProvider, nameof(timesProvider));
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
-        TimesProvider = timesProvider;
+        _timesProvider = timesProvider;
         Substack = new(substack);
     }
 

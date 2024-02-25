@@ -41,13 +41,31 @@ public class CharAt : ValueOperatorBase
     /// The provider of the index
     /// </summary>
     [Input("LETTER")]
-    public IValueProvider IndexProvider { get; }
+    public IValueProvider IndexProvider
+    {
+        get => _indexProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _indexProvider = value;
+        }
+    }
+    private IValueProvider _indexProvider;
 
     /// <summary>
     /// The provider of the source string
     /// </summary>
     [Input]
-    public IValueProvider StringProvider { get; }
+    public IValueProvider StringProvider
+    {
+        get => _stringProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _stringProvider = value;
+        }
+    }
+    private IValueProvider _stringProvider;
 
     private const string _constOpCode = "operator_letter_of";
 
@@ -78,8 +96,8 @@ public class CharAt : ValueOperatorBase
             throw new ArgumentOutOfRangeException(nameof(index), index, "A value larger than 0 was expected.");
         ArgumentNullException.ThrowIfNull(source, nameof(source));
 
-        IndexProvider = new DoubleValue(index);
-        StringProvider = new StringValue(source);
+        _indexProvider = new DoubleValue(index);
+        _stringProvider = new StringValue(source);
     }
 
     /// <summary>
@@ -105,8 +123,8 @@ public class CharAt : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(indexProvider, nameof(indexProvider));
         ArgumentNullException.ThrowIfNull(sourceProvider, nameof(sourceProvider));
 
-        IndexProvider = indexProvider;
-        StringProvider = sourceProvider;
+        _indexProvider = indexProvider;
+        _stringProvider = sourceProvider;
     }
 
 #pragma warning disable CS8618

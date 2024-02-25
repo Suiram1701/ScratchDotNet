@@ -23,7 +23,16 @@ public class SetVariable : VariableExecutionBase
     /// The provider of the value to set
     /// </summary>
     [Input]
-    public IValueProvider ValueProvider { get; }
+    public IValueProvider ValueProvider
+    {
+        get => _valueProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _valueProvider = value;
+        }
+    }
+    private IValueProvider _valueProvider;
 
     private const string _constOpCode = "data_setvariableto";
 
@@ -49,7 +58,7 @@ public class SetVariable : VariableExecutionBase
     public SetVariable(VariableRef reference, IScratchType value, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(value, nameof(value));
-        ValueProvider = value.ConvertToStringValue();
+        _valueProvider = value.ConvertToStringValue();
     }
 
     /// <summary>
@@ -73,7 +82,7 @@ public class SetVariable : VariableExecutionBase
     public SetVariable(VariableRef reference, IValueProvider valueProvider, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
-        ValueProvider = valueProvider;
+        _valueProvider = valueProvider;
     }
 
 #pragma warning disable CS8618

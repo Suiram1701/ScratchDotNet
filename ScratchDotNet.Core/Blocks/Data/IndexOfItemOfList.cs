@@ -32,7 +32,16 @@ internal class IndexOfItemOfList : ListOperatorBase
     /// The item whose index should get read
     /// </summary>
     [Input]
-    public IValueProvider ItemProvider { get; }
+    public IValueProvider ItemProvider
+    {
+        get => _itemProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _itemProvider = value;
+        }
+    }
+    private IValueProvider _itemProvider;
 
     private const string _constOpCode = "data_itemnumoflist";
 
@@ -42,7 +51,7 @@ internal class IndexOfItemOfList : ListOperatorBase
     /// <param name="reference">The reference to the list</param>
     /// <param name="item">The item whose index should get returned</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public IndexOfItemOfList(ListRef reference, IScratchType item) : this(reference, item, BlockHelpers.GenerateBlockId())
+    public IndexOfItemOfList(ListRef reference, string item) : this(reference, item, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -54,10 +63,10 @@ internal class IndexOfItemOfList : ListOperatorBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public IndexOfItemOfList(ListRef reference, IScratchType item, string blockId) : base(reference, blockId, _constOpCode)
+    public IndexOfItemOfList(ListRef reference, string item, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
-        ItemProvider = item.ConvertToStringValue();
+        _itemProvider = new StringValue(item);
     }
 
     /// <summary>
@@ -81,7 +90,7 @@ internal class IndexOfItemOfList : ListOperatorBase
     public IndexOfItemOfList(ListRef reference, IValueProvider itemProvider, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(itemProvider, nameof(itemProvider));
-        ItemProvider = itemProvider;
+        _itemProvider = itemProvider;
     }
 
 #pragma warning disable CS8618

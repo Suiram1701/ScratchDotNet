@@ -22,7 +22,16 @@ public abstract class GlideBase : ExecutionBlockBase
     /// The provider of the seconds the figure needs to move to the position
     /// </summary>
     [Input("SECS")]
-    public IValueProvider TimeProvider { get; }
+    public IValueProvider TimeProvider
+    {
+        get => _timeProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _timeProvider = value;
+        }
+    }
+    private IValueProvider _timeProvider;
 
     /// <summary>
     /// Creates a new instance
@@ -35,7 +44,7 @@ public abstract class GlideBase : ExecutionBlockBase
     protected GlideBase(TimeSpan time, string opCode, string blockId) : base(opCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(time, nameof(time));
-        TimeProvider = new DoubleValue(time.TotalSeconds);
+        _timeProvider = new DoubleValue(time.TotalSeconds);
     }
 
     /// <summary>
@@ -49,7 +58,7 @@ public abstract class GlideBase : ExecutionBlockBase
     protected GlideBase(IValueProvider timeProvider, string opcode, string blockId) : base(opcode, blockId)
     {
         ArgumentNullException.ThrowIfNull(timeProvider, nameof(timeProvider));
-        TimeProvider = timeProvider;
+        _timeProvider = timeProvider;
     }
 
 #pragma warning disable CS8618

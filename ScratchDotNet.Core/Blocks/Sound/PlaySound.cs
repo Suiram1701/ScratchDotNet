@@ -26,7 +26,16 @@ public class PlaySound : ExecutionBlockBase
     /// The provider of the name of the sound to play
     /// </summary>
     [Input("SOUND_MENU")]
-    public IValueProvider SoundNameProvider { get; }
+    public IValueProvider SoundNameProvider
+    {
+        get => _soundNameProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _soundNameProvider = value;
+        }
+    }
+    private IValueProvider _soundNameProvider;
 
     /// <summary>
     /// Indicates whether the end of playing the sound should be awaited
@@ -57,7 +66,7 @@ public class PlaySound : ExecutionBlockBase
     public PlaySound(SoundAsset sound, bool awaitEnd, string blockId) : base(GetOpCodeFromAwaitEnd(awaitEnd), blockId)
     {
         ArgumentNullException.ThrowIfNull(sound, nameof(sound));
-        SoundNameProvider = new SoundNameReporter(sound);
+        _soundNameProvider = new SoundNameReporter(sound);
     }
 
     /// <summary>
@@ -99,7 +108,7 @@ public class PlaySound : ExecutionBlockBase
             throw new NotSupportedException(message);
         }
 
-        SoundNameProvider = soundNameProvider;
+        _soundNameProvider = soundNameProvider;
     }
 
 #pragma warning disable CS8618

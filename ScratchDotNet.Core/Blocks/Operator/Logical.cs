@@ -44,13 +44,31 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
     /// The provider of the first operand
     /// </summary>
     [Input]
-    public IBoolValueProvider Operand1Provider { get; }
+    public IBoolValueProvider Operand1Provider
+    {
+        get => _operand1Provider;
+        set
+        {
+            ThrowAtRuntime();
+            _operand1Provider = value;
+        }
+    }
+    private IBoolValueProvider _operand1Provider;
 
     /// <summary>
     /// The provider of the second operand
     /// </summary>
     [Input]
-    public IBoolValueProvider Operand2Provider { get; }
+    public IBoolValueProvider Operand2Provider
+    {
+        get => _operand2Provider;
+        set
+        {
+            ThrowAtRuntime();
+            _operand2Provider = value;
+        }
+    }
+    private IBoolValueProvider _operand2Provider;
 
     private const string _constAndOpCode = "operator_and";
     private const string _constOrOpCode = "operator_or";
@@ -82,8 +100,8 @@ public class Logical : ValueOperatorBase, IBoolValueProvider
         ArgumentNullException.ThrowIfNull(operand2Provider, nameof(operand2Provider));
 
         Operator = @operator;
-        Operand1Provider = operand1Provider;
-        Operand2Provider = operand2Provider;
+        _operand1Provider = operand1Provider;
+        _operand2Provider = operand2Provider;
     }
 
 #pragma warning disable CS8618

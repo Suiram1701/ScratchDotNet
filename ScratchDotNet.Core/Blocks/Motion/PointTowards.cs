@@ -30,7 +30,16 @@ public class PointTowards : ExecutionBlockBase
     /// The provider target to rotate to
     /// </summary>
     [Input("TOWARDS")]
-    public IValueProvider TargetProvider { get; }
+    public IValueProvider TargetProvider
+    {
+        get => _targetProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _targetProvider = value;
+        }
+    }
+    private IValueProvider _targetProvider;
 
     private const string _constOpCode = "motion_pointtowards";
 
@@ -54,7 +63,7 @@ public class PointTowards : ExecutionBlockBase
     public PointTowards(SpecialTarget target, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        TargetProvider = new TargetReporter(target, TargetReporter.PointTowardsOpCode);
+        _targetProvider = new TargetReporter(target, TargetReporter.PointTowardsOpCode);
     }
 
     /// <summary>
@@ -76,7 +85,7 @@ public class PointTowards : ExecutionBlockBase
     public PointTowards(IFigure target, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        TargetProvider = new TargetReporter(target, TargetReporter.PointTowardsOpCode);
+        _targetProvider = new TargetReporter(target, TargetReporter.PointTowardsOpCode);
     }
 
     /// <summary>
@@ -106,7 +115,7 @@ public class PointTowards : ExecutionBlockBase
     {
         ArgumentNullException.ThrowIfNull(targetProvider, nameof(targetProvider));
 
-        TargetProvider = targetProvider;
+        _targetProvider = targetProvider;
         if (TargetProvider is IScratchType)
         {
             string message = string.Format(

@@ -29,7 +29,16 @@ public class ItemOfList : ListOperatorBase
     /// The provider of the index of the item to get
     /// </summary>
     [Input]
-    public IValueProvider IndexProvider { get; }
+    public IValueProvider IndexProvider
+    {
+        get => _indexProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _indexProvider = value;
+        }
+    }
+    private IValueProvider _indexProvider;
 
     private const string _constOpCode = "data_itemoflist";
 
@@ -53,7 +62,7 @@ public class ItemOfList : ListOperatorBase
     /// <exception cref="ArgumentNullException"></exception>
     public ItemOfList(ListRef reference, int index, string blockId) : base(reference, blockId, _constOpCode)
     {
-        IndexProvider = new DoubleValue(index);
+        _indexProvider = new DoubleValue(index);
     }
 
     /// <summary>
@@ -77,7 +86,7 @@ public class ItemOfList : ListOperatorBase
     public ItemOfList(ListRef reference, IValueProvider indexProvider, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(indexProvider, nameof(indexProvider));
-        IndexProvider = indexProvider;
+        _indexProvider = indexProvider;
     }
 
 #pragma warning disable CS8618

@@ -27,7 +27,16 @@ public class Goto : ExecutionBlockBase
     /// The position to move to
     /// </summary>
     [Input("TO")]
-    public IValueProvider TargetProvider { get; }
+    public IValueProvider TargetProvider
+    {
+        get => _targetProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _targetProvider = value;
+        }
+    }
+    private IValueProvider _targetProvider;
 
     private const string _constOpCode = "motion_goto";
 
@@ -84,7 +93,7 @@ public class Goto : ExecutionBlockBase
     public Goto(IFigure target, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        TargetProvider = new TargetReporter(target, TargetReporter.GotoOpCode);
+        _targetProvider = new TargetReporter(target, TargetReporter.GotoOpCode);
     }
 
     /// <summary>
@@ -114,7 +123,7 @@ public class Goto : ExecutionBlockBase
     {
         ArgumentNullException.ThrowIfNull(targetProvider, nameof(targetProvider));
 
-        TargetProvider = targetProvider;
+        _targetProvider = targetProvider;
         if (targetProvider is IScratchType)
         {
             string message = string.Format(

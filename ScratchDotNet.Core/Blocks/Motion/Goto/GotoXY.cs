@@ -27,13 +27,31 @@ public class GotoXY : ExecutionBlockBase
     /// The target X position provider
     /// </summary>
     [Input("X")]
-    public IValueProvider TargetXProvider { get; }
+    public IValueProvider TargetXProvider
+    {
+        get => _targetXProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _targetXProvider = value;
+        }
+    }
+    private IValueProvider _targetXProvider;
 
     /// <summary>
     /// The target Y position provider
     /// </summary>
     [Input("Y")]
-    public IValueProvider TargetYProvider { get; }
+    public IValueProvider TargetYProvider
+    {
+        get => _targetYProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _targetYProvider = value;
+        }
+    }
+    private IValueProvider _targetYProvider;
 
     private const string _constOpCode = "motion_gotoxy";
 
@@ -60,8 +78,8 @@ public class GotoXY : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(targetX, nameof(targetX));
         ArgumentNullException.ThrowIfNull(targetY, nameof(targetY));
 
-        TargetXProvider = new DoubleValue(targetX);
-        TargetYProvider = new DoubleValue(targetY);
+        _targetXProvider = new DoubleValue(targetX);
+        _targetYProvider = new DoubleValue(targetY);
     }
 
     /// <summary>
@@ -87,8 +105,8 @@ public class GotoXY : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(targetXProvider, nameof(targetXProvider));
         ArgumentNullException.ThrowIfNull(targetYProvider, nameof(targetYProvider));
 
-        TargetXProvider = targetXProvider;
-        TargetYProvider = targetYProvider;
+        _targetXProvider = targetXProvider;
+        _targetYProvider = targetYProvider;
     }
 
 #pragma warning disable CS8618

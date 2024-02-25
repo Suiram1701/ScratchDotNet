@@ -23,7 +23,7 @@ public class Forever : ExecutionBlockBase
     /// The substack to execute forever
     /// </summary>
     [Substack]
-    public Substack Substack { get; }
+    public Substack Substack { get; internal init; }
 
     private const string _constOpCode = "control_forever";
 

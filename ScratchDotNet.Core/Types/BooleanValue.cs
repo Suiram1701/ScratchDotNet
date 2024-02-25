@@ -18,7 +18,7 @@ namespace ScratchDotNet.Core.Types;
 /// </summary>
 /// <param name="value">The initialized value</param>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public readonly struct BooleanValue(bool value) : IScratchType, IBoolValueProvider
+public readonly struct BooleanValue(bool value) : IScratchType
 {
     /// <inheritdoc/>
     /// <remarks>
@@ -92,9 +92,6 @@ public readonly struct BooleanValue(bool value) : IScratchType, IBoolValueProvid
 
         return 1;     // By default is a boolean value larger than aonther value
     }
-
-    public Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
-        Task.FromResult<IScratchType>(this);
 
     public static bool operator ==(BooleanValue left, BooleanValue right) =>
         left.Equals(right);

@@ -35,13 +35,31 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
     /// The provider of the main string
     /// </summary>
     [Input]
-    public IValueProvider String1Provider { get; }
+    public IValueProvider String1Provider
+    {
+        get => _string1Provider;
+        set
+        {
+            ThrowAtRuntime();
+            _string1Provider = value;
+        }
+    }
+    private IValueProvider _string1Provider;
 
     /// <summary>
     /// The provider of the string that could be contained in the main string
     /// </summary>
     [Input]
-    public IValueProvider String2Provider { get; }
+    public IValueProvider String2Provider
+    {
+        get => _string2Provider;
+        set
+        {
+            ThrowAtRuntime();
+            _string2Provider = value;
+        }
+    }
+    private IValueProvider _string2Provider;
 
     private const string _constOpCode = "operator_contains";
 
@@ -68,8 +86,8 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
         ArgumentNullException.ThrowIfNull(string1, nameof(string1));
         ArgumentNullException.ThrowIfNull(string2, nameof(string2));
 
-        String1Provider = new StringValue(string1);
-        String2Provider = new StringValue(string2);
+        _string1Provider = new StringValue(string1);
+        _string2Provider = new StringValue(string2);
     }
 
     /// <summary>
@@ -95,8 +113,8 @@ public class Contains : ValueOperatorBase, IBoolValueProvider
         ArgumentNullException.ThrowIfNull(string1Provider, nameof(string1Provider));
         ArgumentNullException.ThrowIfNull(string2Provider, nameof(string2Provider));
 
-        String1Provider = string1Provider;
-        String2Provider = string2Provider;
+        _string1Provider = string1Provider;
+        _string2Provider = string2Provider;
     }
 
 #pragma warning disable CS8618

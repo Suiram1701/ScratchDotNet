@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using ScratchDotNet.Core.Exceptions;
 using ScratchDotNet.Core.Helpers;
 
 namespace ScratchDotNet.Core.Blocks.Bases;
@@ -14,6 +15,8 @@ public abstract class BlockBase
     public string BlockId { get; }
 
     protected readonly string _opCode;
+
+    private bool _atRuntime;
 
     /// <summary>
     /// Creates a new instance with an automatic generated block id
@@ -31,6 +34,8 @@ public abstract class BlockBase
     /// <exception cref="ArgumentException"></exception>
     protected BlockBase(string blockId, string opCode)
     {
+        _atRuntime = false;
+
         ArgumentException.ThrowIfNullOrEmpty(blockId, nameof(blockId));
 
         BlockId = blockId;
@@ -50,5 +55,18 @@ public abstract class BlockBase
         BlockConstructionHelper helper = new(this);
         helper.ConstructInputs(blockToken);
         helper.ConstructSubstacks(blockToken);
+
+        _atRuntime = true;
+    }
+
+    /// <summary>
+    /// Throws an exception when <see cref="_atRuntime"/> is <c>true</c>
+    /// </summary>
+    /// <exception cref="NotEditableException"></exception>
+    protected void ThrowAtRuntime()
+    {
+        if (!_atRuntime)
+            return;
+        throw new NotEditableException("The value providers of a block isn't changeable at runtime or after first execution.");
     }
 }

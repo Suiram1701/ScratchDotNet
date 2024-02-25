@@ -38,13 +38,31 @@ public class Random : ValueOperatorBase
     /// The provider of the minimum value
     /// </summary>
     [Input("FROM")]
-    public IValueProvider MinProvider { get; }
+    public IValueProvider MinProvider
+    {
+        get => _minProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _minProvider = value;
+        }
+    }
+    private IValueProvider _minProvider;
 
     /// <summary>
     /// The provider of the maximum value
     /// </summary>
     [Input("TO")]
-    public IValueProvider MaxProvider { get; }
+    public IValueProvider MaxProvider
+    {
+        get => _maxProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _maxProvider = value;
+        }
+    }
+    private IValueProvider _maxProvider;
 
     private const string _constOpCode = "operator_random";
 
@@ -71,8 +89,8 @@ public class Random : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(min, nameof(min));
         ArgumentNullException.ThrowIfNull(max, nameof(max));
 
-        MinProvider = new DoubleValue(min);
-        MaxProvider = new DoubleValue(max);
+        _minProvider = new DoubleValue(min);
+        _maxProvider = new DoubleValue(max);
     }
 
     /// <summary>
@@ -98,8 +116,8 @@ public class Random : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(minProvider, nameof(minProvider));
         ArgumentNullException.ThrowIfNull(maxProvider, nameof(maxProvider));
 
-        MinProvider = minProvider;
-        MaxProvider = maxProvider;
+        _minProvider = minProvider;
+        _maxProvider = maxProvider;
     }
 
 #pragma warning disable CS8618

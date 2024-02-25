@@ -26,7 +26,16 @@ public class GlideTo : GlideBase
     /// The provider position to move to
     /// </summary>
     [Input("TO")]
-    public IValueProvider TargetProvider { get; }
+    public IValueProvider TargetProvider
+    {
+        get => _targetProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _targetProvider = value;
+        }
+    }
+    private IValueProvider _targetProvider;
 
     private const string _constOpCode = "motion_glideto";
 
@@ -51,7 +60,7 @@ public class GlideTo : GlideBase
     public GlideTo(TimeSpan time, SpecialTarget target, string blockId) : base(time, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        TargetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
+        _targetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
     }
 
     /// <summary>
@@ -75,7 +84,7 @@ public class GlideTo : GlideBase
     public GlideTo(TimeSpan time, IFigure target, string blockId) : base(time, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        TargetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
+        _targetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
     }
 
     /// <summary>
@@ -106,7 +115,7 @@ public class GlideTo : GlideBase
     {
         ArgumentNullException.ThrowIfNull(targetProvider, nameof(targetProvider));
 
-        TargetProvider = targetProvider;
+        _targetProvider = targetProvider;
         if (TargetProvider is IScratchType)
         {
             string message = string.Format(

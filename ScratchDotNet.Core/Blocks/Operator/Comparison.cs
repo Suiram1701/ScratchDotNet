@@ -45,13 +45,31 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     /// The provider of the first operand
     /// </summary>
     [Input]
-    public IValueProvider Operand1Provider { get; }
+    public IValueProvider Operand1Provider
+    {
+        get => _operand1Provider;
+        set
+        {
+            ThrowAtRuntime();
+            _operand1Provider = value;
+        }
+    }
+    private IValueProvider _operand1Provider;
 
     /// <summary>
     /// The provider of the second operand
     /// </summary>
     [Input]
-    public IValueProvider Operand2Provider { get; }
+    public IValueProvider Operand2Provider
+    {
+        get => _operand2Provider;
+        set
+        {
+            ThrowAtRuntime();
+            _operand2Provider = value;
+        }
+    }
+    private IValueProvider _operand2Provider;
 
     private const string _constGreaterThanOpCode = "operator_gt";
     private const string _constLessThanOpCode = "operator_lt";
@@ -63,15 +81,38 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
     /// <param name="operator">The comparison operation to execute</param>
     /// <param name="operand1">The first operand</param>
     /// <param name="operand2">The second operand</param>
-    /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public Comparison(ComparisonOperator @operator, IScratchType operand1, IScratchType operand2, string blockId) : base(GetOpCodeFromOperator(@operator), blockId)
+    public Comparison(ComparisonOperator @operator, string operand1, string operand2) : this(@operator, operand1, operand2, BlockHelpers.GenerateBlockId())
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance
+    /// </summary>
+    /// <param name="operator">The comparison operation to execute</param>
+    /// <param name="operand1">The first operand</param>
+    /// <param name="operand2">The second operand</param>
+    /// <param name="blockId">The id of this block</param>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentNullException"></exception>
+    public Comparison(ComparisonOperator @operator, string operand1, string operand2, string blockId) : base(GetOpCodeFromOperator(@operator), blockId)
     {
         ArgumentNullException.ThrowIfNull(@operator, nameof(@operator));
 
         Operator = @operator;
-        Operand1Provider = operand1.ConvertToStringValue();
-        Operand2Provider = operand2.ConvertToStringValue();
+        _operand1Provider = new StringValue(operand1);
+        _operand2Provider = new StringValue(operand2);
+    }
+
+    /// <summary>
+    /// Creates a new instance
+    /// </summary>
+    /// <param name="operator">The comparison operation to execute</param>
+    /// <param name="operand1Provider">The provider of the first operand</param>
+    /// <param name="operand2Provider">The provider of the second</param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public Comparison(ComparisonOperator @operator, IValueProvider operand1Provider, IValueProvider operand2Provider) : this(@operator, operand1Provider, operand2Provider, BlockHelpers.GenerateBlockId())
+    {
     }
 
     /// <summary>
@@ -90,8 +131,9 @@ public class Comparison : ValueOperatorBase, IBoolValueProvider
         ArgumentNullException.ThrowIfNull(operand2Provider, nameof(operand2Provider));
 
         Operator = @operator;
-        Operand1Provider = operand1Provider;
-        Operand2Provider = operand2Provider;}
+        _operand1Provider = operand1Provider;
+        _operand2Provider = operand2Provider;
+    }
 
 #pragma warning disable CS8618
     internal Comparison(string blockId, JToken blockToken) : base(blockId, blockToken)

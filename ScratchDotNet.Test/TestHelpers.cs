@@ -17,7 +17,7 @@ internal static class TestHelpers
             logger.LogInformation("Start test: {test}", loggerName);
 
             sw.Start();
-            _ = ScriptExecutor.Create(Setup.BlockTokens, startId, logger);
+            var a = ScriptExecutor.Create(Setup.BlockTokens, startId, logger);
             sw.Stop();
 
             logger.LogInformation("Test successfully ended");

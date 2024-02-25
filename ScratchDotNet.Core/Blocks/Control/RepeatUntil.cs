@@ -20,13 +20,22 @@ public class RepeatUntil : ExecutionBlockBase
     /// The condition to check
     /// </summary>
     [Input]
-    public IBoolValueProvider ConditionProvider { get; }
+    public IBoolValueProvider ConditionProvider
+    {
+        get => _conditionProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _conditionProvider = value;
+        }
+    }
+    private IBoolValueProvider _conditionProvider;
 
     /// <summary>
     /// The substack to execute
     /// </summary>
     [Substack]
-    public Substack Substack { get; }
+    public Substack Substack { get; internal init; }
 
     private const string _constOpCode = "control_repeat_until";
 
@@ -53,7 +62,7 @@ public class RepeatUntil : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(conditionProvider, nameof(conditionProvider));
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
-        ConditionProvider = conditionProvider;
+        _conditionProvider = conditionProvider;
         Substack = new(substack);
     }
 

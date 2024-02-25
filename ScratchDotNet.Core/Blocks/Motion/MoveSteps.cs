@@ -27,7 +27,16 @@ public class MoveSteps : ExecutionBlockBase
     /// The provider of steps how much steps the figure should do
     /// </summary>
     [Input]
-    public IValueProvider StepsProvider { get; }
+    public IValueProvider StepsProvider
+    {
+        get => _stepsProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _stepsProvider = value;
+        }
+    }
+    private IValueProvider _stepsProvider;
 
     private const string _constOpCode = "motion_movesteps";
 
@@ -50,7 +59,16 @@ public class MoveSteps : ExecutionBlockBase
     public MoveSteps(double steps, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(steps, nameof(steps));
-        StepsProvider = new DoubleValue(steps);
+        _stepsProvider = new DoubleValue(steps);
+    }
+
+    /// <summary>
+    /// Creates a new instance
+    /// </summary>
+    /// <param name="stepsProvider">The steps provider</param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public MoveSteps(IValueProvider stepsProvider) : this(stepsProvider, BlockHelpers.GenerateBlockId())
+    {
     }
 
     /// <summary>
@@ -58,11 +76,12 @@ public class MoveSteps : ExecutionBlockBase
     /// </summary>
     /// <param name="blockId">The Id of this block</param>
     /// <param name="stepsProvider">The steps provider</param>
+    /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
     public MoveSteps(IValueProvider stepsProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(stepsProvider, nameof(stepsProvider));
-        StepsProvider = stepsProvider;
+        _stepsProvider = stepsProvider;
     }
 
     /// <summary>

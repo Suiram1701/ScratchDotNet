@@ -7,6 +7,7 @@ using ScratchDotNet.Core.Data;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
+using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,16 @@ public class AddToList : ListExecutionBase
     /// The provider of the item to append
     /// </summary>
     [Input]
-    public IValueProvider ItemProvider { get; }
+    public IValueProvider ItemProvider
+    {
+        get => _itemProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _itemProvider = value;
+        }
+    }
+    private IValueProvider _itemProvider;
 
     private const string _constOpCode = "data_addtolist";
 
@@ -53,7 +63,7 @@ public class AddToList : ListExecutionBase
     public AddToList(ListRef reference, IScratchType item, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
-        ItemProvider = item.ConvertToStringValue();
+        _itemProvider = item.ConvertToStringValue();
     }
 
     /// <summary>
@@ -77,7 +87,7 @@ public class AddToList : ListExecutionBase
     public AddToList(ListRef reference, IValueProvider itemProvider, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(itemProvider, nameof(itemProvider));
-        ItemProvider = itemProvider;
+        _itemProvider = itemProvider;
     }
 
 #pragma warning disable CS8618

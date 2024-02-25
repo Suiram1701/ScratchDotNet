@@ -29,13 +29,31 @@ public class InsertInList : ListExecutionBase
     /// The provider of the item to insert
     /// </summary>
     [Input]
-    public IValueProvider ItemProvider { get; }
+    public IValueProvider ItemProvider
+    {
+        get => _itemProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _itemProvider = value;
+        }
+    }
+    private IValueProvider _itemProvider;
 
     /// <summary>
     /// The provider of the index where the item should be insert
     /// </summary>
     [Input]
-    public IValueProvider IndexProvider { get; }
+    public IValueProvider IndexProvider
+    {
+        get => _indexProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _indexProvider = value;
+        }
+    }
+    private IValueProvider _indexProvider;
 
     private const string _constOpCode = "data_insertatlist";
 
@@ -46,7 +64,7 @@ public class InsertInList : ListExecutionBase
     /// <param name="item">The item to insert at the index</param>
     /// <param name="index">The 1 based index where the item should be insert to</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public InsertInList(ListRef reference, IScratchType item, int index) : this(reference, item, index, BlockHelpers.GenerateBlockId())
+    public InsertInList(ListRef reference, string item, int index) : this(reference, item, index, BlockHelpers.GenerateBlockId())
     {
     }
 
@@ -59,12 +77,12 @@ public class InsertInList : ListExecutionBase
     /// <param name="blockId">The id of this block</param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public InsertInList(ListRef reference, IScratchType item, int index, string blockId) : base(reference, _constOpCode, blockId)
+    public InsertInList(ListRef reference, string item, int index, string blockId) : base(reference, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
 
-        ItemProvider = item.ConvertToStringValue();
-        IndexProvider = new DoubleValue(index);
+        _itemProvider = new StringValue(item);
+        _indexProvider = new DoubleValue(index);
     }
 
     /// <summary>
@@ -92,8 +110,8 @@ public class InsertInList : ListExecutionBase
         ArgumentNullException.ThrowIfNull(itemProvider, nameof(itemProvider));
         ArgumentNullException.ThrowIfNull(indexProvider, nameof(indexProvider));
 
-        ItemProvider = itemProvider;
-        IndexProvider = indexProvider;
+        _itemProvider = itemProvider;
+        _indexProvider = indexProvider;
     }
 
 #pragma warning disable CS8618

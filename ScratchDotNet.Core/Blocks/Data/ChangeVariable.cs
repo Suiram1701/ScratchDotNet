@@ -23,7 +23,16 @@ public class ChangeVariable : VariableExecutionBase
     /// The provider of the value to change by
     /// </summary>
     [Input]
-    public IValueProvider ValueProvider { get; }
+    public IValueProvider ValueProvider
+    {
+        get => _valueProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _valueProvider = value;
+        }
+    }
+    private IValueProvider _valueProvider;
 
     private const string _constOpCode = "data_changevariableby";
 
@@ -48,7 +57,7 @@ public class ChangeVariable : VariableExecutionBase
     public ChangeVariable(double value, VariableRef reference, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(value, nameof(value));
-        ValueProvider = new DoubleValue(value);
+        _valueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -72,7 +81,7 @@ public class ChangeVariable : VariableExecutionBase
     public ChangeVariable(IValueProvider valueProvider, VariableRef reference, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
-        ValueProvider = valueProvider;
+        _valueProvider = valueProvider;
     }
 
 #pragma warning disable CS8618

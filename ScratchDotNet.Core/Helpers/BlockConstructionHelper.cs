@@ -86,12 +86,12 @@ internal class BlockConstructionHelper(BlockBase block)
     /// <returns>The created provider</returns>
     public static IValueProvider GetInputProviderFromJSON(JToken blockToken, string jsonPath)
     {
-        JToken? dataToken = blockToken.SelectToken(jsonPath)![1];
+        JToken? dataToken = blockToken.SelectToken(jsonPath)?[1];
 
         if (dataToken is null || dataToken.Type == JTokenType.Null)     // value of path was empty
             return new EmptyValue();
         else if (dataToken.Type == JTokenType.Array)     // a constant value
-            return GetCosntValue(dataToken);
+            return GetConstValue(dataToken);
         else if (dataToken.Type == JTokenType.String)     // Reference to another block
             return GetReferenceBlock(blockToken, dataToken.Value<string>()!);
         else
@@ -125,7 +125,7 @@ internal class BlockConstructionHelper(BlockBase block)
     /// </summary>
     /// <param name="dataToken">The json token of data</param>
     /// <returns>The created provider</returns>
-    private static IValueProvider GetCosntValue(JToken dataToken)
+    private static IValueProvider GetConstValue(JToken dataToken)
     {
         DataType dataType = (DataType)dataToken[0]!.Value<int>();
         string? dataValue = dataToken[1]?.Value<string>();

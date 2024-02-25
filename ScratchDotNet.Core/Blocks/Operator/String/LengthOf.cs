@@ -29,7 +29,16 @@ public class LengthOf : ValueOperatorBase
     /// <summary>
     /// The provider of the string to get the length from
     /// </summary>
-    public IValueProvider StringProvider { get; }
+    public IValueProvider StringProvider
+    {
+        get => _stringProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _stringProvider = value;
+        }
+    }
+    private IValueProvider _stringProvider;
 
     private const string _constOpCode = "operator_length";
 
@@ -52,7 +61,7 @@ public class LengthOf : ValueOperatorBase
     public LengthOf(string @string, string blockId) : base(blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(@string, nameof(@string));
-        StringProvider = new StringValue(@string);
+        _stringProvider = new StringValue(@string);
     }
 
     /// <summary>
@@ -74,7 +83,7 @@ public class LengthOf : ValueOperatorBase
     public LengthOf(IValueProvider stringProvider, string blockId) : base(blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(stringProvider, nameof(@stringProvider));
-        StringProvider = stringProvider;
+        _stringProvider = stringProvider;
     }
 
 #pragma warning disable CS8618

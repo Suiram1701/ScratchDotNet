@@ -26,7 +26,16 @@ public class PointInDirection : ExecutionBlockBase
     /// The provider of the degree to set
     /// </summary>
     [Input]
-    public IValueProvider DirectionProvider { get; }
+    public IValueProvider DirectionProvider
+    {
+        get => _directionProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _directionProvider = value;
+        }
+    }
+    private IValueProvider _directionProvider;
 
     private const string _constOpCode = "motion_pointindirection";
 
@@ -54,7 +63,7 @@ public class PointInDirection : ExecutionBlockBase
         if (angle < 0 || angle >= 360)
             throw new ArgumentOutOfRangeException(nameof(angle), angle, "The count of degree have to be between 0° and 359°.");
 
-        DirectionProvider = new DoubleValue(angle);
+        _directionProvider = new DoubleValue(angle);
     }
 
     /// <summary>
@@ -76,7 +85,7 @@ public class PointInDirection : ExecutionBlockBase
     public PointInDirection(IValueProvider angleProvider, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(angleProvider, nameof(angleProvider));
-        DirectionProvider = angleProvider;}
+        _directionProvider = angleProvider;}
 
 #pragma warning disable CS8618
     internal PointInDirection(string blockId, JToken blockToken) : base(blockId, blockToken)

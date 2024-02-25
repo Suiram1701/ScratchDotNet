@@ -29,7 +29,16 @@ public class ChangeXY : ExecutionBlockBase
     /// <summary>
     /// The provider of the value to change by
     /// </summary>
-    public IValueProvider ValueProvider { get; }
+    public IValueProvider ValueProvider
+    {
+        get => _valueProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _valueProvider = value;
+        }
+    }
+    private IValueProvider _valueProvider;
 
     /// <summary>
     /// The kind of the position change
@@ -65,7 +74,7 @@ public class ChangeXY : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         ChangeKind = kind;
-        ValueProvider = new DoubleValue(value);
+        _valueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -92,7 +101,7 @@ public class ChangeXY : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
 
         ChangeKind = kind;
-        ValueProvider = valueProvider;
+        _valueProvider = valueProvider;
     }
 
     internal ChangeXY(string blockId, JToken blockToken) : base(blockId, blockToken)
@@ -107,7 +116,7 @@ public class ChangeXY : ExecutionBlockBase
         };
 
         string jsonPath = string.Format("inputs.{0}", ChangeKind.ToString());
-        ValueProvider = BlockConstructionHelper.GetInputProviderFromJSON(blockToken, jsonPath);
+        _valueProvider = BlockConstructionHelper.GetInputProviderFromJSON(blockToken, jsonPath);
     }
 
     protected override async Task ExecuteInternalAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)

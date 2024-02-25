@@ -32,7 +32,16 @@ public class Turn : ExecutionBlockBase
     /// The provider of the value to turn
     /// </summary>
     [Input("DEGREES")]
-    public IValueProvider ValueProvider { get; }
+    public IValueProvider ValueProvider
+    {
+        get => _valueProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _valueProvider = value;
+        }
+    }
+    private IValueProvider _valueProvider;
 
     private const string _constLeftOpCode = "motion_turnleft";
     private const string _constRightOpCode = "motion_turnright";
@@ -62,7 +71,7 @@ public class Turn : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(value, nameof(value));
 
         Direction = direction;
-        ValueProvider = new DoubleValue(value);
+        _valueProvider = new DoubleValue(value);
     }
 
     /// <summary>
@@ -90,7 +99,7 @@ public class Turn : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(valueProvider, nameof(valueProvider));
 
         Direction = direction;
-        ValueProvider = valueProvider;
+        _valueProvider = valueProvider;
     }
 
 #pragma warning disable CS8618

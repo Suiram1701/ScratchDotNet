@@ -29,7 +29,16 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
     /// The provider of the item which one could be contained in the list
     /// </summary>
     [Input]
-    public IValueProvider ItemProvider { get; }
+    public IValueProvider ItemProvider
+    {
+        get => _itemProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _itemProvider = value;
+        }
+    }
+    private IValueProvider _itemProvider;
 
     private const string _constOpCode = "data_listcontainsitem";
 
@@ -54,7 +63,7 @@ public class ListContainsItem : ListOperatorBase, IBoolValueProvider
     public ListContainsItem(ListRef reference, IScratchType item, string blockId) : base(reference, blockId, _constOpCode)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
-        ItemProvider = item.ConvertToStringValue();
+        _itemProvider = item.ConvertToStringValue();
     }
 
 #pragma warning disable CS8618

@@ -22,13 +22,22 @@ public class IfElse : ExecutionBlockBase
     /// The provider of the condition to execute
     /// </summary>
     [Input]
-    public IBoolValueProvider ConditionProvider { get; }
+    public IBoolValueProvider ConditionProvider
+    {
+        get => _conditionProvider;
+        set
+        {
+            ThrowAtRuntime();
+            _conditionProvider = value;
+        }
+    }
+    private IBoolValueProvider _conditionProvider;
 
     /// <summary>
     /// The substack to execute at positive condition
     /// </summary>
     [Substack]
-    public Substack Substack { get; }
+    public Substack Substack { get; internal init; }
 
     /// <summary>
     /// The substack to execute at negative condition
@@ -61,7 +70,7 @@ public class IfElse : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(conditionProvider, nameof(conditionProvider));
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
 
-        ConditionProvider = conditionProvider;
+        _conditionProvider = conditionProvider;
         Substack = new(substack);
     }
 
@@ -91,7 +100,7 @@ public class IfElse : ExecutionBlockBase
         ArgumentNullException.ThrowIfNull(substack, nameof(substack));
         ArgumentNullException.ThrowIfNull(elseSubstack, nameof(elseSubstack));
 
-        ConditionProvider = conditionProvider;
+        _conditionProvider = conditionProvider;
         Substack = new(substack);
         ElseSubstack = new(elseSubstack);
     }
