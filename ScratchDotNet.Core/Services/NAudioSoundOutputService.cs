@@ -4,12 +4,6 @@ using NAudio.Wave.SampleProviders;
 using ScratchDotNet.Core.NAudio.Wave;
 using ScratchDotNet.Core.Services.Interfaces;
 using ScratchDotNet.Core.StageObjects.Assets;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Services;
 

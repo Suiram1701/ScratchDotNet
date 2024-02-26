@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ScratchDotNet.Core.Types.Interfaces;
+﻿namespace ScratchDotNet.Core.Types.Interfaces;
 
 /// <summary>
 /// An interface that provides convertion and comparatation between every scratch type

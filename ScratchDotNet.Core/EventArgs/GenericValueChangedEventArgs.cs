@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ScratchDotNet.Core.EventArgs;
+﻿namespace ScratchDotNet.Core.EventArgs;
 
 /// <summary>
 /// Generic event args that provides an old- and new value

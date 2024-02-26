@@ -6,12 +6,7 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Blocks.Sound.Volume;
 
@@ -66,7 +61,7 @@ public class VolumeValue : ValueOperatorBase
         if (e.OldValue == e.NewValue)
             return;
 
-        ValueChangedEventArgs eventArgs = new(new DoubleValue(e.OldValue), new  DoubleValue(e.NewValue));
+        ValueChangedEventArgs eventArgs = new(new DoubleValue(e.OldValue), new DoubleValue(e.NewValue));
         OnValueChanged?.Invoke(sender, eventArgs);
     }
 

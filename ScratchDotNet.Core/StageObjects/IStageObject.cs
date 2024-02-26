@@ -1,5 +1,4 @@
 ﻿using ScratchDotNet.Core.Data;
-using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.StageObjects.Assets;
 
 namespace ScratchDotNet.Core.StageObjects;

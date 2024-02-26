@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using ScratchDotNet.Core.Execution;
+﻿using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
-using ScratchDotNet.Core.Types.Interfaces;
 
 namespace ScratchDotNet.Core.Blocks.Interfaces;
 

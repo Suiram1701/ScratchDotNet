@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ScratchDotNet.Core.Exceptions;
+﻿namespace ScratchDotNet.Core.Exceptions;
 
 /// <summary>
 /// An exceptions that will be thrown when an attempt will be to change data of a block at runtime

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ScratchDotNet.Core.Blocks.Attributes;
+﻿namespace ScratchDotNet.Core.Blocks.Attributes;
 
 /// <summary>
 /// Provides an automatic assignment of a substacks blocks to the property

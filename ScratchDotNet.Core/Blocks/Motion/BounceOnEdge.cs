@@ -47,7 +47,7 @@ public class BounceOnEdge : ExecutionBlockBase
 
     protected internal override Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Executor is not IFigure figure)
+        if (context.Executor is not IExecutableFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return Task.CompletedTask;

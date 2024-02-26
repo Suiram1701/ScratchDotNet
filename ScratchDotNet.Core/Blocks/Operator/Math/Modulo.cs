@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
@@ -115,7 +114,7 @@ public class Modulo : ValueOperatorBase
     {
         ArgumentNullException.ThrowIfNull(num1Provider, nameof(num1Provider));
         ArgumentNullException.ThrowIfNull(num2Provider, nameof(num2Provider));
-        
+
         _dividendProvider = num1Provider;
         _divisorProvider = num2Provider;
     }

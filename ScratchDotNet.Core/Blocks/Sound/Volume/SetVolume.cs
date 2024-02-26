@@ -3,16 +3,10 @@ using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Blocks.Sound.Volume;
 
@@ -62,7 +56,7 @@ public class SetVolume : ExecutionBlockBase
     public SetVolume(IValueProvider volumeProvider) : this(volumeProvider, BlockHelpers.GenerateBlockId())
     {
     }
-    
+
     /// <summary>
     /// Creates a new instance
     /// </summary>

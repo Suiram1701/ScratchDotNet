@@ -117,7 +117,7 @@ public class Mathop : ValueOperatorBase
 
         return new DoubleValue(result);
     }
-    
+
     private Func<double, double> GetOperationDelegate()
     {
         return Operation switch

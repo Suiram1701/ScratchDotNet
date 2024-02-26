@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Interfaces;
-using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
@@ -119,7 +118,7 @@ public class GlideToXY : GlideBase
 
     protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Executor is not IFigure figure)
+        if (context.Executor is not IExecutableFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return;

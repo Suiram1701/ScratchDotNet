@@ -5,7 +5,6 @@ using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace ScratchDotNet.Core.Blocks.Control;

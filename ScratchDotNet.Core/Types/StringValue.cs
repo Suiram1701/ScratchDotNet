@@ -3,13 +3,8 @@ using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Types;
 
@@ -24,7 +19,7 @@ public sealed class StringValue(string value) : IScratchType, IValueProvider
     /// <remarks>
     /// This will be never get called
     /// </remarks>
-    public event EventHandler<ValueChangedEventArgs> OnValueChanged {  add { } remove { } }
+    public event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
 
     /// <summary>
     /// The string value this instance contains
@@ -79,10 +74,10 @@ public sealed class StringValue(string value) : IScratchType, IValueProvider
     public static bool operator ==(StringValue left, StringValue right) =>
         left.Equals(right);
 
-    public static bool operator !=(StringValue left, StringValue right)=>
+    public static bool operator !=(StringValue left, StringValue right) =>
         !left.Equals(right);
 
-    public static bool operator <(StringValue left, StringValue right)=>
+    public static bool operator <(StringValue left, StringValue right) =>
         left.CompareTo(right) < 0;
 
     public static bool operator <=(StringValue left, StringValue right) =>

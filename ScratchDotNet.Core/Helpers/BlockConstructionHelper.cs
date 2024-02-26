@@ -7,12 +7,7 @@ using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Helpers;
 
@@ -62,7 +57,7 @@ internal class BlockConstructionHelper(BlockBase block)
     /// <param name="blockToken">The json doc </param>
     public void ConstructSubstacks(JToken blockToken)
     {
-        IEnumerable<PropertyInfo> substackProperties = _block.GetType().GetProperties(BindingFlags.Instance| BindingFlags.Public)
+        IEnumerable<PropertyInfo> substackProperties = _block.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
             .Where(prop => prop.PropertyType == typeof(Substack))
             .Where(prop => prop.IsDefined(typeof(SubstackAttribute)))
             .Where(prop => prop.CanWrite);     // skip getter-only properties

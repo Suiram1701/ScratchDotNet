@@ -40,7 +40,7 @@ public class YPosition : ValueOperatorBase
 
     public override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
     {
-        if (context.Executor is not IFigure figure)
+        if (context.Executor is not IExecutableFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
             return Task.FromResult<IScratchType>(new DoubleValue());

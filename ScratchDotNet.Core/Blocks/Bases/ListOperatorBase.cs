@@ -5,11 +5,6 @@ using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScratchDotNet.Core.Blocks.Bases;
 
@@ -38,7 +33,7 @@ public abstract class ListOperatorBase : ValueOperatorBase
         ArgumentNullException.ThrowIfNull(reference, nameof(reference));
         ListRef = reference;
     }
-    
+
     /// <summary>
     /// Creates a new instance
     /// </summary>

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using ScratchDotNet.Core.StageObjects.Assets;
+﻿using ScratchDotNet.Core.StageObjects.Assets;
 
 namespace ScratchDotNet.Core.Services.Interfaces;
 
