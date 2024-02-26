@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
+using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
@@ -60,7 +62,7 @@ public class GlideTo : GlideBase
     public GlideTo(TimeSpan time, SpecialTarget target, string blockId) : base(time, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        _targetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
+        _targetProvider = new TargetReporter(target.ToString());
     }
 
     /// <summary>
@@ -84,14 +86,14 @@ public class GlideTo : GlideBase
     public GlideTo(TimeSpan time, IFigure target, string blockId) : base(time, _constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        _targetProvider = new TargetReporter(target, TargetReporter.GlideToOpCode);
+        _targetProvider = new TargetReporter(target.Name);
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
+    /// A target provider that implements <see cref="IScratchType"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
     /// <param name="timeProvider">The provider of the time in seconds the figure needs to move there</param>
     /// <param name="targetProvider"></param>
@@ -104,7 +106,7 @@ public class GlideTo : GlideBase
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
+    /// A target provider that implements <see cref="IScratchType"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
     /// <param name="timeProvider">The provider of the time in seconds the figure needs to move there</param>
     /// <param name="targetProvider">The provider of the target to move to</param>
@@ -119,7 +121,7 @@ public class GlideTo : GlideBase
         if (TargetProvider is IScratchType)
         {
             string message = string.Format(
-                "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
+                "A target provider that implements {0} is not supported. To provide a constant target you have use a constructor that takes an instance of {1} or {2}",
                 nameof(IScratchType),
                 nameof(SpecialTarget),
                 nameof(IFigure));
@@ -131,8 +133,6 @@ public class GlideTo : GlideBase
     internal GlideTo(string blockId, JToken blockToken) : base(blockId, blockToken)
 #pragma warning restore CS8618
     {
-        if (TargetProvider is EmptyValue)
-            TargetProvider = new TargetReporter(SpecialTarget.Random, TargetReporter.GlideToOpCode);     // the target provider doesn't allow empty values so a default target reporter is used
     }
 
     protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
@@ -162,5 +162,30 @@ public class GlideTo : GlideBase
 
         string baseMessage = base.GetDebuggerDisplay();
         return baseMessage + targetString;
+    }
+
+    [OperatorCode(_constOpCode)]
+    [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
+    private class TargetReporter : ValueOperatorBase
+    {
+        public override event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
+
+        public string Target { get; }
+
+        private const string _constOpCode = "motion_glideto_menu";
+
+        public TargetReporter(string target) : base(BlockHelpers.GenerateBlockId(), _constOpCode)
+        {
+            Target = target;
+        }
+
+#pragma warning disable CS8618
+        internal TargetReporter(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
+        {
+        }
+
+        public override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+            Task.FromResult<IScratchType>(new StringValue(Target));
     }
 }

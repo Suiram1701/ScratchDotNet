@@ -4,6 +4,7 @@ using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
 using ScratchDotNet.Core.Blocks.Interfaces;
 using ScratchDotNet.Core.Enums;
+using ScratchDotNet.Core.EventArgs;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Extensions;
 using ScratchDotNet.Core.StageObjects;
@@ -71,7 +72,7 @@ public class Goto : ExecutionBlockBase
             throw new ArgumentException(message);
         }
 
-        TargetProvider = new TargetReporter(target, TargetReporter.GotoOpCode);
+        TargetProvider = new TargetReporter(target.ToString());
     }
 
     /// <summary>
@@ -93,14 +94,14 @@ public class Goto : ExecutionBlockBase
     public Goto(IFigure target, string blockId) : base(_constOpCode, blockId)
     {
         ArgumentNullException.ThrowIfNull(target, nameof(target));
-        _targetProvider = new TargetReporter(target, TargetReporter.GotoOpCode);
+        _targetProvider = new TargetReporter(target.Name);
     }
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
+    /// A target provider that implements <see cref="IScratchType"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
     /// <param name="targetProvider">The provider of the target figure</param>
     /// <exception cref="ArgumentException"></exception>
@@ -113,7 +114,7 @@ public class Goto : ExecutionBlockBase
     /// Creates a new instance
     /// </summary>
     /// <remarks>
-    /// A target provider that implements <see cref="IConstProvider"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
+    /// A target provider that implements <see cref="IScratchType"/> is not supported. To provide a constant value you have use a constructor that takes an instance of <see cref="SpecialTarget"/> or <see cref="IFigure"/>
     /// </remarks>
     /// <param name="targetProvider">The provider of the target figure</param>
     /// <param name="blockId">The id of this block</param>
@@ -127,7 +128,7 @@ public class Goto : ExecutionBlockBase
         if (targetProvider is IScratchType)
         {
             string message = string.Format(
-                "A target provider that implements {0} is not supported. To provide a constant value you have use a constructor that takes an instance of {1} or {2}",
+                "A target provider that implements {0} is not supported. To provide a constant target you have use a constructor that takes an instance of {1} or {2}",
                 nameof(IScratchType),
                 nameof(SpecialTarget),
                 nameof(IFigure));
@@ -139,8 +140,6 @@ public class Goto : ExecutionBlockBase
     internal Goto(string blockId, JToken blockToken) : base(blockId, blockToken)
 #pragma warning restore CS8618
     {
-        if (TargetProvider is EmptyValue)
-            TargetProvider = new TargetReporter(SpecialTarget.Random, TargetReporter.GotoOpCode);     // the target provider doesn't allow empty values so a default target reporter is used
     }
 
     protected internal override async Task ExecuteAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default)
@@ -168,5 +167,30 @@ public class Goto : ExecutionBlockBase
         };
 
         return string.Format("Goto: {0}", targetString);
+    }
+
+    [OperatorCode(_constOpCode)]
+    [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
+    private class TargetReporter : ValueOperatorBase
+    {
+        public override event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }
+
+        public string Target { get; }
+
+        private const string _constOpCode = "motion_goto_menu";
+
+        public TargetReporter(string target) : base(BlockHelpers.GenerateBlockId(), _constOpCode)
+        {
+            Target = target;
+        }
+
+#pragma warning disable CS8618
+        internal TargetReporter(string blockId, JToken blockToken) : base(blockId, blockToken)
+#pragma warning restore CS8618
+        {
+        }
+
+        public override Task<IScratchType> GetResultAsync(ScriptExecutorContext context, ILogger logger, CancellationToken ct = default) =>
+            Task.FromResult<IScratchType>(new StringValue(Target));
     }
 }
