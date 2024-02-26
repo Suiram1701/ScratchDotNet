@@ -87,7 +87,7 @@ public class SetVolume : ExecutionBlockBase
         double volume = (await VolumeProvider.GetResultAsync(context, logger, ct)).ConvertToDoubleValue();
         volume = Math.Min(Math.Max(volume, 0d), 100d);     // Validate that the volume is between 0 and 100
 
-        context.Executor.SoundVolume = volume;
+        context.Executor.SetSoundVolume(volume);
     }
 
     private string GetDebuggerDisplay()

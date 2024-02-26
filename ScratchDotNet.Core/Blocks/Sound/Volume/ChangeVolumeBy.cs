@@ -91,7 +91,7 @@ public class ChangeVolumeBy : ExecutionBlockBase
         double volume = context.Executor.SoundVolume + value;
 
         volume = Math.Min(Math.Max(volume, 0), 100);     // Validate that the volume id between 0 and 100
-        context.Executor.SoundVolume = volume;
+        context.Executor.SetSoundVolume(volume);
     }
 
     private string GetDebuggerDisplay()

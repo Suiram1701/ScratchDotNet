@@ -10,11 +10,6 @@ namespace ScratchDotNet.Core.StageObjects;
 public interface IStageObject
 {
     /// <summary>
-    /// Called when the volume of the object could have been changed
-    /// </summary>
-    internal event EventHandler<GenericValueChangedEventArgs<double>> OnVolumeChanged;
-
-    /// <summary>
     /// The name of the figure
     /// </summary>
     public string Name { get; }
@@ -49,7 +44,7 @@ public interface IStageObject
     /// <summary>
     /// The sound volume of this object in percent
     /// </summary>
-    public double SoundVolume { get; set; }
+    public double SoundVolume { get; }
 
     /// <summary>
     /// The graphical order of this object

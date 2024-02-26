@@ -12,17 +12,17 @@ public class ScriptExecutorContext
     /// <summary>
     /// The executor of this context
     /// </summary>
-    public IStageObject Executor { get; }
+    public IExecutableStageObject Executor { get; }
 
     /// <summary>
     /// The stage
     /// </summary>
-    public IStage Stage { get; }
+    public IExecutableStage Stage { get; }
 
     /// <summary>
     /// All figures on the stage
     /// </summary>
-    public IEnumerable<IFigure> Figures { get; }
+    public IEnumerable<IExecutableFigure> Figures { get; }
 
     public Dictionary<string, object> RuntimeData { get; }
 
@@ -40,8 +40,8 @@ public class ScriptExecutorContext
     internal ScriptExecutorContext()
 #pragma warning restore CS8618
     {
-        Figures = Array.Empty<IFigure>();
-        RuntimeData = new();
+        Figures = [];
+        RuntimeData = [];
         LoggerFactory = NullLoggerFactory.Instance;
         Services = new Dictionary<Type, object>();
     }
