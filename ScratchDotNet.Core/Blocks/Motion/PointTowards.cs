@@ -201,7 +201,6 @@ public class PointTowards : ExecutionBlockBase
     }
 
     [OperatorCode(_constOpCode)]
-    [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
     private class TargetReporter : ValueOperatorBase
     {
         public override event EventHandler<ValueChangedEventArgs> OnValueChanged { add { } remove { } }

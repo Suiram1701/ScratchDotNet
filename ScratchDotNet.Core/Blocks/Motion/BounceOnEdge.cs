@@ -22,9 +22,6 @@ public class BounceOnEdge : ExecutionBlockBase
 {
     private const string _constOpCode = "motion_ifonedgebounce";
 
-    private const int _stageHeight = 380;
-    private const int _stageWidth = 500;
-
     /// <summary>
     /// Creates a new instance
     /// </summary>
@@ -57,49 +54,43 @@ public class BounceOnEdge : ExecutionBlockBase
         float figureY = Convert.ToSingle(figure.Y);
         Vector2 figureCenter = new(figureX, figureY);
 
-        float figureHeight = Convert.ToSingle(figure.Height);
-        float figureWidth = Convert.ToSingle(figure.Width);
-        SizeF figureSize = new(figureWidth, figureHeight);
+        SizeF figureSize = figure.GetRenderedSize();
+        SizeF stageSize = context.Stage.GetRenderedSize();
 
         float radian = Convert.ToSingle(figure.Direction) * (MathF.PI / 180);
         Matrix3x2 rotation = Matrix3x2.CreateRotation(radian, figureCenter);
 
-        Vector2[] corners = new[]
-        {
-            GetCornerVector(rotation.M11, figureSize) * new Vector2(),
-            GetCornerVector(rotation.M12, figureSize),
-            GetCornerVector(rotation.M21, figureSize),
-            GetCornerVector(rotation.M22, figureSize),
-        };
+        Vector2[] edgePoints =
+        [
+            new(-figureSize.Width / 2, -figureSize.Height / 2),
+            new(figureSize.Width / 2, -figureSize.Height / 2),
+            new(figureSize.Width / 2, figureSize.Height / 2),
+            new(-figureSize.Width / 2, figureSize.Height / 2)
 
-        double targetX = figure.X;
-        double targetY = figure.Y;
+        ];
+        for (int i = 0; i < edgePoints.Length; i++)
+            edgePoints[i] = Vector2.Transform(edgePoints[i], rotation) + figureCenter;
 
-        if (corners.Min(v => v.X) < -(_stageWidth / 2))
-            targetX = -(_stageWidth / 2);
-        else if (corners.Max(v => v.X) > _stageWidth / 2)
-            targetX = _stageWidth / 2;
+        // adjust X and Y when out of stage
+        double? targetX = null;
+        double? targetY = null;
 
-        if (corners.Min(v => v.Y) < -(_stageHeight / 2))
-            targetY = -(_stageHeight / 2);
-        else if (corners.Max(v => v.Y) > _stageHeight / 2)
-            targetY = _stageHeight / 2;
+        double minX = edgePoints.Min(c => c.X);
+        double maxX = edgePoints.Max(c => c.X);
+        if (minX < -stageSize.Width)
+            targetX = -stageSize.Width;
+        else if (maxX > stageSize.Width)
+            targetX = stageSize.Width;
 
-        figure.MoveTo(targetX, targetY);
+        double minY = edgePoints.Min(d => d.Y);
+        double maxY = edgePoints.Max(d => d.Y);
+        if (minY < -stageSize.Height)
+            targetY = -stageSize.Height;
+        else if (maxY > stageSize.Height)
+            targetY = stageSize.Height;
+
+        figure.MoveTo(targetX ?? figure.X, targetY ?? figure.Y);
         return Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// The angle as radian
-    /// </summary>
-    /// <param name="angle">The angle</param>
-    /// <param name="size">The size of the figure</param>
-    /// <param name="e">The distance between the center and the corner</param>
-    /// <returns>The vector</returns>
-    private static Vector2 GetCornerVector(float angle, SizeF size)
-    {
-        (float x, float y) = MathF.SinCos(angle);
-        return new Vector2(x * (size.Width / 2), y * (size.Height / 2));
     }
 
     private static string GetDebuggerDisplay()

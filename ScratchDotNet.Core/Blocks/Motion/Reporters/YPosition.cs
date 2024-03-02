@@ -9,7 +9,7 @@ using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
-namespace ScratchDotNet.Core.Blocks.Motion.Variables;
+namespace ScratchDotNet.Core.Blocks.Motion.Reporters;
 
 /// <summary>
 /// Provides the y position of the figure

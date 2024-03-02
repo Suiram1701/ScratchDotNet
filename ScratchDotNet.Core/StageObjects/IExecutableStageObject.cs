@@ -1,4 +1,5 @@
 ﻿using ScratchDotNet.Core.EventArgs;
+using System.Drawing;
 
 namespace ScratchDotNet.Core.StageObjects;
 
@@ -17,4 +18,10 @@ public interface IExecutableStageObject : IStageObject
     /// </summary>
     /// <param name="volume">The value to set</param>
     public void SetSoundVolume(double volume);
+
+    /// <summary>
+    /// Returns the rendered size of the currently rendered custume
+    /// </summary>
+    /// <returns>The size</returns>
+    public SizeF GetRenderedSize();
 }

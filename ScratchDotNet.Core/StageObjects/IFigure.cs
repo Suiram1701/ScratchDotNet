@@ -28,16 +28,6 @@ public interface IFigure : IStageObject
     public double Size { get; }
 
     /// <summary>
-    /// The height of the figure
-    /// </summary>
-    public int Height { get; }
-
-    /// <summary>
-    /// The width of the figure
-    /// </summary>
-    public int Width { get; }
-
-    /// <summary>
     /// The direction of the figure
     /// </summary>
     public double Direction { get; }

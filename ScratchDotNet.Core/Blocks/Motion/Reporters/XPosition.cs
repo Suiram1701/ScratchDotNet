@@ -9,32 +9,32 @@ using ScratchDotNet.Core.Types;
 using ScratchDotNet.Core.Types.Interfaces;
 using System.Diagnostics;
 
-namespace ScratchDotNet.Core.Blocks.Motion.Variables;
+namespace ScratchDotNet.Core.Blocks.Motion.Reporters;
 
 /// <summary>
-/// Provides the direction of the figure
+/// Provides the x position of the figure
 /// </summary>
 /// <remarks>
 /// This block have to got executed by a figure
 /// </remarks>
 [OperatorCode(_constOpCode)]
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public class Direction : ValueOperatorBase
+public class XPosition : ValueOperatorBase
 {
     public override event EventHandler<ValueChangedEventArgs>? OnValueChanged;
 
     private bool _delegateInitialized;
 
-    private const string _constOpCode = "motion_direction";
+    private const string _constOpCode = "motion_xposition";
 
     /// <summary>
     /// Creates a new instance
     /// </summary>
-    public Direction() : base(_constOpCode)
+    public XPosition() : base(_constOpCode)
     {
     }
 
-    internal Direction(string blockId, JToken blockToken) : base(blockId, blockToken)
+    internal XPosition(string blockId, JToken blockToken) : base(blockId, blockToken)
     {
     }
 
@@ -43,30 +43,29 @@ public class Direction : ValueOperatorBase
         if (context.Executor is not IExecutableFigure figure)
         {
             logger.LogWarning("Block {block} have to executed by a figure", BlockId);
-            return Task.FromResult<IScratchType>(new DoubleValue(0d));
+            return Task.FromResult<IScratchType>(new DoubleValue());
         }
 
         if (!_delegateInitialized)
         {
-            figure.OnDirectionChanged += Figure_OnDirectionChanged;
+            figure.OnPositionChanged += Figure_OnPositionChanged;
 
             logger.LogInformation("Value changed event of block {block} was successfully initialized", BlockId);
             _delegateInitialized = true;
         }
 
-        double result = figure.Direction;
-        return Task.FromResult((IScratchType)new DoubleValue(result));
+        return Task.FromResult<IScratchType>(new DoubleValue(figure.X));
     }
 
-    private void Figure_OnDirectionChanged(object? sender, GenericValueChangedEventArgs<double> e)
+    private void Figure_OnPositionChanged(object? sender, PositionChangedEventArgs e)
     {
-        if (e.OldValue == e.NewValue)
+        if (e.OldPosition.X == e.NewPosition.X)
             return;
 
-        ValueChangedEventArgs eventArgs = new(new DoubleValue(e.OldValue), new DoubleValue(e.NewValue));
+        ValueChangedEventArgs eventArgs = new(new DoubleValue(e.OldPosition.X), new DoubleValue(e.NewPosition.X));
         OnValueChanged?.Invoke(sender, eventArgs);
     }
 
     private static string GetDebuggerDisplay() =>
-        "direction";
+        "x position";
 }
