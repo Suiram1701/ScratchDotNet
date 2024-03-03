@@ -20,7 +20,7 @@ public interface IExecutableStageObject : IStageObject
     public void SetSoundVolume(double volume);
 
     /// <summary>
-    /// Returns the rendered size of the currently rendered custume
+    /// Returns the rendered size of the currently rendered costume
     /// </summary>
     /// <returns>The size</returns>
     public SizeF GetRenderedSize();

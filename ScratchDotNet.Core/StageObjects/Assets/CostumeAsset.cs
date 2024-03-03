@@ -12,12 +12,12 @@ public class CostumeAsset : AssetBase
     /// <summary>
     /// The rotation from center in the X axis
     /// </summary>
-    public int RotationCenterX { get; set; }
+    public double RotationCenterX { get; set; }
 
     /// <summary>
     /// The rotation from center in the Y axis
     /// </summary>
-    public int RotationCenterY { get; set; }
+    public double RotationCenterY { get; set; }
 
     public CostumeAsset(JToken assetToken, string tmpPath) : base(assetToken, tmpPath)
     {
