@@ -5,7 +5,9 @@ VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchDotNet.Core", "ScratchDotNet.Core\ScratchDotNet.Core.csproj", "{A05AEFEB-353B-4408-AD08-A8703F2D5D94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScratchDotNet.Test", "ScratchDotNet.Test\ScratchDotNet.Test.csproj", "{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchDotNet.Test", "ScratchDotNet.Test\ScratchDotNet.Test.csproj", "{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScratchDotNet.Core.Abstractions", "ScratchDotNet.Core.Abstractions\ScratchDotNet.Core.Abstractions.csproj", "{D9107D84-93B7-4298-9167-89925A6BB93E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F61D62C3-A68A-40F7-9DD4-A5745C8DE153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9107D84-93B7-4298-9167-89925A6BB93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9107D84-93B7-4298-9167-89925A6BB93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9107D84-93B7-4298-9167-89925A6BB93E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9107D84-93B7-4298-9167-89925A6BB93E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

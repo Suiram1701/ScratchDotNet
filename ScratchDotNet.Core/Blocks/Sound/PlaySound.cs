@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
@@ -125,9 +126,9 @@ public class PlaySound : ExecutionBlockBase
         if (!(soundCts?.IsCancellationRequested ?? true))     // Stop sound playing when the object still playing a sound
             soundCts.Cancel();
 
-        if (context.Services[typeof(ISoundOutputService)] is not ISoundOutputService soundOutputService)
+        if (context.ServicesProvider.GetService<ISoundOutputService>() is not ISoundOutputService soundOutputService)
         {
-            logger.LogCritical("Could not find any registered service that implements {provider}", nameof(ISoundOutputService));
+            logger.LogWarning("Could not find any registered service that implements {provider}.", nameof(ISoundOutputService));
             return;
         }
 
@@ -152,11 +153,33 @@ public class PlaySound : ExecutionBlockBase
         CancellationTokenSource newSoundCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         context.RuntimeData[$"{context.Executor.Name}_soundCts"] = newSoundCts;
 
-        Task soundPlay = soundOutputService.PlaySoundAsync(soundAsset, volume, pitch, pan, newSoundCts.Token);
-        if (AwaitEnd)
-            await soundPlay;
-        else
-            _ = Task.Run(async () => await soundPlay, newSoundCts.Token);
+        Stream audioStream = soundAsset.GetStream();
+        Task soundPlay = soundOutputService.PlaySoundAsync(audioStream, volume, pitch, pan, newSoundCts.Token);
+
+        try
+        {
+            if (AwaitEnd)
+            {
+                await soundPlay;
+                audioStream.Dispose();
+            }
+            else
+            {
+                _ = Task.Run(async () => await soundPlay, newSoundCts.Token).ContinueWith(task => audioStream.Dispose(), newSoundCts.Token);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error ocoured during playing a sound.");
+            throw;
+        }
+        finally
+        {
+            if (AwaitEnd)
+            {
+                audioStream.Dispose();
+            }
+        }
     }
 
     private static string GetOpCodeFromAwaitEnd(bool awaitEnd) =>

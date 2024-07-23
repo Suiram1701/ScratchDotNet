@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using ScratchDotNet.Core.Blocks.Attributes;
 using ScratchDotNet.Core.Blocks.Bases;
@@ -148,15 +149,13 @@ public class PointTowards : ExecutionBlockBase
             "_random_" => () => Random.Shared.Next(1, 359),
             "_mouse_" => () =>
             {
-                if (context.Services[typeof(IInputProviderService)] is not IInputProviderService provider)
+                if (context.ServicesProvider.GetService<IInputProviderService>() is not IInputProviderService inputProvider)
                 {
-                    logger.LogCritical("Could not find any registered service that implement {interface}", nameof(IInputProviderService));
-
-                    string message = string.Format("Could not find any registered implementation of {0}", nameof(IInputProviderService));
-                    throw new InvalidOperationException(message);
+                    logger.LogWarning("Could not find any registered service that implements {provider}.", nameof(IInputProviderService));
+                    return 0d;
                 }
 
-                Point mousePosition = provider.GetMousePosition();
+                Point mousePosition = inputProvider.GetMousePosition();
                 return GetFigureAngle(figure, mousePosition.X, mousePosition.Y);
             }
             ,

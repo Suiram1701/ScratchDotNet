@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ScratchDotNet.Core.Enums;
 using ScratchDotNet.Core.Execution;
 using ScratchDotNet.Core.Services.Interfaces;
@@ -24,18 +25,18 @@ internal static class MotionHelpers
                 Point mousePosition;
                 try
                 {
-                    if (context.Services[typeof(IInputProviderService)] is not IInputProviderService provider)
+                    if (context.ServicesProvider.GetService<IInputProviderService>() is not IInputProviderService inputProvider)
                     {
-                        string message = string.Format("Could not find any registered service that implement {0}", nameof(IInputProviderService));
-                        throw new InvalidOperationException(message);
+                        logger.LogWarning("Could not find any registered service that implements {provider}.", nameof(IInputProviderService));
+                        break;
                     }
 
-                    mousePosition = provider.GetMousePosition();
+                    mousePosition = inputProvider.GetMousePosition();
                 }
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "An error happened while determining mouse position");
-                    return (0, 0);
+                    break;
                 }
 
                 return (mousePosition.X, mousePosition.Y);
@@ -44,11 +45,13 @@ internal static class MotionHelpers
                 if (targetFigure is null)
                 {
                     logger.LogError("Cant find figure {figure} on stage", targetFigure);
-                    return (0, 0);
+                    break;
                 }
 
                 return (targetFigure.X, targetFigure.Y);
         }
+
+        return (0, 0);
     }
 
     /// <summary>
